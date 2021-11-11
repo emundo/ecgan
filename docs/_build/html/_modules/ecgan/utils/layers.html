@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ecgan.utils.layers &mdash; ECGAN 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../synthesis.html#beatgan">BeatGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classification.html">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ecgan.utils.layers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ecgan.utils.layers</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Custom torch layers for neural architectures.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch.distributions.normal</span> <span class="kn">import</span> <span class="n">Normal</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">GroupNorm</span>
+<span class="kn">from</span> <span class="nn">torch.nn.modules.batchnorm</span> <span class="kn">import</span> <span class="n">_BatchNorm</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.config</span> <span class="kn">import</span> <span class="n">NormalInitializationConfig</span><span class="p">,</span> <span class="n">UniformInitializationConfig</span><span class="p">,</span> <span class="n">WeightInitializationConfig</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">WeightInitialization</span>
+
+
+<div class="viewcode-block" id="MinibatchDiscrimination"><a class="viewcode-back" href="../../../api/utils/layers.html#ecgan.utils.layers.MinibatchDiscrimination">[docs]</a><span class="k">class</span> <span class="nc">MinibatchDiscrimination</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Minibatch discrimination layer based on https://gist.github.com/t-ae/732f78671643de97bbe2c46519972491.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">out_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">kernel_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+        <span class="n">calc_mean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_features</span> <span class="o">=</span> <span class="n">in_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_features</span> <span class="o">=</span> <span class="n">out_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_dims</span> <span class="o">=</span> <span class="n">kernel_dims</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_mean</span> <span class="o">=</span> <span class="n">calc_mean</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_mat</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">in_features</span><span class="p">,</span> <span class="n">out_features</span><span class="p">,</span> <span class="n">kernel_dims</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="MinibatchDiscrimination.forward"><a class="viewcode-back" href="../../../api/utils/layers.html#ecgan.utils.layers.MinibatchDiscrimination.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Forward pass of the Minibatch Discriminator.&quot;&quot;&quot;</span>
+        <span class="c1"># x is NxA</span>
+        <span class="c1"># T is AxBxC</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_mat</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_dims</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># 1xNxBxC</span>
+        <span class="n">out_perm</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># Nx1xBxC</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out</span> <span class="o">-</span> <span class="n">out_perm</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># NxNxB</span>
+        <span class="n">exp_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">norm</span><span class="p">)</span>
+        <span class="n">o_b</span> <span class="o">=</span> <span class="n">exp_norm</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># NxB, subtract self distance</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_mean</span><span class="p">:</span>
+            <span class="n">o_b</span> <span class="o">/=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">o_b</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div></div>
+
+
+<div class="viewcode-block" id="MinibatchDiscriminationSimple"><a class="viewcode-back" href="../../../api/utils/layers.html#ecgan.utils.layers.MinibatchDiscriminationSimple">[docs]</a><span class="k">class</span> <span class="nc">MinibatchDiscriminationSimple</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From `Karras et al. 2018 &lt;https://arxiv.org/pdf/1710.10196.pdf&gt;`_.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MinibatchDiscriminationSimple.forward"><a class="viewcode-back" href="../../../api/utils/layers.html#ecgan.utils.layers.MinibatchDiscriminationSimple.forward">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Forward pass of the Minibatch Discriminator.&quot;&quot;&quot;</span>
+        <span class="n">out_stds</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">out_stds</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="initialize_weights"><a class="viewcode-back" href="../../../api/utils/layers.html#ecgan.utils.layers.initialize_weights">[docs]</a><span class="k">def</span> <span class="nf">initialize_weights</span><span class="p">(</span>
+    <span class="n">network</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">init_config</span><span class="p">:</span> <span class="n">WeightInitializationConfig</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize weights of a Torch architecture.</span>
+
+<span class="sd">    Currently supported are:</span>
+
+<span class="sd">        - &#39;normal&#39;: Sampling from a normal distribution. Parameters: mean, std</span>
+<span class="sd">        - &#39;uniform&#39;: Sampling from a uniform distribution. Parameters: upper_bound,</span>
+<span class="sd">           lower_bound</span>
+<span class="sd">        - &#39;he&#39;: He initialization . He, K. et al. (2015)</span>
+<span class="sd">        - &#39;glorot&#39;: Glorot, X. &amp; Bengio, Y. (2010)</span>
+
+<span class="sd">    Biases and BatchNorm are not initialized with this function as different strategies are applicable for these</span>
+<span class="sd">    tensors/layers. Therefore the standard initialization of PyTorch when creating the layers is taken in these cases.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">weight_init</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_initialize_weights</span><span class="p">,</span> <span class="n">init_cfg</span><span class="o">=</span><span class="n">init_config</span><span class="p">)</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">weight_init</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_initialize_weights</span><span class="p">(</span><span class="n">layer</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">init_cfg</span><span class="p">:</span> <span class="n">WeightInitializationConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize the weights of a given layer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        layer: Layer to initialize weights in.</span>
+<span class="sd">        init_cfg: Configuration for weight initialization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">is_normalization_layer</span><span class="p">(</span><span class="n">layer</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">init_cfg</span><span class="o">.</span><span class="n">weight_init_type</span> <span class="o">==</span> <span class="n">WeightInitialization</span><span class="o">.</span><span class="n">NORMAL</span><span class="p">:</span>
+        <span class="n">normal_cfg</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">NormalInitializationConfig</span><span class="p">,</span> <span class="n">init_cfg</span><span class="p">)</span>
+        <span class="n">_init_normal</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="n">normal_cfg</span><span class="o">.</span><span class="n">MEAN</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">normal_cfg</span><span class="o">.</span><span class="n">STD</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">init_cfg</span><span class="o">.</span><span class="n">weight_init_type</span> <span class="o">==</span> <span class="n">WeightInitialization</span><span class="o">.</span><span class="n">UNIFORM</span><span class="p">:</span>
+        <span class="n">uniform_cfg</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">UniformInitializationConfig</span><span class="p">,</span> <span class="n">init_cfg</span><span class="p">)</span>
+        <span class="n">_init_uniform</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="n">uniform_cfg</span><span class="o">.</span><span class="n">LOWER_BOUND</span><span class="p">,</span> <span class="n">upper_bound</span><span class="o">=</span><span class="n">uniform_cfg</span><span class="o">.</span><span class="n">UPPER_BOUND</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">init_cfg</span><span class="o">.</span><span class="n">weight_init_type</span> <span class="o">==</span> <span class="n">WeightInitialization</span><span class="o">.</span><span class="n">HE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="n">_init_he</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">init_cfg</span><span class="o">.</span><span class="n">weight_init_type</span> <span class="o">==</span> <span class="n">WeightInitialization</span><span class="o">.</span><span class="n">GLOROT_UNIFORM</span><span class="p">:</span>
+        <span class="n">_init_glorot_uniform</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">init_cfg</span><span class="o">.</span><span class="n">weight_init_type</span> <span class="o">==</span> <span class="n">WeightInitialization</span><span class="o">.</span><span class="n">GLOROT_NORMAL</span><span class="p">:</span>
+        <span class="n">_init_glorot_normal</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Initialization &quot;</span><span class="si">{}</span><span class="s1">&quot; is not known.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">init_cfg</span><span class="o">.</span><span class="n">NAME</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="initialize_batchnorm"><a class="viewcode-back" href="../../../api/utils/layers.html#ecgan.utils.layers.initialize_batchnorm">[docs]</a><span class="k">def</span> <span class="nf">initialize_batchnorm</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Explicitly initialize batchnorm layers with a normal distribution.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">modules</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">_BatchNorm</span><span class="p">):</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">))</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bias&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_init_normal</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">std</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Initialize a nn.Module by sampling from a normal distribution.&quot;&quot;&quot;</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">mean</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">mean</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="k">if</span> <span class="n">std</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">std</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">):</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+
+<span class="k">def</span> <span class="nf">_init_uniform</span><span class="p">(</span>
+    <span class="n">module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">lower_bound</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">upper_bound</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Initialize a nn.Module by sampling from a uniform distribution.&quot;&quot;&quot;</span>
+    <span class="n">lower_bound</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">lower_bound</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">lower_bound</span>
+    <span class="n">upper_bound</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">upper_bound</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">upper_bound</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">):</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+
+<span class="k">def</span> <span class="nf">_init_he</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Initialize a nn.Module with He initialization.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">):</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">kaiming_normal_</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_init_glorot_uniform</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Initialize a nn.Module with Glorot initialization.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">):</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+
+<span class="k">def</span> <span class="nf">_init_glorot_normal</span><span class="p">(</span><span class="n">layer</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Initialize a nn.Module with Glorot initialization.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">):</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_normal_</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+
+<div class="viewcode-block" id="is_normalization_layer"><a class="viewcode-back" href="../../../api/utils/layers.html#ecgan.utils.layers.is_normalization_layer">[docs]</a><span class="k">def</span> <span class="nf">is_normalization_layer</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if a module is a input normalization layer.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="p">(</span><span class="n">_BatchNorm</span><span class="p">,</span> <span class="n">GroupNorm</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

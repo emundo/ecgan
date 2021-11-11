@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.evaluation.tracker.local_tracker &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.evaluation.tracker.local_tracker</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.evaluation.tracker.local_tracker</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tracker storing data locally.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">csv</span> <span class="kn">import</span> <span class="n">DictReader</span><span class="p">,</span> <span class="n">DictWriter</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.evaluation.tracker.base_tracker</span> <span class="kn">import</span> <span class="n">BaseTracker</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.artifacts</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">FileArtifact</span><span class="p">,</span> <span class="n">ImageArtifact</span><span class="p">,</span> <span class="n">ValueArtifact</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.miscellaneous</span> <span class="kn">import</span> <span class="n">load_yml</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LocalTracker"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker">[docs]</a><span class="k">class</span> <span class="nc">LocalTracker</span><span class="p">(</span><span class="n">BaseTracker</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class to manage calculating metrics and logging them on the local file system.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">project</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">run_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">save_pdf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">base_root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;results&#39;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_root</span> <span class="o">=</span> <span class="n">base_root</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">run_name</span><span class="p">,</span> <span class="n">save_pdf</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Local tracking enabled. Your run is saved in &quot;</span><span class="si">{}</span><span class="s1">&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_dir</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics_buffer</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">_init_run_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a randomly generated directory name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Path consisting of &#39;./&lt;base_root&gt;/&lt;entity&gt;/&lt;project&gt;/&lt;run_name&gt;-&lt;random_hex&gt;&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">run_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_root</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">run_name</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">run_dir</span><span class="p">):</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">run_dir</span>
+
+<div class="viewcode-block" id="LocalTracker.close"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close training run.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics_buffer</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="LocalTracker.watch"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.watch">[docs]</a>    <span class="k">def</span> <span class="nf">watch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Watch models during training - not supported in LocalTracker.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="LocalTracker.log_config"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_config">[docs]</a>    <span class="k">def</span> <span class="nf">log_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Log parameters for training setup.&quot;&quot;&quot;</span>
+        <span class="c1"># The local config name will be replaced by &#39;config.yml&#39; in any case.</span>
+        <span class="c1"># This allows to easily retrieve configs from a given run.</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_dir</span><span class="p">,</span> <span class="s1">&#39;config.yml&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LocalTracker.log_metrics"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_metrics">[docs]</a>    <span class="k">def</span> <span class="nf">log_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Take a dictionary with metrics and log content.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metrics: Dict in shape {metric: val, ...}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">metrics_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/metrics.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">metrics_path</span><span class="p">):</span>
+            <span class="nb">open</span><span class="p">(</span><span class="n">metrics_path</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>  <span class="c1"># pylint: disable=R1732</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metrics_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">csv_dict_reader</span> <span class="o">=</span> <span class="n">DictReader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">csv_dict_reader</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">header_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">header</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metrics_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">csv_writer</span> <span class="o">=</span> <span class="n">DictWriter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">header_list</span><span class="p">)</span>
+            <span class="n">csv_writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metrics_path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">csv_writer</span> <span class="o">=</span> <span class="n">DictWriter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">header_list</span><span class="p">)</span>
+            <span class="n">csv_writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics_buffer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metrics_buffer</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metrics_buffer</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+            <span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">create_plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics_buffer</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+
+            <span class="n">file_type</span> <span class="o">=</span> <span class="s1">&#39;pdf&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_pdf</span> <span class="k">else</span> <span class="s1">&#39;png&#39;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">save_plot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_dir</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">file_type</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="LocalTracker.log_checkpoint"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_checkpoint">[docs]</a>    <span class="k">def</span> <span class="nf">log_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module_checkpoint</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">fold</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save a module checkpoint.</span>
+
+<span class="sd">        The checkpoint is a dictionary containing its state dict and optimizer parameters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            module_checkpoint: Dictionary with model weights.</span>
+<span class="sd">            fold: Current fold. Should be extracted before beginning to upload to avoid concurrency.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Checkpoint for model</span>
+        <span class="n">model_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_dir</span><span class="p">,</span> <span class="s1">&#39;MODELS&#39;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">model_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+            <span class="n">module_checkpoint</span><span class="p">,</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_dir</span><span class="p">,</span> <span class="s1">&#39;model_ep_</span><span class="si">{}</span><span class="s1">_fold</span><span class="si">{}</span><span class="s1">.pt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">,</span> <span class="n">fold</span><span class="p">)),</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="LocalTracker.log_artifacts"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_artifacts">[docs]</a>    <span class="k">def</span> <span class="nf">log_artifacts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artifacts</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Artifact</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Log dictionary with artifacts.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            artifacts: Dictionary containing artifacts to log.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">artifacts</span> <span class="o">=</span> <span class="n">artifacts</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifacts</span><span class="p">,</span> <span class="n">List</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">artifacts</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">artifacts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="p">,</span> <span class="n">ImageArtifact</span><span class="p">):</span>
+                <span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_dir</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">file_type</span> <span class="o">=</span> <span class="s1">&#39;pdf&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_pdf</span> <span class="k">else</span> <span class="s1">&#39;png&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">save_plot</span><span class="p">(</span>
+                    <span class="n">file_location</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">file_type</span><span class="p">),</span>
+                    <span class="n">plot</span><span class="o">=</span><span class="n">artifact</span><span class="o">.</span><span class="n">image</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="p">,</span> <span class="n">ValueArtifact</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log_metrics</span><span class="p">({</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">artifact</span><span class="o">.</span><span class="n">value</span><span class="p">})</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">Dict</span><span class="p">):</span>
+                    <span class="n">value_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unfold_inner_dict</span><span class="p">(</span><span class="n">artifact_dict</span><span class="o">=</span><span class="n">artifact</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">artifact_name</span><span class="o">=</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log_metrics</span><span class="p">(</span><span class="n">value_dict</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="p">,</span> <span class="n">FileArtifact</span><span class="p">):</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local_file_save</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Saved </span><span class="si">{0}</span><span class="s1"> in </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Artifact type was not found: </span><span class="si">{0}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">artifact</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="LocalTracker.load_config"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.load_config">[docs]</a>    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load config.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            run_uri: Path pointing to project root.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Loaded yml config as dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">run_uri</span><span class="p">):</span>
+            <span class="n">run_dir</span> <span class="o">=</span> <span class="n">run_uri</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">run_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_root</span><span class="p">,</span> <span class="n">run_uri</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">run_dir</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> does not point to a valid directory.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">run_dir</span><span class="p">))</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="s1">&#39;config.yml&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> does not contain a valid config.yml.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">run_dir</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">load_yml</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_unfold_inner_dict</span><span class="p">(</span><span class="n">artifact_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">artifact_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="n">value_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">outer_key</span><span class="p">,</span> <span class="n">val_dict</span> <span class="ow">in</span> <span class="n">artifact_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;unfolding </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">outer_key</span><span class="p">,</span> <span class="n">val_dict</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">value_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">artifact_name</span><span class="p">)</span> <span class="o">+</span> <span class="n">outer_key</span><span class="p">:</span> <span class="n">val_dict</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">inner_key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">val_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">value_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">artifact_name</span><span class="p">)</span> <span class="o">+</span> <span class="n">outer_key</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">inner_key</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">value_dict</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

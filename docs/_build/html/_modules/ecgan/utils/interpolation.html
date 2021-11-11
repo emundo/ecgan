@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ecgan.utils.interpolation &mdash; ECGAN 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../synthesis.html#beatgan">BeatGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classification.html">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ecgan.utils.interpolation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ecgan.utils.interpolation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Interpolation schemes between two data points in latent space.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+
+
+<div class="viewcode-block" id="slerp"><a class="viewcode-back" href="../../../api/utils/interpolation.html#ecgan.utils.interpolation.slerp">[docs]</a><span class="k">def</span> <span class="nf">slerp</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Spherical linear interpolation based on `White et al. 2016 &lt;https://arxiv.org/pdf/1609.04468.pdf&gt;`_.</span>
+
+<span class="sd">    Originally introduced in `Shoemake, 1985 &lt;https://www.engr.colostate.edu/ECE481A2/Readings/Rotation_Animation.pdf&gt;`_</span>
+<span class="sd">    and additional visualizations can be found in</span>
+<span class="sd">    `Huszár 2017 (Blogpost) &lt;https://www.inference.vc/high-dimensional-gaussian-distributions-are-soap-bubble/&gt;`_.</span>
+<span class="sd">    Implementation adapted from</span>
+<span class="sd">    `ptrblack, GitHub &lt;https://github.com/ptrblck/prog_gans_pytorch_inference/blob/master/utils.py&gt;`_</span>
+<span class="sd">    and `soumith, GitHub &lt;https://github.com/soumith/dcgan.torch/issues/14&gt;`_.</span>
+<span class="sd">    Most probability mass in high-dimensional Gaussian latent spaces is in an annulus around the origin</span>
+<span class="sd">    and points around the origin are scarce. To account for this, a meaningful interpolation should</span>
+<span class="sd">    traverse the annulus and not travel through the center of the hypersphere.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mu: Parameter moving from 0 to 1 the closer it gets to `high`.</span>
+<span class="sd">        low: Sample from latent space, origin of the interpolation process.</span>
+<span class="sd">        high: Sample from latent space, target of the interpolation process.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Mu-based interpolated sample between low and high.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">low_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+    <span class="n">high_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+    <span class="c1"># avoid numerical instability norm is only zero if low is zero</span>
+    <span class="c1"># denominator can then be set arbitrarily to avoid division by zero</span>
+    <span class="n">low_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">low_norm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">low_norm</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">low_norm</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">high_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">high_norm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">high_norm</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">high_norm</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">low_norm_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">low_norm</span><span class="p">)</span>
+    <span class="n">high_norm_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">high</span><span class="p">,</span> <span class="n">high_norm</span><span class="p">)</span>
+
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">acos</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">low_norm_scale</span><span class="p">,</span> <span class="n">high_norm_scale</span><span class="o">.</span><span class="n">t</span><span class="p">()))</span>
+    <span class="n">sin_omega</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+    <span class="c1"># L&#39;Hopital&#39;s rule/LERP from https://github.com/soumith/dcgan.torch/issues/14</span>
+    <span class="k">if</span> <span class="n">sin_omega</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="n">low</span> <span class="o">+</span> <span class="n">mu</span> <span class="o">*</span> <span class="n">high</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="n">omega</span><span class="p">)</span> <span class="o">/</span> <span class="n">sin_omega</span><span class="p">)</span> <span class="o">*</span> <span class="n">low</span> <span class="o">+</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">mu</span> <span class="o">*</span> <span class="n">omega</span><span class="p">)</span> <span class="o">/</span> <span class="n">sin_omega</span><span class="p">)</span> <span class="o">*</span> <span class="n">high</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="spherical_interpolation"><a class="viewcode-back" href="../../../api/utils/interpolation.html#ecgan.utils.interpolation.spherical_interpolation">[docs]</a><span class="k">def</span> <span class="nf">spherical_interpolation</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform the interpolation between two points in a specified amount of steps.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        start: One point (in latent space), of dimensionality (n,).</span>
+<span class="sd">        target: Point which is approached during interpolation.</span>
+<span class="sd">        num_steps: Amount of steps/samples taken during interpolation.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tensor: (num_steps x samples.shape).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">interpolation_steps</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">num_steps</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">num_steps</span><span class="p">)</span>
+    <span class="n">interpolated_samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">slerp</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">interpolation_steps</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">interpolated_samples</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="latent_walk"><a class="viewcode-back" href="../../../api/utils/interpolation.html#ecgan.utils.interpolation.latent_walk">[docs]</a><span class="k">def</span> <span class="nf">latent_walk</span><span class="p">(</span>
+    <span class="n">base_sample</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">component</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">walk_range</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+    <span class="n">latent_dims</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Explore the latent space based on a single latent space sample.</span>
+
+<span class="sd">    Up to 10 dims are visualized.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        base_sample: Initial latent sample of dim [1,1,latent_dim].</span>
+<span class="sd">        component: The generative module that is used to create new samples.</span>
+<span class="sd">        walk_range: The area of the latent sample investigated.</span>
+<span class="sd">        device: The device of the NN module.</span>
+<span class="sd">        latent_dims: Amount of dims walked through. If more dims exist than selected: Use the first n latent_dims.</span>
+<span class="sd">            Only up to 10 latent_dims are allowed for this visualization.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tensor of reconstructed samples where each latent dim is altered in the direction of walk_range.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">latent_dim_range</span> <span class="o">=</span> <span class="n">latent_dims</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">latent_dims</span><span class="p">,</span> <span class="n">List</span><span class="p">)</span> <span class="k">else</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">latent_dims</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">latent_dim_range</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">walk_range</span><span class="p">:</span>
+                <span class="n">base_clone</span> <span class="o">=</span> <span class="n">base_sample</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+                <span class="n">base_clone</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">base_clone</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">dim</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span>
+                <span class="n">gen_samples</span> <span class="o">=</span> <span class="n">component</span><span class="p">(</span><span class="n">base_clone</span><span class="p">)</span>
+                <span class="n">samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">samples</span><span class="p">,</span> <span class="n">gen_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">samples</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

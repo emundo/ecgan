@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NN Classifier &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Inverse Mappings" href="../inverse_mapping/index.html" />
+    <link rel="prev" title="Base classifier" href="base.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Classification Modules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="base.html">Base classifier</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">ECGAN Python API</a> &raquo;</li>
+          <li><a href="../index.html">Modules</a> &raquo;</li>
+          <li><a href="index.html">Classifiers</a> &raquo;</li>
+      <li>NN Classifier</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/api/modules/classifiers/nn_classifier.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ecgan.modules.classifiers.nn_classifier">
+<span id="nn-classifier"></span><h1>NN Classifier<a class="headerlink" href="#module-ecgan.modules.classifiers.nn_classifier" title="Permalink to this headline"></a></h1>
+<p>Basic RNN/CNN with the aim to correctly predict labels based on input data.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.modules.classifiers.nn_classifier.</span></span><span class="sig-name descname"><span class="pre">NNClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#NNClassifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../basemodule.html#ecgan.modules.base.BaseModule" title="ecgan.modules.base.BaseModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.modules.base.BaseModule</span></code></a>, <a class="reference internal" href="base.html#ecgan.modules.classifiers.base.BaseClassifier" title="ecgan.modules.classifiers.base.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.modules.classifiers.base.BaseClassifier</span></code></a></p>
+<p>NN used to predict labels, not used for forecasting which can also be used for AD.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.classifier">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">classifier</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">torch.nn.modules.module.Module</span></em><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.classifier" title="Permalink to this definition"></a></dt>
+<dd><p>Return the NN classifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.classify">
+<span class="sig-name descname"><span class="pre">classify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#NNClassifier.classify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.classify" title="Permalink to this definition"></a></dt>
+<dd><p>Return a classification score according to the NN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.optimizer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optimizer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer" title="ecgan.utils.optimizer.BaseOptimizer"><span class="pre">ecgan.utils.optimizer.BaseOptimizer</span></a></em><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.optimizer" title="Permalink to this definition"></a></dt>
+<dd><p>Return the optimizer for the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer" title="ecgan.utils.optimizer.BaseOptimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseOptimizer</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.criterion">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">criterion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../utils/losses.html#ecgan.utils.losses.SupervisedLoss" title="ecgan.utils.losses.SupervisedLoss"><span class="pre">ecgan.utils.losses.SupervisedLoss</span></a></em><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.criterion" title="Permalink to this definition"></a></dt>
+<dd><p>Return the criterion for the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../utils/losses.html#ecgan.utils.losses.SupervisedLoss" title="ecgan.utils.losses.SupervisedLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">SupervisedLoss</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.training_step">
+<span class="sig-name descname"><span class="pre">training_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#NNClassifier.training_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.training_step" title="Permalink to this definition"></a></dt>
+<dd><p>Declare what the model should do during a training step using a given batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) -- The batch of real data.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dict containing the optimization metrics which shall be logged.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.validation_step">
+<span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#NNClassifier.validation_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.validation_step" title="Permalink to this definition"></a></dt>
+<dd><p>Declare what the model should do during a validation step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.save_checkpoint">
+<span class="sig-name descname"><span class="pre">save_checkpoint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#NNClassifier.save_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.save_checkpoint" title="Permalink to this definition"></a></dt>
+<dd><p>Return current model parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_optim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#NNClassifier.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load a trained module from disk (file path) or wand reference.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.watch_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">watch_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.watch_list" title="Permalink to this definition"></a></dt>
+<dd><p>Return models that should be watched during training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.NNClassifier.on_epoch_end">
+<span class="sig-name descname"><span class="pre">on_epoch_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#NNClassifier.on_epoch_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier.on_epoch_end" title="Permalink to this definition"></a></dt>
+<dd><p>Set actions to be executed after epoch ends.</p>
+<p>Declare what should be done upon finishing an epoch (e.g. save artifacts or
+evaluate some metric).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../../utils/artifacts.html#ecgan.utils.artifacts.Artifact" title="ecgan.utils.artifacts.Artifact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Artifact</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.CNNClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.modules.classifiers.nn_classifier.</span></span><span class="sig-name descname"><span class="pre">CNNClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#CNNClassifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.CNNClassifier" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier" title="ecgan.modules.classifiers.nn_classifier.NNClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.modules.classifiers.nn_classifier.NNClassifier</span></code></a></p>
+<p>Argmax CNN classifier.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.CNNClassifier.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#CNNClassifier.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.CNNClassifier.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration of a standard CNN classifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.RNNClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.modules.classifiers.nn_classifier.</span></span><span class="sig-name descname"><span class="pre">RNNClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#RNNClassifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.RNNClassifier" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.modules.classifiers.nn_classifier.NNClassifier" title="ecgan.modules.classifiers.nn_classifier.NNClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.modules.classifiers.nn_classifier.NNClassifier</span></code></a></p>
+<p>Argmax RNN classifier.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.modules.classifiers.nn_classifier.RNNClassifier.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/modules/classifiers/nn_classifier.html#RNNClassifier.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.modules.classifiers.nn_classifier.RNNClassifier.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration of a standard RNN classifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="base.html" class="btn btn-neutral float-left" title="Base classifier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../inverse_mapping/index.html" class="btn btn-neutral float-right" title="Inverse Mappings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

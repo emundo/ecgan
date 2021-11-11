@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Networks &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Anomaly Detection Submodule" href="../anomaly_detection/index.html" />
+    <link rel="prev" title="Simple Inverse Mapping" href="../modules/inverse_mapping/vanilla_inverse_mapping.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">ECGAN Python API</a> &raquo;</li>
+      <li>Networks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/networks/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ecgan.networks">
+<span id="networks"></span><h1>Networks<a class="headerlink" href="#module-ecgan.networks" title="Permalink to this headline"></a></h1>
+<p>Networks of and helper functions for supported architectures.</p>
+<span class="target" id="module-ecgan.networks.helpers"></span><p>Helper functions and networks.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.networks.helpers.apply_input_normalization">
+<span class="sig-prename descclassname"><span class="pre">ecgan.networks.helpers.</span></span><span class="sig-name descname"><span class="pre">apply_input_normalization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/helpers.html#apply_input_normalization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.helpers.apply_input_normalization" title="Permalink to this definition"></a></dt>
+<dd><p>Apply input normalization to a layer of size <cite>channel_size</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_size</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Size of the channel/layer.</p></li>
+<li><p><strong>normalization</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../utils/custom_types.html#ecgan.utils.custom_types.InputNormalization" title="ecgan.utils.custom_types.InputNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputNormalization</span></code></a>]) -- Selected normalization method.</p></li>
+<li><p><strong>kwargs</strong> -- Optional parameters which might be required for normalizations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.networks.helpers.conv1d_block">
+<span class="sig-prename descclassname"><span class="pre">ecgan.networks.helpers.</span></span><span class="sig-name descname"><span class="pre">conv1d_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/helpers.html#conv1d_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.helpers.conv1d_block" title="Permalink to this definition"></a></dt>
+<dd><p>Abbreviate the creation of a Conv1d block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- input channels.</p></li>
+<li><p><strong>out_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- output channels.</p></li>
+<li><p><strong>k</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- kernel size.</p></li>
+<li><p><strong>s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- stride.</p></li>
+<li><p><strong>p</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- padding.</p></li>
+<li><p><strong>bias</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) -- bias.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Conv1d</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Conv1d block.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.networks.helpers.conv1d_trans_block">
+<span class="sig-prename descclassname"><span class="pre">ecgan.networks.helpers.</span></span><span class="sig-name descname"><span class="pre">conv1d_trans_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/helpers.html#conv1d_trans_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.helpers.conv1d_trans_block" title="Permalink to this definition"></a></dt>
+<dd><p>Abbreviate the creation of a 1d convolutional transpose block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- input channels.</p></li>
+<li><p><strong>out_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- output channels.</p></li>
+<li><p><strong>k</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- kernel size.</p></li>
+<li><p><strong>s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- stride.</p></li>
+<li><p><strong>p</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- padding.</p></li>
+<li><p><strong>bias</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) -- bias.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ConvTranspose1d</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A ConvTranspose1d block.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.networks.helpers.create_5_hidden_layer_convnet">
+<span class="sig-prename descclassname"><span class="pre">ecgan.networks.helpers.</span></span><span class="sig-name descname"><span class="pre">create_5_hidden_layer_convnet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_running_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/helpers.html#create_5_hidden_layer_convnet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.helpers.create_5_hidden_layer_convnet" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a downsampling CNN architecture, with LeakyReLU activation and optionally weight/input normalization.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>seq_len has to be divisible by 32 for the pooling kernel.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Amount of input channels.</p></li>
+<li><p><strong>hidden_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) -- List of hidden channel sizes. Should be of length 5.</p></li>
+<li><p><strong>output_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Amount of output channels.</p></li>
+<li><p><strong>seq_len</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Sequence length of the data.</p></li>
+<li><p><strong>input_norm</strong> (<a class="reference internal" href="../utils/custom_types.html#ecgan.utils.custom_types.InputNormalization" title="ecgan.utils.custom_types.InputNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputNormalization</span></code></a>) -- Type of input normalization.</p></li>
+<li><p><strong>spectral_norm</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) -- Flag to indicate if spectral weight normalization should be performed</p></li>
+<li><p><strong>track_running_stats</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) -- Flag to indicate if a BatchNorm layer should track the running statistics.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequential</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A five hidden layer CNN as nn.Module.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.networks.helpers.create_transpose_conv_net">
+<span class="sig-prename descclassname"><span class="pre">ecgan.networks.helpers.</span></span><span class="sig-name descname"><span class="pre">create_transpose_conv_net</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_running_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/helpers.html#create_transpose_conv_net"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.helpers.create_transpose_conv_net" title="Permalink to this definition"></a></dt>
+<dd><p>Create a 5 hidden layer conv transposed network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Amount of input channels.</p></li>
+<li><p><strong>hidden_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) -- List of hidden channel sizes. Should be of length 5.</p></li>
+<li><p><strong>output_channels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Amount of output channels.</p></li>
+<li><p><strong>seq_len</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Sequence length of the data.</p></li>
+<li><p><strong>input_norm</strong> (<a class="reference internal" href="../utils/custom_types.html#ecgan.utils.custom_types.InputNormalization" title="ecgan.utils.custom_types.InputNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputNormalization</span></code></a>) -- Type of input normalization.</p></li>
+<li><p><strong>spectral_norm</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) -- Flag to indicate if spectral weight normalization should be performed</p></li>
+<li><p><strong>track_running_stats</strong> -- Flag to indicate if a BatchNorm layer should track the running statistics.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequential</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A five hidden layer transposed CNN as nn.Module.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.networks.helpers.conv_norm_relu">
+<span class="sig-prename descclassname"><span class="pre">ecgan.networks.helpers.</span></span><span class="sig-name descname"><span class="pre">conv_norm_relu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/helpers.html#conv_norm_relu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.helpers.conv_norm_relu" title="Permalink to this definition"></a></dt>
+<dd><p>Chain convolutional layers with ReLU activations and batch norm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequential</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-ecgan.networks.cnn"></span><p>Generic CNNs.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.cnn.ConvolutionalNeuralNetwork">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.cnn.</span></span><span class="sig-name descname"><span class="pre">ConvolutionalNeuralNetwork</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_norm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/cnn.html#ConvolutionalNeuralNetwork"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.cnn.ConvolutionalNeuralNetwork" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>Generic CNN which can be used for classification.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.cnn.ConvolutionalNeuralNetwork.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/cnn.html#ConvolutionalNeuralNetwork.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.cnn.ConvolutionalNeuralNetwork.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the CNN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.cnn.ConvolutionalNeuralNetwork.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/cnn.html#ConvolutionalNeuralNetwork.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.cnn.ConvolutionalNeuralNetwork.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return a default configuration of a CNN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.cnn.DownsampleCNN">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.cnn.</span></span><span class="sig-name descname"><span class="pre">DownsampleCNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel_sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pooling_kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_seq_len</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/cnn.html#DownsampleCNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.cnn.DownsampleCNN" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>A CNN used for downsampling.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.cnn.DownsampleCNN.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/cnn.html#DownsampleCNN.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.cnn.DownsampleCNN.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the downsample CNN.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.cnn.DownsampleCNN.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/cnn.html#DownsampleCNN.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.cnn.DownsampleCNN.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the <cite>DownsampleCNN</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ecgan.networks.rnn"></span><p>Simple RNN (LSTM) which can be used for classification.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.rnn.RecurrentNeuralNetwork">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.rnn.</span></span><span class="sig-name descname"><span class="pre">RecurrentNeuralNetwork</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_classes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/rnn.html#RecurrentNeuralNetwork"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.rnn.RecurrentNeuralNetwork" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>Generic Recurrent Neural Network classifier with LSTM blocks followed by a fully connected layer.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.rnn.RecurrentNeuralNetwork.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/rnn.html#RecurrentNeuralNetwork.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.rnn.RecurrentNeuralNetwork.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the RNN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.rnn.RecurrentNeuralNetwork.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/rnn.html#RecurrentNeuralNetwork.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.rnn.RecurrentNeuralNetwork.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Configure rnn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ecgan.networks.rgan"></span><p>RGAN architectures for the discriminator and generator.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.rgan.RGANGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.rgan.</span></span><span class="sig-name descname"><span class="pre">RGANGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/rgan.html#RGANGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.rgan.RGANGenerator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>Generator with the RGAN architecture.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.rgan.RGANGenerator.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/rgan.html#RGANGenerator.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.rgan.RGANGenerator.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.rgan.RGANGenerator.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/rgan.html#RGANGenerator.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.rgan.RGANGenerator.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the generator of the RGAN module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.rgan.RGANDiscriminator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.rgan.</span></span><span class="sig-name descname"><span class="pre">RGANDiscriminator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/rgan.html#RGANDiscriminator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.rgan.RGANDiscriminator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>Discriminator with the RGAN architecture with additional spectral normalization.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.rgan.RGANDiscriminator.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/rgan.html#RGANDiscriminator.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.rgan.RGANDiscriminator.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the discriminator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.rgan.RGANDiscriminator.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/rgan.html#RGANDiscriminator.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.rgan.RGANDiscriminator.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the discriminator of the RGAN module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ecgan.networks.dcgan"></span><p>Adapted DCGAN generator and discriminator.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.dcgan.DCGANGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.dcgan.</span></span><span class="sig-name descname"><span class="pre">DCGANGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/dcgan.html#DCGANGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.dcgan.DCGANGenerator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>A generator using an architecture similar to <a class="reference external" href="https://arxiv.org/abs/1511.06434">Radford et al. 2015</a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.dcgan.DCGANGenerator.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/dcgan.html#DCGANGenerator.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.dcgan.DCGANGenerator.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.dcgan.DCGANGenerator.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/dcgan.html#DCGANGenerator.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.dcgan.DCGANGenerator.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the generator of the DCGAN module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.dcgan.DCGANDiscriminator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.dcgan.</span></span><span class="sig-name descname"><span class="pre">DCGANDiscriminator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/dcgan.html#DCGANDiscriminator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.dcgan.DCGANDiscriminator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>Slightly modified discriminator from <a class="reference external" href="https://arxiv.org/abs/1511.06434">Radford et al. 2015</a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.dcgan.DCGANDiscriminator.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/dcgan.html#DCGANDiscriminator.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.dcgan.DCGANDiscriminator.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the discriminator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.dcgan.DCGANDiscriminator.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/dcgan.html#DCGANDiscriminator.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.dcgan.DCGANDiscriminator.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the discriminator of the DCGAN module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ecgan.networks.beatgan"></span><p>BeatGAN encoder, generator and discriminator from <span class="xref std std-ref">BeatGAN</span>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.beatgan.BeatganInverseEncoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.beatgan.</span></span><span class="sig-name descname"><span class="pre">BeatganInverseEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_norm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/beatgan.html#BeatganInverseEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.beatgan.BeatganInverseEncoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>Encoder of the BeatGAN model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.beatgan.BeatganInverseEncoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/beatgan.html#BeatganInverseEncoder.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.beatgan.BeatganInverseEncoder.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Perform a forward pass.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.beatgan.BeatganInverseEncoder.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/beatgan.html#BeatganInverseEncoder.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.beatgan.BeatganInverseEncoder.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the encoder of the BeatGAN module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.beatgan.BeatganDiscriminator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.beatgan.</span></span><span class="sig-name descname"><span class="pre">BeatganDiscriminator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_norm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/beatgan.html#BeatganDiscriminator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.beatgan.BeatganDiscriminator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>Discriminator of the BeatGAN model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.beatgan.BeatganDiscriminator.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/beatgan.html#BeatganDiscriminator.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.beatgan.BeatganDiscriminator.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Perform a forward pass.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.beatgan.BeatganDiscriminator.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/beatgan.html#BeatganDiscriminator.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.beatgan.BeatganDiscriminator.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the discriminator of the BeatGAN model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.beatgan.BeatganGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.beatgan.</span></span><span class="sig-name descname"><span class="pre">BeatganGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tanh_out</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/beatgan.html#BeatganGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.beatgan.BeatganGenerator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>Generator of the BeatGAN model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.beatgan.BeatganGenerator.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/beatgan.html#BeatganGenerator.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.beatgan.BeatganGenerator.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Perform a forward pass.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.beatgan.BeatganGenerator.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/beatgan.html#BeatganGenerator.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.beatgan.BeatganGenerator.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the generator of the BeatGAN module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ecgan.networks.vaegan"></span><p>VAEGAN encoder.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.networks.vaegan.VAEEncoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.networks.vaegan.</span></span><span class="sig-name descname"><span class="pre">VAEEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_running_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/vaegan.html#VAEEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.vaegan.VAEEncoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule" title="ecgan.utils.configurable.ConfigurableTorchModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.ConfigurableTorchModule</span></code></a></p>
+<p>Variational Convolutional Encoder Module.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.vaegan.VAEEncoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/vaegan.html#VAEEncoder.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.vaegan.VAEEncoder.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the VAEGAN encoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Input data.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple of (mu, log_var).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.networks.vaegan.VAEEncoder.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/networks/vaegan.html#VAEEncoder.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.networks.vaegan.VAEEncoder.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the encoder of the VAEGAN module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../modules/inverse_mapping/vanilla_inverse_mapping.html" class="btn btn-neutral float-left" title="Simple Inverse Mapping" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../anomaly_detection/index.html" class="btn btn-neutral float-right" title="Anomaly Detection Submodule" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

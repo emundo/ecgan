@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preprocessor &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sampling" href="sampling.html" />
+    <link rel="prev" title="Data Retrieval" href="data_retrieval.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Preprocessing</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">ECGAN Python API</a> &raquo;</li>
+          <li><a href="index.html">Data Preprocessing</a> &raquo;</li>
+      <li>Preprocessor</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/preprocessing/preprocessor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ecgan.preprocessing.preprocessor">
+<span id="preprocessor"></span><h1>Preprocessor<a class="headerlink" href="#module-ecgan.preprocessing.preprocessor" title="Permalink to this headline"></a></h1>
+<p>Baseclass for preprocessing as well as the preprocessing classes for the supported datasets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.BasePreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.preprocessing.preprocessor.</span></span><span class="sig-name descname"><span class="pre">BasePreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#BasePreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.BasePreprocessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Base class for preprocessors.</p>
+<p>Generally, preprocessors expect data to be in <code class="code docutils literal notranslate"><span class="pre">&lt;target_dir&gt;/&lt;dataset_name&gt;/raw</span></code> (e.g. <code class="code docutils literal notranslate"><span class="pre">data/mitbih/raw</span></code>)
+with <code class="code docutils literal notranslate"><span class="pre">target_dir</span></code> being given in the config. Processed data should always be saved as <code class="code docutils literal notranslate"><span class="pre">data.pkl</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">label.pkl</span></code> into <code class="code docutils literal notranslate"><span class="pre">&lt;target_dir&gt;/&lt;dataset_name&gt;/processed</span></code> (e.g. <code class="code docutils literal notranslate"><span class="pre">data/mitbih/processed</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cfg</strong> (<a class="reference internal" href="../config/dataclasses.html#ecgan.config.dataclasses.PreprocessingConfig" title="ecgan.config.dataclasses.PreprocessingConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">PreprocessingConfig</span></code></a>) -- Configuration determining data source and desired preprocessing.</p></li>
+<li><p><strong>dataset_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) -- Name of dataset which has to be preprocessed.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.BasePreprocessor.preprocess">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#BasePreprocessor.preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.BasePreprocessor.preprocess" title="Permalink to this definition"></a></dt>
+<dd><p>Preprocess a given dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Data and label tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.BasePreprocessor.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#BasePreprocessor.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.BasePreprocessor.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save the data as well as the labels to <cite>save_dir</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.preprocessing.preprocessor.</span></span><span class="sig-name descname"><span class="pre">ExtractedBeatsPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#ExtractedBeatsPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.preprocessing.preprocessor.BasePreprocessor" title="ecgan.preprocessing.preprocessor.BasePreprocessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.preprocessing.preprocessor.BasePreprocessor</span></code></a></p>
+<p>Preprocess the MITBIH/PTB dataset to retrieve beatwise segmented data.</p>
+<p>The data is already preprocessed according to <a class="reference external" href="https://arxiv.org/abs/1805.00794">Kachuee et al. 2018</a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#ExtractedBeatsPreprocessor.preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor.preprocess" title="Permalink to this definition"></a></dt>
+<dd><p>Preprocess the dataset.</p>
+<p>Load the raw CSV data, reshape the univariate series into multivariate series,
+extract labels, call the _preprocess_worker to cleanse and resample the data.
+Each initial raw sample has 187 values and contains the label in the last column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of data and labels in a framework compatible format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.MitbihExtractedBeatsPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.preprocessing.preprocessor.</span></span><span class="sig-name descname"><span class="pre">MitbihExtractedBeatsPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#MitbihExtractedBeatsPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.MitbihExtractedBeatsPreprocessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor" title="ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor</span></code></a></p>
+<p>Preprocess the MITBIH dataset from <a class="reference external" href="https://arxiv.org/abs/1805.00794">Kachuee et al. 2018</a>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.PtbExtractedBeatsPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.preprocessing.preprocessor.</span></span><span class="sig-name descname"><span class="pre">PtbExtractedBeatsPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#PtbExtractedBeatsPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.PtbExtractedBeatsPreprocessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor" title="ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor</span></code></a></p>
+<p>Preprocess the PTB dataset from <a class="reference external" href="https://arxiv.org/abs/1805.00794">Kachuee et al. 2018</a>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.MitbihBeatganPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.preprocessing.preprocessor.</span></span><span class="sig-name descname"><span class="pre">MitbihBeatganPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#MitbihBeatganPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.MitbihBeatganPreprocessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.preprocessing.preprocessor.BasePreprocessor" title="ecgan.preprocessing.preprocessor.BasePreprocessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.preprocessing.preprocessor.BasePreprocessor</span></code></a></p>
+<p>Preprocess the MITBIH dataset from <a class="reference external" href="https://www.ijcai.org/Proceedings/2019/0616.pdf">Zhou et al. 2019</a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.MitbihBeatganPreprocessor.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#MitbihBeatganPreprocessor.preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.MitbihBeatganPreprocessor.preprocess" title="Permalink to this definition"></a></dt>
+<dd><p>Preprocess the MITBIH BEATGAN dataset.</p>
+<p>Since the data itself is already preprocessed according to the paper, data classes are
+concatenated, reshaped and labeled according to the format used in ECGAN.
+Data can be additionally resampled, additional cleansing is not supported.</p>
+<p>It can be useful to remove the second dim (the second feature) since the leads
+differ across many series.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The data has not been validated and might be erroneous.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.ShaoxingPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.preprocessing.preprocessor.</span></span><span class="sig-name descname"><span class="pre">ShaoxingPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#ShaoxingPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.ShaoxingPreprocessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.preprocessing.preprocessor.BasePreprocessor" title="ecgan.preprocessing.preprocessor.BasePreprocessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.preprocessing.preprocessor.BasePreprocessor</span></code></a></p>
+<p>Preprocess the Shaoxing dataset from <a class="reference external" href="https://www.nature.com/articles/s41597-020-0386-x">Zheng et al. 2020</a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.ShaoxingPreprocessor.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#ShaoxingPreprocessor.preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.ShaoxingPreprocessor.preprocess" title="Permalink to this definition"></a></dt>
+<dd><p>Start preprocessing the Shaoxing data and save it to disc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.preprocessing.preprocessor.PreprocessorFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.preprocessing.preprocessor.</span></span><span class="sig-name descname"><span class="pre">PreprocessorFactory</span></span><a class="reference internal" href="../../_modules/ecgan/preprocessing/preprocessor.html#PreprocessorFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.preprocessing.preprocessor.PreprocessorFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Meta module for creating preprocessor instances.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data_retrieval.html" class="btn btn-neutral float-left" title="Data Retrieval" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sampling.html" class="btn btn-neutral float-right" title="Sampling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

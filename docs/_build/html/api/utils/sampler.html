@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sampler &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Splitting" href="splitting.html" />
+    <link rel="prev" title="Reconstruction Criteria" href="reconstruction_criteria.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Utils</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">ECGAN Python API</a> &raquo;</li>
+          <li><a href="index.html">Utils</a> &raquo;</li>
+      <li>Sampler</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/utils/sampler.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ecgan.utils.sampler">
+<span id="sampler"></span><h1>Sampler<a class="headerlink" href="#module-ecgan.utils.sampler" title="Permalink to this headline"></a></h1>
+<p>Implementation of a read-only sampling interface for module resources.</p>
+<p>A sampler provides access to a module's resources such as its latent space, generator
+and discriminator. The usage is exemplified in the implementation of loss functions where
+samplers are used to compute the necessary gradients.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.ones">
+<span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">ones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout=torch.strided</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requires_grad=False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="headerlink" href="#ecgan.utils.sampler.ones" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a tensor filled with the scalar value <cite>1</cite>, with the shape defined
+by the variable argument <code class="xref py py-attr docutils literal notranslate"><span class="pre">size</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>int</em><em>...</em>) -- a sequence of integers defining the shape of the output tensor.
+Can be a variable number of arguments or a collection like a list or tuple.</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>out</strong> (<em>Tensor</em><em>, </em><em>optional</em>) -- the output tensor.</p></li>
+<li><p><strong>dtype</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.dtype</span></code>, optional) -- the desired data type of returned tensor.
+Default: if <code class="docutils literal notranslate"><span class="pre">None</span></code>, uses a global default (see <code class="xref py py-func docutils literal notranslate"><span class="pre">torch.set_default_tensor_type()</span></code>).</p></li>
+<li><p><strong>layout</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.layout</span></code>, optional) -- the desired layout of returned Tensor.
+Default: <code class="docutils literal notranslate"><span class="pre">torch.strided</span></code>.</p></li>
+<li><p><strong>device</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.device</span></code>, optional) -- the desired device of returned tensor.
+Default: if <code class="docutils literal notranslate"><span class="pre">None</span></code>, uses the current device for the default tensor type
+(see <code class="xref py py-func docutils literal notranslate"><span class="pre">torch.set_default_tensor_type()</span></code>). <code class="xref py py-attr docutils literal notranslate"><span class="pre">device</span></code> will be the CPU
+for CPU tensor types and the current CUDA device for CUDA tensor types.</p></li>
+<li><p><strong>requires_grad</strong> (<em>bool</em><em>, </em><em>optional</em>) -- If autograd should record operations on the
+returned tensor. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">tensor([[ 1.,  1.,  1.],</span>
+<span class="go">        [ 1.,  1.,  1.]])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">tensor([ 1.,  1.,  1.,  1.,  1.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.BaseSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">BaseSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_seq_length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#BaseSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.BaseSampler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract sampler that provides read-only access to a component.</p>
+<p>Examples are modules such as the generator or discriminator, or data and labels.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.BaseSampler.sample">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#BaseSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.BaseSampler.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample from the component.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.BaseSampler.sample_label_ones">
+<span class="sig-name descname"><span class="pre">sample_label_ones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sampling_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#BaseSampler.sample_label_ones"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.BaseSampler.sample_label_ones" title="Permalink to this definition"></a></dt>
+<dd><p>Return a tensor filled with ones based on the sampling size.</p>
+<p>RNN-based GANs can rely on a label for each timestep in every series instead of
+only one label per series. If an RNN is used, the sampling_seq_length should be
+set to the sequence length, 1 otherwise during initialization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.BaseSampler.sample_label_zeros">
+<span class="sig-name descname"><span class="pre">sample_label_zeros</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sampling_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#BaseSampler.sample_label_zeros"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.BaseSampler.sample_label_zeros" title="Permalink to this definition"></a></dt>
+<dd><p>Return a tensor filled with zeros based on the sampling size.</p>
+<p>RNN-based GANs can rely on a label for each timestep in every series instead of
+only one label per series. If an RNN is used, the sampling_seq_length should be
+set to the sequence length, 1 otherwise during initialization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.DataSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">DataSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#DataSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.DataSampler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.sampler.BaseSampler" title="ecgan.utils.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.sampler.BaseSampler</span></code></a></p>
+<p>Sampler for a (PyTorch) dataset.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.DataSampler.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#DataSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.DataSampler.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample <cite>data</cite> amount of data from the provided dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Amount of data to draw from the dataset.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict containing the sample values and labels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.DataSampler.sample_class">
+<span class="sig-name descname"><span class="pre">sample_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#DataSampler.sample_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.DataSampler.sample_class" title="Permalink to this definition"></a></dt>
+<dd><p>Sample <cite>num_samples</cite> amount of samples belonging to a given class from the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_samples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Amount of data to draw from the dataset.</p></li>
+<li><p><strong>class_label</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Class label.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict containing the sampled values and (non-zero) labels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.DataSampler.set_dataset">
+<span class="sig-name descname"><span class="pre">set_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#DataSampler.set_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.DataSampler.set_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Change or set datasets to sample from.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.DataSampler.get_dataset_size">
+<span class="sig-name descname"><span class="pre">get_dataset_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#DataSampler.get_dataset_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.DataSampler.get_dataset_size" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve the amount of data in the dataset or of a specific class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>class_label</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) -- Optional class label.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Amount of samples in whole dataset if no class label is given, amount of samples in class otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.DiscriminatorSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">DiscriminatorSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_seq_length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#DiscriminatorSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.DiscriminatorSampler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.sampler.BaseSampler" title="ecgan.utils.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.sampler.BaseSampler</span></code></a></p>
+<p>Sampler for a classification model (e.g. a GAN discriminator) to retrieve the classification scores.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.DiscriminatorSampler.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#DiscriminatorSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.DiscriminatorSampler.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the classifier.</p>
+<p>Note that a gradient for the component is computed.
+You can wrap the method in a <cite>torch.no_grad()</cite> block in
+order to stop the computation of the gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Input tensor that shall be judged by the discriminator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Probability scores for the data being real.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.GeneratorSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">GeneratorSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#GeneratorSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.GeneratorSampler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.sampler.BaseSampler" title="ecgan.utils.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.sampler.BaseSampler</span></code></a></p>
+<p>Sampler for a generator.</p>
+<p>Can be used to either sample noise from the latent space provided during
+initialization, or to generate data based on a noise sample.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.GeneratorSampler.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#GeneratorSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.GeneratorSampler.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the generator to synthesize data space of the training data.</p>
+<p>The resulting data is a time series with a predefined sequence length
+and a specified amount of channels.
+Note that that a gradient for the component is computed. You can wrap the
+method in a <cite>torch.no_grad()</cite> block in order to stop the computation of the
+gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Input noise for the generator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Samples in the training data space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.GeneratorSampler.sample_z">
+<span class="sig-name descname"><span class="pre">sample_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#GeneratorSampler.sample_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.GeneratorSampler.sample_z" title="Permalink to this definition"></a></dt>
+<dd><p>Draw a sample from from the latent space.</p>
+<p>Sample n vectors of noise. The dimensionality of the noise should be set during
+initialization. The sequence length is set to 1 (contrary to what some
+LSTM-based GANs do). The noise is expanded if the sampling_seq_length is larger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.FeatureDiscriminatorSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">FeatureDiscriminatorSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_seq_length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#FeatureDiscriminatorSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.FeatureDiscriminatorSampler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.sampler.DiscriminatorSampler" title="ecgan.utils.sampler.DiscriminatorSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.sampler.DiscriminatorSampler</span></code></a></p>
+<p>Sampler for a discriminator model which returns a discrimination score and features.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.FeatureDiscriminatorSampler.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#FeatureDiscriminatorSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.FeatureDiscriminatorSampler.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the classifier.</p>
+<p>Note that a gradient for the component is computed.
+You can wrap the method in a <cite>torch.no_grad()</cite> block in
+order to stop the computation of the gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Input tensor that shall be judged by the discriminator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Probability scores for the data being real.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.FeatureDiscriminatorSampler.sample_features">
+<span class="sig-name descname"><span class="pre">sample_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#FeatureDiscriminatorSampler.sample_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.FeatureDiscriminatorSampler.sample_features" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the model for the features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> -- </p></li>
+<li><p><strong>data</strong> -- Input tensor that shall be judged by the discriminator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returns the features as returned by the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.FeatureDiscriminatorSampler.sample_score_features">
+<span class="sig-name descname"><span class="pre">sample_score_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#FeatureDiscriminatorSampler.sample_score_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.FeatureDiscriminatorSampler.sample_score_features" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the model for the score and the features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> -- Input tensor that shall be judged by the discriminator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returns the score and the features as returned by the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.EncoderBasedGeneratorSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">EncoderBasedGeneratorSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_seq_length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#EncoderBasedGeneratorSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.EncoderBasedGeneratorSampler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.sampler.GeneratorSampler" title="ecgan.utils.sampler.GeneratorSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.sampler.GeneratorSampler</span></code></a></p>
+<p>Generator sampler for encoder based modules.</p>
+<p>Since these modules do not have a traditional latent distribution, calling <cite>sample_z</cite> will result in a
+<cite>NotImplementedError</cite>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.EncoderBasedGeneratorSampler.sample_encoder">
+<span class="sig-name descname"><span class="pre">sample_encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#EncoderBasedGeneratorSampler.sample_encoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.EncoderBasedGeneratorSampler.sample_encoder" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the encoder of the module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.EncoderBasedGeneratorSampler.sample_generator_encoder">
+<span class="sig-name descname"><span class="pre">sample_generator_encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#EncoderBasedGeneratorSampler.sample_generator_encoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.EncoderBasedGeneratorSampler.sample_generator_encoder" title="Permalink to this definition"></a></dt>
+<dd><p>Return the result of the encoder and the generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.EncoderBasedGeneratorSampler.sample_z">
+<span class="sig-name descname"><span class="pre">sample_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#EncoderBasedGeneratorSampler.sample_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.EncoderBasedGeneratorSampler.sample_z" title="Permalink to this definition"></a></dt>
+<dd><p>Raise <cite>NotImplementedError</cite> since the sampler has no latent distribution.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.VAEGANGeneratorSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">VAEGANGeneratorSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#VAEGANGeneratorSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.VAEGANGeneratorSampler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.sampler.EncoderBasedGeneratorSampler" title="ecgan.utils.sampler.EncoderBasedGeneratorSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.sampler.EncoderBasedGeneratorSampler</span></code></a></p>
+<p>Generator sampler for the VAEGAN module.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.VAEGANGeneratorSampler.sample_mu_logvar">
+<span class="sig-name descname"><span class="pre">sample_mu_logvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#VAEGANGeneratorSampler.sample_mu_logvar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_mu_logvar" title="Permalink to this definition"></a></dt>
+<dd><p>Sample mu and log variance for a given sample from VAEGAN encoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.VAEGANGeneratorSampler.sample_encoder">
+<span class="sig-name descname"><span class="pre">sample_encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#VAEGANGeneratorSampler.sample_encoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_encoder" title="Permalink to this definition"></a></dt>
+<dd><p>Return the noise of the encoder for the VAEGAN module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Training data.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Learned mean value mu with reparameterized std.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.VAEGANGeneratorSampler.sample_eps">
+<span class="sig-name descname"><span class="pre">sample_eps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#VAEGANGeneratorSampler.sample_eps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_eps" title="Permalink to this definition"></a></dt>
+<dd><p>Sample epsilon for reparametrization from normal distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.VAEGANGeneratorSampler.sample_pre_computed">
+<span class="sig-name descname"><span class="pre">sample_pre_computed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#VAEGANGeneratorSampler.sample_pre_computed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_pre_computed" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the generator given a mean value and a log variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.VAEGANGeneratorSampler.sample_z">
+<span class="sig-name descname"><span class="pre">sample_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#VAEGANGeneratorSampler.sample_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_z" title="Permalink to this definition"></a></dt>
+<dd><p>Raise <cite>NotImplementedError</cite> since the sampler has no latent distribution.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.EncoderDecoderSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">EncoderDecoderSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decoder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#EncoderDecoderSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.EncoderDecoderSampler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.sampler.GeneratorSampler" title="ecgan.utils.sampler.GeneratorSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.sampler.GeneratorSampler</span></code></a></p>
+<p>Sampler for a Encoder/Decoder based model, without explicit latent distribution.</p>
+<p>As of yet it remains unused. But it is meant for usage in encoder-based architectures such as BeatGAN. These
+architectures do not have a typical distribution which can be queried for latent space vectors but have to query the
+encoder model for a latent vector.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.EncoderDecoderSampler.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#EncoderDecoderSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.EncoderDecoderSampler.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample data by feeding input to encoder and then to decoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.EncoderDecoderSampler.sample_z">
+<span class="sig-name descname"><span class="pre">sample_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#EncoderDecoderSampler.sample_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.EncoderDecoderSampler.sample_z" title="Permalink to this definition"></a></dt>
+<dd><p>Sample the implicit latent space of the encoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.sampler.LatentDistributionFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.sampler.</span></span><span class="sig-name descname"><span class="pre">LatentDistributionFactory</span></span><a class="reference internal" href="../../_modules/ecgan/utils/sampler.html#LatentDistributionFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.sampler.LatentDistributionFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Meta module for creating correct loss functions.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="reconstruction_criteria.html" class="btn btn-neutral float-left" title="Reconstruction Criteria" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="splitting.html" class="btn btn-neutral float-right" title="Splitting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

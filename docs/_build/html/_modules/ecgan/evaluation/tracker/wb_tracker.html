@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.evaluation.tracker.wb_tracker &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.evaluation.tracker.wb_tracker</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.evaluation.tracker.wb_tracker</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tracker storing data using weights and biases.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">TemporaryDirectory</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">wandb</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.evaluation.tracker.base_tracker</span> <span class="kn">import</span> <span class="n">BaseTracker</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.artifacts</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">FileArtifact</span><span class="p">,</span> <span class="n">ImageArtifact</span><span class="p">,</span> <span class="n">ValueArtifact</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.miscellaneous</span> <span class="kn">import</span> <span class="n">load_wandb_config</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="WBTracker"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker">[docs]</a><span class="k">class</span> <span class="nc">WBTracker</span><span class="p">(</span><span class="n">BaseTracker</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to manage calculating metrics and logging them with Weights &amp; Biases (W&amp;B).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        entity: Weights and Biases entity name (given by W&amp;B).</span>
+<span class="sd">        project: Weights and Biases project name (chosen by user).</span>
+<span class="sd">        run_name: Weights and Biases run name (chosen by user).</span>
+<span class="sd">        save_pdf: Flag to save data as pdf **ADDITIONALLY** to normal plots.</span>
+<span class="sd">        save_locally: Flag to retain local storage of data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PDF_DIR</span> <span class="o">=</span> <span class="s2">&quot;pdfs&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">project</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">run_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">save_locally</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">save_pdf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">save_checkpoint_s3</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set basic tracking parameters.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span> <span class="o">=</span> <span class="n">wandb</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">run_name</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span> <span class="n">reinit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_id</span> <span class="o">=</span> <span class="n">wandb</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">id</span>  <span class="c1"># type: ignore</span>
+
+        <span class="c1"># Data will be saved locally to self.temp_dir during training and removed</span>
+        <span class="c1"># if the `save_locally` flag is not explicitly set to True.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temp_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TemporaryDirectory</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_locally</span> <span class="o">=</span> <span class="n">save_locally</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_pdf</span> <span class="o">=</span> <span class="n">save_pdf</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">run_name</span><span class="p">,</span> <span class="n">save_pdf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">save_checkpoint_s3</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">boto3</span>  <span class="c1"># pylint: disable=C0415</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">s3_bucket</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">Bucket</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_checkpoint_s3</span> <span class="o">=</span> <span class="n">save_checkpoint_s3</span>
+
+    <span class="k">def</span> <span class="nf">_init_run_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the run directory.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The file path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_locally</span><span class="p">:</span>
+            <span class="n">run_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="s1">&#39;runs&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">=</span> <span class="n">TemporaryDirectory</span><span class="p">()</span>  <span class="c1"># pylint: disable=R1732</span>
+            <span class="n">run_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp_dir</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_pdf</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="n">WBTracker</span><span class="o">.</span><span class="n">PDF_DIR</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">run_dir</span>
+
+<div class="viewcode-block" id="WBTracker.close"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close training run.</span>
+
+<span class="sd">        The uploading might require some time. The run is interrupted if the upload did not complete after 90 seconds.</span>
+<span class="sd">        You can manually upload the data afterwards with a local sync.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="mi">90</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">still_alive</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">remaining_time</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="k">while</span> <span class="n">still_alive</span><span class="p">:</span>
+            <span class="n">still_alive</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">thread</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread_list</span><span class="p">:</span>
+                <span class="n">thread</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">thread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+                    <span class="n">still_alive</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;Waiting for threaded upload to finish. Force quit in </span><span class="si">{0:3}</span><span class="s1"> second(s) if &#39;</span>
+                <span class="s1">&#39;upload does not complete.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">remaining_time</span><span class="p">),</span>
+                <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">remaining_time</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_locally</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp_dir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="WBTracker.watch"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.watch">[docs]</a>    <span class="k">def</span> <span class="nf">watch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Pass a module that should be watched during training.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+                <span class="n">wandb</span><span class="o">.</span><span class="n">watch</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">log_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wandb</span><span class="o">.</span><span class="n">watch</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">log_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WBTracker.log_config"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_config">[docs]</a>    <span class="k">def</span> <span class="nf">log_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Log parameters for training setup.&quot;&quot;&quot;</span>
+        <span class="n">wandb</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>  <span class="c1"># pylint: disable=E1101</span></div>
+
+<div class="viewcode-block" id="WBTracker.log_metrics"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_metrics">[docs]</a>    <span class="k">def</span> <span class="nf">log_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Take a dictionary with metrics and log content.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metrics: Dict in shape {metric: val, ...}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wandb</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WBTracker.log_checkpoint"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_checkpoint">[docs]</a>    <span class="k">def</span> <span class="nf">log_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module_checkpoint</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">fold</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save a module checkpoint.</span>
+
+<span class="sd">        The checkpoint is a dictionary containing its state dict and</span>
+<span class="sd">        optimizer parameters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            module_checkpoint: Dictionary with model weights.</span>
+<span class="sd">            fold: Current fold. Should be extracted before beginning to upload to avoid concurrency.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_thread</span><span class="p">(</span>
+            <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_upload_checkpoint</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">module_checkpoint</span><span class="p">,</span>
+                <span class="n">fold</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_start_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thread</span><span class="p">)</span>
+        <span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_upload_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Upload file to wandb.&quot;&quot;&quot;</span>
+        <span class="n">wandb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_upload_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module_checkpoint</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">fold</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Upload checkpoint to S3 and log it to W&amp;B.&quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_dir</span><span class="p">,</span> <span class="s1">&#39;model_ep_</span><span class="si">{}</span><span class="s1">_fold_</span><span class="si">{}</span><span class="s1">.pt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">,</span> <span class="n">fold</span><span class="p">))</span>
+
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">module_checkpoint</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">model_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_fold&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">fold</span><span class="p">)</span>
+        <span class="n">art</span> <span class="o">=</span> <span class="n">wandb</span><span class="o">.</span><span class="n">Artifact</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_checkpoint_s3</span><span class="p">:</span>
+            <span class="n">s3_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">s3_bucket</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">s3_path</span><span class="p">)</span>
+            <span class="n">s3_reference</span> <span class="o">=</span> <span class="s1">&#39;s3://&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">s3_path</span>
+            <span class="n">art</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">s3_reference</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">art</span><span class="o">.</span><span class="n">add_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">wandb</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="n">art</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_checkpoint_s3</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Uploaded checkout to s3.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Uploaded checkout to wandb.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="WBTracker.log_artifacts"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_artifacts">[docs]</a>    <span class="k">def</span> <span class="nf">log_artifacts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artifacts</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Artifact</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Log dictionary with artifacts to W&amp;B.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            artifacts: Dictionary containing artifacts to log.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">metrics_log</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">artifacts</span> <span class="o">=</span> <span class="n">artifacts</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifacts</span><span class="p">,</span> <span class="n">List</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">artifacts</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">artifacts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="p">,</span> <span class="n">ImageArtifact</span><span class="p">):</span>
+                <span class="n">metrics_log</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">wandb</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">image</span><span class="p">)})</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_pdf</span> <span class="ow">and</span> <span class="n">artifact</span><span class="o">.</span><span class="n">figure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">file_name</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+                    <span class="n">pdf_artifact</span> <span class="o">=</span> <span class="n">FileArtifact</span><span class="p">(</span>
+                        <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local_file_save</span><span class="p">(</span><span class="n">pdf_artifact</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_start_thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_upload_file</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">),))</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="p">,</span> <span class="n">ValueArtifact</span><span class="p">):</span>
+                <span class="n">metrics_log</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">artifact</span><span class="o">.</span><span class="n">value</span><span class="p">})</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="p">,</span> <span class="n">FileArtifact</span><span class="p">):</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local_file_save</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_start_thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_upload_file</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">path</span><span class="p">,))</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Saved </span><span class="si">{0}</span><span class="s1"> in </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Artifact type was not found: </span><span class="si">{0}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">artifact</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">metrics_log</span><span class="p">:</span>
+            <span class="n">wandb</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">metrics_log</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WBTracker.load_config"><a class="viewcode-back" href="../../../../api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.load_config">[docs]</a>    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Load config as dict.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">load_wandb_config</span><span class="p">(</span><span class="n">run_uri</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

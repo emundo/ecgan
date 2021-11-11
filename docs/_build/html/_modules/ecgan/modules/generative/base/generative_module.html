@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.modules.generative.base.generative_module &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.modules.generative.base.generative_module</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.modules.generative.base.generative_module</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Abstract base generative module.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">no_grad</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.config</span> <span class="kn">import</span> <span class="n">ModuleConfig</span>
+<span class="kn">from</span> <span class="nn">ecgan.evaluation.metrics.classification</span> <span class="kn">import</span> <span class="n">AUROCMetric</span><span class="p">,</span> <span class="n">FScoreMetric</span><span class="p">,</span> <span class="n">MCCMetric</span>
+<span class="kn">from</span> <span class="nn">ecgan.evaluation.metrics.mmd</span> <span class="kn">import</span> <span class="n">MaxMeanDiscrepancy</span>
+<span class="kn">from</span> <span class="nn">ecgan.evaluation.metrics.tstr</span> <span class="kn">import</span> <span class="n">TSTR</span>
+<span class="kn">from</span> <span class="nn">ecgan.modules.base</span> <span class="kn">import</span> <span class="n">BaseModule</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.artifacts</span> <span class="kn">import</span> <span class="n">ValueArtifact</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BaseGenerativeModule"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.generative_module.BaseGenerativeModule">[docs]</a><span class="k">class</span> <span class="nc">BaseGenerativeModule</span><span class="p">(</span><span class="n">BaseModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract base generative module containing several generative metrics.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cfg</span><span class="p">:</span> <span class="n">ModuleConfig</span><span class="p">,</span>
+        <span class="n">seq_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">NUM_CLASSES_BINARY</span>
+
+<div class="viewcode-block" id="BaseGenerativeModule.get_sample"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.generative_module.BaseGenerativeModule.get_sample">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_sample</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_samples</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a sample.</span>
+
+<span class="sd">        Either based on random noise (requires the amount of samples) or original data</span>
+<span class="sd">        if a reconstruction-based GAN is chosen.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;GenerativeModule needs to implement the `get_sample` method.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseGenerativeModule.get_tstr"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.generative_module.BaseGenerativeModule.get_tstr">[docs]</a>    <span class="k">def</span> <span class="nf">get_tstr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate TSTR values.</span>
+
+<span class="sd">        Requires a validation dataset from which the data is drawn. Afterwards, data is generated either from</span>
+<span class="sd">        randomly sampling the latent space (e.g. GAN based models which use a random z vector) or from retrieving a</span>
+<span class="sd">        reconstructed sample from the validation data used for training.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict containing TSTR statistics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tstr_metric</span> <span class="o">=</span> <span class="n">TSTR</span><span class="p">(</span>
+            <span class="n">n_estimators</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+            <span class="n">num_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="p">,</span>
+            <span class="n">classifier</span><span class="o">=</span><span class="s1">&#39;cnn&#39;</span><span class="p">,</span>
+            <span class="n">seq_len</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seq_len</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+            <span class="n">num_classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Train TSTR on binary labels without class imbalance: Use equal amount of normal and abnormal data.</span>
+        <span class="c1"># Use 2/3 of the data for training and 1/3 for testing.</span>
+        <span class="n">lower_volume_class</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mi">0</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vali_dataset_sampler</span><span class="o">.</span><span class="n">get_dataset_size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">vali_dataset_sampler</span><span class="o">.</span><span class="n">get_dataset_size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">num_test_samples_per_class</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vali_dataset_sampler</span><span class="o">.</span><span class="n">get_dataset_size</span><span class="p">(</span><span class="n">lower_volume_class</span><span class="p">))</span> <span class="o">//</span> <span class="mi">3</span>
+        <span class="n">num_train_samples_per_class</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vali_dataset_sampler</span><span class="o">.</span><span class="n">get_dataset_size</span><span class="p">(</span><span class="n">lower_volume_class</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_test_samples_per_class</span>
+        <span class="p">)</span>
+        <span class="n">samples_per_class</span> <span class="o">=</span> <span class="n">num_test_samples_per_class</span> <span class="o">+</span> <span class="n">num_train_samples_per_class</span>
+
+        <span class="n">abnormal_data_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vali_dataset_sampler</span><span class="o">.</span><span class="n">sample_class</span><span class="p">(</span><span class="n">samples_per_class</span><span class="p">,</span> <span class="n">class_label</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">normal_data_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vali_dataset_sampler</span><span class="o">.</span><span class="n">sample_class</span><span class="p">(</span><span class="n">samples_per_class</span><span class="p">,</span> <span class="n">class_label</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">anomalous_data_train</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">abnormal_data_samples</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][:</span><span class="n">num_train_samples_per_class</span><span class="p">],</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">abnormal_data_samples</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">][:</span><span class="n">num_train_samples_per_class</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">anomalous_data_test</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">abnormal_data_samples</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][:</span><span class="n">num_test_samples_per_class</span><span class="p">],</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">abnormal_data_samples</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">][:</span><span class="n">num_test_samples_per_class</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">normal_data_train</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">normal_data_samples</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">num_train_samples_per_class</span><span class="p">:],</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">normal_data_samples</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">][</span><span class="n">num_train_samples_per_class</span><span class="p">:],</span>
+        <span class="p">}</span>
+        <span class="n">normal_data_test</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">normal_data_samples</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">num_test_samples_per_class</span><span class="p">:],</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">normal_data_samples</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">][</span><span class="n">num_test_samples_per_class</span><span class="p">:],</span>
+        <span class="p">}</span>
+
+        <span class="n">real_train_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">normal_data_train</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">anomalous_data_train</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">real_test_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">normal_data_test</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">anomalous_data_test</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">real_train_label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">normal_data_train</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">anomalous_data_train</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">real_test_label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">normal_data_test</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">anomalous_data_test</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="c1"># Attention: transition of terminology.</span>
+        <span class="c1"># Before: zero-Tensor related to the discriminator score &gt; lower score was worse</span>
+        <span class="c1"># Now: zero-Tensor means that the data was not anomalous i.e. all data fed into the GAN</span>
+        <span class="c1">#</span>
+        <span class="c1"># In the current version, the GAN is only trained to generate data from class 0 (normal/non-anomalous/healthy).</span>
+        <span class="c1"># Training a classifier with only one label would result in not very useful information since no useful</span>
+        <span class="c1"># separating hyperplane can be created. To allow the creation of such a hyperplane, anomalous data has to be</span>
+        <span class="c1"># considered.</span>
+
+        <span class="k">with</span> <span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">fake_train_data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sample</span><span class="p">(</span>
+                <span class="n">num_samples</span><span class="o">=</span><span class="n">num_test_samples_per_class</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">normal_data_train</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">fake_test_data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sample</span><span class="p">(</span>
+                <span class="n">num_samples</span><span class="o">=</span><span class="n">num_test_samples_per_class</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">normal_data_test</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="n">fake_train_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">fake_train_data</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">anomalous_data_train</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+            <span class="n">fake_train_label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">normal_data_train</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">anomalous_data_train</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+            <span class="n">fake_test_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">fake_test_data</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">anomalous_data_test</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+            <span class="n">fake_test_label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">normal_data_test</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">anomalous_data_test</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+
+        <span class="n">tstr_score</span> <span class="o">=</span> <span class="n">tstr_metric</span><span class="p">(</span>
+            <span class="n">real_train_data</span><span class="o">=</span><span class="n">real_train_data</span><span class="p">,</span>
+            <span class="n">real_test_data</span><span class="o">=</span><span class="n">real_test_data</span><span class="p">,</span>
+            <span class="n">real_train_labels</span><span class="o">=</span><span class="n">real_train_label</span><span class="p">,</span>
+            <span class="n">real_test_labels</span><span class="o">=</span><span class="n">real_test_label</span><span class="p">,</span>
+            <span class="n">synth_train_data</span><span class="o">=</span><span class="n">fake_train_data</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+            <span class="n">synth_test_data</span><span class="o">=</span><span class="n">fake_test_data</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+            <span class="n">synth_train_labels</span><span class="o">=</span><span class="n">fake_train_label</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+            <span class="n">synth_test_labels</span><span class="o">=</span><span class="n">fake_test_label</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;Metrics: TSTR F1 synth at </span><span class="si">{0}</span><span class="s1">, normalized with real classifier: </span><span class="si">{1}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">tstr_score</span><span class="p">[</span><span class="s1">&#39;synth&#39;</span><span class="p">][</span><span class="s1">&#39;f1&#39;</span><span class="p">],</span> <span class="n">tstr_score</span><span class="p">[</span><span class="s1">&#39;normalized&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tstr_score</span></div>
+
+<div class="viewcode-block" id="BaseGenerativeModule.get_mmd"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.generative_module.BaseGenerativeModule.get_mmd">[docs]</a>    <span class="k">def</span> <span class="nf">get_mmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the maximum mean discrepancy.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_samples: Amount of samples used for the MMD calculation.</span>
+<span class="sd">            sigma: Sigma for Gaussian kernel during MMD.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            MMD score.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mmd_metric</span> <span class="o">=</span> <span class="n">MaxMeanDiscrepancy</span><span class="p">(</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">num_samples</span>
+        <span class="n">real_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">samples</span><span class="p">)[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">synthetic_data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sample</span><span class="p">(</span><span class="n">num_samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">real_data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">))</span>
+
+        <span class="n">mmd_score</span> <span class="o">=</span> <span class="n">mmd_metric</span><span class="p">(</span><span class="n">real_data</span><span class="p">,</span> <span class="n">synthetic_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mmd_score</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_metrics</span><span class="p">(</span>
+        <span class="n">real_labels</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">predicted_labels</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">log_fscore</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_mcc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_auroc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ValueArtifact</span><span class="p">]:</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">log_fscore</span><span class="p">:</span>
+            <span class="n">fscore</span> <span class="o">=</span> <span class="n">FScoreMetric</span><span class="p">()</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">real_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">)</span>
+
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValueArtifact</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_fscore&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">identifier</span><span class="p">),</span> <span class="n">fscore</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">log_mcc</span><span class="p">:</span>
+            <span class="n">mcc</span> <span class="o">=</span> <span class="n">MCCMetric</span><span class="p">()</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">real_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValueArtifact</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_mcc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">identifier</span><span class="p">),</span> <span class="n">mcc</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">log_auroc</span><span class="p">:</span>
+            <span class="n">auroc</span> <span class="o">=</span> <span class="n">AUROCMetric</span><span class="p">()</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">real_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValueArtifact</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_auroc&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">identifier</span><span class="p">),</span> <span class="n">auroc</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

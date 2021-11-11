@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reconstruction Detector &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Evaluation" href="../../evaluation/index.html" />
+    <link rel="prev" title="Detector Factory" href="detector_factory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../networks/index.html">Networks</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Anomaly Detection</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Detectors</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">ECGAN Python API</a> &raquo;</li>
+          <li><a href="../index.html">Anomaly Detection Submodule</a> &raquo;</li>
+          <li><a href="index.html">Anomaly Detector</a> &raquo;</li>
+      <li>Reconstruction Detector</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/api/anomaly_detection/detector/reconstruction_detector.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ecgan.anomaly_detection.detector.reconstruction_detector">
+<span id="reconstruction-detector"></span><h1>Reconstruction Detector<a class="headerlink" href="#module-ecgan.anomaly_detection.detector.reconstruction_detector" title="Permalink to this headline"></a></h1>
+<p>Base class for reconstruction based AD and implementation of such algorithms.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.anomaly_detection.detector.reconstruction_detector.</span></span><span class="sig-name descname"><span class="pre">ReconstructionDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reconstructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#ReconstructionDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="base_detector.html#ecgan.anomaly_detection.detector.base_detector.AnomalyDetector" title="ecgan.anomaly_detection.detector.base_detector.AnomalyDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.anomaly_detection.detector.base_detector.AnomalyDetector</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Base class for anomaly detectors which reconstruct data.</p>
+<p>The reconstructed data is used to calculate the anomalousness of the data.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reconstructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#ReconstructionDetector.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector.get_reconstructed_data">
+<span class="sig-name descname"><span class="pre">get_reconstructed_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#ReconstructionDetector.get_reconstructed_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector.get_reconstructed_data" title="Permalink to this definition"></a></dt>
+<dd><p>Return the reconstructed data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.anomaly_detection.detector.reconstruction_detector.</span></span><span class="sig-name descname"><span class="pre">GANAnomalyDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reconstructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector" title="ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector</span></code></a></p>
+<p>A GAN based anomaly detector which utilizes a reconstructed series.</p>
+<p>Data is reconstructed by latent interpolation from <a class="reference internal" href="../../../anomaly_detection.html#anogan"><span class="std std-ref">AnoGAN</span></a>.
+Given an input sample x, an <span class="math notranslate nohighlight">\(\epsilon\)</span> similar sample <span class="math notranslate nohighlight">\(\hat{x}\)</span> is retrieved by
+interpolating through latent space (see <code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.detection.reconstruction.InterpolationReconstructor</span></code>).
+Afterwards an anomaly score is calculated by</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Comparing real and synthetic data in data space (using e.g. <span class="math notranslate nohighlight">\(L_1\)</span> /<span class="math notranslate nohighlight">\(L_2\)</span> distance) using
+reconstruction error R(x). R(x) is e.g. the L2 distance or any other distance in data space.</p></li>
+<li><p>Comparing real and synthetic data using the output of the discriminator using discrimination error D(x).
+D(x) is e.g. the deviation of the output score from a target value. Since this can be unreliable and
+depends on the training progress of the discriminator, feature matching is most commonly used.</p></li>
+</ol>
+</div></blockquote>
+<p>Both components are weighted using <span class="math notranslate nohighlight">\(\lambda\)</span> according to the <a class="reference internal" href="../../../anomaly_detection.html#anogan"><span class="std std-ref">AnoGAN</span></a> paper.
+Additionally we allow using a second weight <span class="math notranslate nohighlight">\(\gamma\)</span> to incorporate a third variable, the latent norm Z(x).
+Z(x) compares the norm of the latent vector: The distribution of the norm of training data usually follows the
+Chi distribution (albeit depending on the generative net used). The deviation from its mode can be used to
+measure how likely it is that the latent vector has produced the output data.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reconstructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.detect">
+<span class="sig-name descname"><span class="pre">detect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector.detect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.detect" title="Permalink to this definition"></a></dt>
+<dd><p>Detect anomalies in the test data and return predicted labels.</p>
+<p>Original <cite>detect</cite> method has to be overridden since part of our
+score (and label) optimization requires all reconstructed samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._detect">
+<span class="sig-name descname"><span class="pre">_detect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector._detect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._detect" title="Permalink to this definition"></a></dt>
+<dd><p>Not implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._optimize_metric">
+<span class="sig-name descname"><span class="pre">_optimize_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reconstruction_error</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discriminator_error</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector._optimize_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._optimize_metric" title="Permalink to this definition"></a></dt>
+<dd><p>Predict labels based on the selected strategy.</p>
+<p>The deciding parameters (SVM or manual params) should be retrieved from the validation dataset.
+If none exist: train and evaluate on test data. This should be avoided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The predicted labels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._reconstruct">
+<span class="sig-name descname"><span class="pre">_reconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector._reconstruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._reconstruct" title="Permalink to this definition"></a></dt>
+<dd><p>Detect anomalies inside the <cite>data</cite> Tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Tensor (usually of size [series, channel, seq_len]) of real data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tensor with the corresponding predicted labels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.track_batch">
+<span class="sig-name descname"><span class="pre">track_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reconstructed_series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_num_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector.track_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.track_batch" title="Permalink to this definition"></a></dt>
+<dd><p>Track a batch of reconstructed data.</p>
+<p>By default: visualize the first <cite>plot_num_samples</cite> samples for a visual comparison.
+If the reconstruction is an interpolation reconstructed: Track further metrics.
+This includes the norm of reconstructed data in the latent space, the
+L1 distance between real and fake samples and interpolation grids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reconstructed_series</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Reconstructed data.</p></li>
+<li><p><strong>real_series</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Real data.</p></li>
+<li><p><strong>labels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Labels corresponding to real data.</p></li>
+<li><p><strong>plot_num_samples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Amount of samples that shall be plotted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._get_data_to_save">
+<span class="sig-name descname"><span class="pre">_get_data_to_save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector._get_data_to_save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._get_data_to_save" title="Permalink to this definition"></a></dt>
+<dd><p>Select data that shall be saved after anomaly detection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">saved_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load data from dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANAnomalyDetector.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Configure the default settings for an GANAnomalyDetector.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.anomaly_detection.detector.reconstruction_detector.</span></span><span class="sig-name descname"><span class="pre">GANInverseAnomalyDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reconstructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANInverseAnomalyDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector" title="ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector</span></code></a></p>
+<p>Anomaly detector with an inverse mapping from data to latent space.</p>
+<p>The detector can use a pretrained network for mapping a datum to a latent vector.
+Alternatively, a novel mapping can be trained using a fully trained GAN.
+The resulting detection follows the <code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.anomaly_detection.reconstruction_detector.GANAnomalyDetector</span></code>,
+the only difference is how the reconstructed sample is retrieved. Using the inverse mapping the sample
+is not necessarily <span class="math notranslate nohighlight">\(\epsilon\)</span> similar but the process is significantly sped up and the runtime is linear.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reconstructor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANInverseAnomalyDetector.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector._reconstruct">
+<span class="sig-name descname"><span class="pre">_reconstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANInverseAnomalyDetector._reconstruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector._reconstruct" title="Permalink to this definition"></a></dt>
+<dd><p>Detect anomalies inside the <cite>data</cite> Tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Tensor (usually of size [series, channel, seq_len]) of real data.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tensor with the corresponding predicted labels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector._detect">
+<span class="sig-name descname"><span class="pre">_detect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANInverseAnomalyDetector._detect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector._detect" title="Permalink to this definition"></a></dt>
+<dd><p>Not implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ecgan/anomaly_detection/detector/reconstruction_detector.html#GANInverseAnomalyDetector.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Configure the default settings for a GANInverseAnomalyDetector.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="detector_factory.html" class="btn btn-neutral float-left" title="Detector Factory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../evaluation/index.html" class="btn btn-neutral float-right" title="Evaluation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

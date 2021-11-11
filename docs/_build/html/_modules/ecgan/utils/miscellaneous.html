@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.utils.miscellaneous &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.utils.miscellaneous</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.utils.miscellaneous</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Miscellaneous utilities (especially saving, loading, logging).&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">wandb</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.utils.artifacts</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">ValueArtifact</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">save_epoch_metrics</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="load_model"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_model">[docs]</a><span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="n">model_reference</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Load a trained module from disk (file path) or wand reference to device.&quot;&quot;&quot;</span>
+    <span class="n">artifact_dir</span> <span class="o">=</span> <span class="s1">&#39;artifacts&#39;</span>
+    <span class="n">downloaded_artifacts</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">artifact_dir</span><span class="p">)</span>
+    <span class="n">model_reference_root</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;.pt&#39;</span> <span class="ow">in</span> <span class="n">model_reference</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">model_reference</span><span class="p">):</span>
+        <span class="n">model_path</span> <span class="o">=</span> <span class="n">model_reference</span>
+
+    <span class="k">elif</span> <span class="n">model_reference</span> <span class="ow">in</span> <span class="n">downloaded_artifacts</span><span class="p">:</span>
+        <span class="n">model_reference_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">artifact_dir</span><span class="p">,</span> <span class="n">model_reference</span><span class="p">)</span>
+        <span class="n">model_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">model_reference_root</span><span class="p">)</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.pt&#39;</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_wandb_model_link</span><span class="p">(</span><span class="n">model_reference</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;:&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_reference</span><span class="p">:</span>
+            <span class="n">model_reference</span> <span class="o">+=</span> <span class="s1">&#39;:latest&#39;</span>
+        <span class="n">api</span> <span class="o">=</span> <span class="n">wandb</span><span class="o">.</span><span class="n">Api</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loading model </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_reference</span><span class="p">))</span>
+        <span class="n">artifact</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">artifact</span><span class="p">(</span><span class="n">model_reference</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
+        <span class="n">model_reference_root</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+        <span class="n">model_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">model_reference_root</span><span class="p">)</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.pt&#39;</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_reference_root</span><span class="p">,</span> <span class="n">model_path</span><span class="p">),</span> <span class="n">map_location</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="save_pickle"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.save_pickle">[docs]</a><span class="k">def</span> <span class="nf">save_pickle</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save a generic object to a binary file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: Object to be saved.</span>
+<span class="sd">        filepath: Saving destination.</span>
+<span class="sd">        filename: Name of file `data` is saved to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="save_tensor"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.save_tensor">[docs]</a><span class="k">def</span> <span class="nf">save_tensor</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save a torch tensor to a binary file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: Object to be saved.</span>
+<span class="sd">        filepath: Saving destination.</span>
+<span class="sd">        filename:  Name of file `data` is saved to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">full_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_pickle"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_pickle">[docs]</a><span class="k">def</span> <span class="nf">load_pickle</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a binary file to a python object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath: File to be loaded</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_pickle_numpy"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_pickle_numpy">[docs]</a><span class="k">def</span> <span class="nf">load_pickle_numpy</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a binary file to a numpy array.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath: File to be loaded</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+
+
+<div class="viewcode-block" id="load_yml"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_yml">[docs]</a><span class="k">def</span> <span class="nf">load_yml</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Load a yml file to memory as dict.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ymlfile</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ymlfile</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">FullLoader</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="is_wandb_model_link"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.is_wandb_model_link">[docs]</a><span class="k">def</span> <span class="nf">is_wandb_model_link</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Differentiates between local data and W&amp;B data.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_wandb_config"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_wandb_config">[docs]</a><span class="k">def</span> <span class="nf">load_wandb_config</span><span class="p">(</span><span class="n">run_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Load a config from W&amp;B and convert it to a local one.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">wandb</span><span class="o">.</span><span class="n">Api</span><span class="p">()</span>
+    <span class="n">run</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run_uri</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">convert_wandb_config</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">json_config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_wandb_config"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.convert_wandb_config">[docs]</a><span class="k">def</span> <span class="nf">convert_wandb_config</span><span class="p">(</span><span class="n">wandb_config</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a wandb config into a config dict to reconstruct a run.</span>
+
+<span class="sd">    The wandb includes some additional metadata, especially a `value` field for each key which has to be removed to fit</span>
+<span class="sd">    the original form.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wandb_config: The downloaded wandb config.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The cleaned config parsed into a dict.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wandb_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">wandb_config</span><span class="p">)</span>
+    <span class="n">new_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">wandb_json</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">new_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">)})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">new_dict</span></div>
+
+
+<div class="viewcode-block" id="update_dicts"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.update_dicts">[docs]</a><span class="k">def</span> <span class="nf">update_dicts</span><span class="p">(</span><span class="n">original_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">update_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">additional_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Update dict and the update dict with an additional dict.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;update&#39;</span> <span class="ow">in</span> <span class="n">additional_dict</span><span class="p">:</span>
+        <span class="n">merge_dicts</span><span class="p">(</span><span class="n">update_dict</span><span class="p">,</span> <span class="n">additional_dict</span><span class="p">[</span><span class="s1">&#39;update&#39;</span><span class="p">],</span> <span class="n">duplicates</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">additional_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;update&#39;</span><span class="p">)</span>
+    <span class="n">original_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">additional_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="merge_dicts"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.merge_dicts">[docs]</a><span class="k">def</span> <span class="nf">merge_dicts</span><span class="p">(</span><span class="n">dict_0</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">dict_1</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">duplicates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively merges two dicts into the first one.</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        dict_0: The dictionary that is merged into.</span>
+<span class="sd">        dict_1: The dictionary that is merged from.</span>
+<span class="sd">        duplicates: If `False` the merging will exit with `RunTimeError` when merging duplicate keys.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">dict_1</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_0</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">merge_dicts</span><span class="p">(</span><span class="n">dict_0</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dict_0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">duplicates</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Overwriting existing key when duplicated where prohibited: key: </span><span class="si">{}</span><span class="s2"> value: </span><span class="si">{}</span><span class="s2"> new &quot;</span>
+                    <span class="s2">&quot;value: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">dict_0</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">dict_1</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="p">)</span>
+            <span class="n">dict_0</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="calc_conv_output"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.calc_conv_output">[docs]</a><span class="k">def</span> <span class="nf">calc_conv_output</span><span class="p">(</span><span class="n">in_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">stride</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the output shape for a network with convolutions.</span>
+
+<span class="sd">    The calculation is done for every dimension individually. That means if your</span>
+<span class="sd">    training input is a 5D Tensor with shape (B x C x H x W x D) you need to call this</span>
+<span class="sd">    function 3 times separately for H, W, D in case the dimensions differ. Hence input</span>
+<span class="sd">    size is an int, which represents one dimension.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        in_size: Input size in the CNN.</span>
+<span class="sd">        kernel_size: All kernel sizes in the CNN layers.</span>
+<span class="sd">        stride: All strides in the CNN layers.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Output size in the given dimension.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stride</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">in_size</span> <span class="o">-</span> <span class="n">kernel_size</span><span class="p">)</span> <span class="o">//</span> <span class="n">stride</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel_size</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stride</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">strd</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
+            <span class="n">in_size</span> <span class="o">=</span> <span class="p">((</span><span class="n">in_size</span> <span class="o">-</span> <span class="n">kernel</span><span class="p">)</span> <span class="o">//</span> <span class="n">strd</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">in_size</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="s1">&#39;Parameters kernel_size and stride are not of same type. &#39;</span>
+        <span class="s1">&#39;They should both be of type List or int.&#39;</span>
+        <span class="s1">&#39;Current types: kernel size: </span><span class="si">{0}</span><span class="s1"> and stride: </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">kernel_size</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">stride</span><span class="p">))</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calc_pool_output"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.calc_pool_output">[docs]</a><span class="k">def</span> <span class="nf">calc_pool_output</span><span class="p">(</span><span class="n">in_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stride</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the output size of a pooling layer.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">in_size</span> <span class="o">-</span> <span class="n">kernel_size</span><span class="p">)</span> <span class="o">//</span> <span class="n">stride</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="select_device"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.select_device">[docs]</a><span class="k">def</span> <span class="nf">select_device</span><span class="p">(</span><span class="n">gpu_flag</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select device the model shall be trained on.</span>
+
+<span class="sd">    Either GPU if GPU is set in config and GPU is available or</span>
+<span class="sd">    CPU if GPU is selected but not available or CPU is selected.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gpu_flag: Flag indicating if GPU shall be used.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Device for torch (:code:`gpu` or :code:`cpu`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">gpu_flag</span> <span class="ow">and</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">gpu_flag</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">##############################################################</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="s1">&#39;### WARNING: GPU FLAG IS SET TO TRUE BUT CUDA IS NOT AVAILABLE</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="s1">&#39;### Please check your CUDA install. Defaulting to CPU now.&#39;</span>
+            <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">##############################################################</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resuming process in </span><span class="si">{0:3}</span><span class="s1"> second(s)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="save_epoch"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.save_epoch">[docs]</a><span class="k">def</span> <span class="nf">save_epoch</span><span class="p">(</span>
+    <span class="n">highest_vals</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">checkpoint_interval</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">final_epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if epoch should be saved based on the performance on the validation data.</span>
+
+<span class="sd">    It will be saved if:</span>
+<span class="sd">    1. auroc/f1 are at its maximum,</span>
+<span class="sd">    2. the model would not be saved due to the checkpoint interval anyways, and</span>
+<span class="sd">    3. the auroc/f1 are above the threshold of 0.7 to avoid excessive saving during first epochs</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        highest_vals: Dictionary of the maximum epoch values.</span>
+<span class="sd">        epoch: Current epoch.</span>
+<span class="sd">        checkpoint_interval: Regular checkpoint interval.</span>
+<span class="sd">        metrics: Additional metrics.</span>
+<span class="sd">        final_epoch: Last epoch, saved by default.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Flag, indicating if epoch should be saved.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">checkpoint_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Saving epoch: regular checkpoint interval.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="n">final_epoch</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Saving epoch: Current epoch is final epoch of fold.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">high_epoch</span><span class="p">,</span> <span class="n">high_val</span><span class="p">)</span> <span class="ow">in</span> <span class="n">highest_vals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">high_val</span> <span class="o">&gt;</span> <span class="mf">0.7</span> <span class="ow">and</span> <span class="n">high_epoch</span> <span class="o">==</span> <span class="n">epoch</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s1">&#39;Saving epoch: new highest metric score: </span><span class="si">{0}</span><span class="s1"> is </span><span class="si">{1}</span><span class="s1"> in epoch </span><span class="si">{2}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">high_val</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="update_highest_metrics"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.update_highest_metrics">[docs]</a><span class="k">def</span> <span class="nf">update_highest_metrics</span><span class="p">(</span>
+    <span class="n">new_vali_metrics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">artifacts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">],</span>
+    <span class="n">highest_metrics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">],</span>
+    <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">minimum_metric_improvement</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.005</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compare validation metrics of current epoch with existing max values.</span>
+
+<span class="sd">    A value is only saved as a new highest value if the previous highest value is exceeded</span>
+<span class="sd">    by at least `minimum_metric_improvement`.</span>
+<span class="sd">    This means that the real highest metric might be higher than the highest metric saved here</span>
+<span class="sd">    but it will only be a slight improvement. This avoids too many saved checkpoints which</span>
+<span class="sd">    would happen if any relevant metric is improved marginally (see :func:`ecgan.utils.miscellaneous.save_epoch`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        new_vali_metrics: Dict containing metric keys and float values for current epoch.</span>
+<span class="sd">        artifacts: List of artifacts that is checked for valid metrics.</span>
+<span class="sd">        highest_metrics: Dict containing highest metrics. Metric keys and values are Tuples of (epoch, max value).</span>
+<span class="sd">        epoch: Current epoch.</span>
+<span class="sd">        minimum_metric_improvement: Minimum required relative improvement of the metric.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated dict with highest metric values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">artifacts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="p">,</span> <span class="n">ValueArtifact</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>  <span class="c1"># nested dicts are not compared at the moment.</span>
+                <span class="n">new_vali_metrics</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">artifact</span><span class="o">.</span><span class="n">value</span><span class="p">})</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">new_vali_metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="c1"># nested dicts are not tracked</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">highest_metrics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">highest_metrics</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">highest_val</span> <span class="o">=</span> <span class="n">highest_metrics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">highest_val</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">minimum_metric_improvement</span><span class="p">)):</span>
+            <span class="n">highest_metrics</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">highest_metrics</span></div>
+
+
+<div class="viewcode-block" id="generate_seed"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.generate_seed">[docs]</a><span class="k">def</span> <span class="nf">generate_seed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generate a random seed which can later be used as manual seed.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,))</span><span class="o">.</span><span class="n">item</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="get_num_workers"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.get_num_workers">[docs]</a><span class="k">def</span> <span class="nf">get_num_workers</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Return the number of available CPU cores (minus one).&quot;&quot;&quot;</span>
+    <span class="n">available_cores</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+    <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mi">0</span> <span class="k">if</span> <span class="n">available_cores</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">available_cores</span> <span class="k">if</span> <span class="n">available_cores</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">available_cores</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">num_workers</span></div>
+
+
+<div class="viewcode-block" id="list_from_tuple_list"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.list_from_tuple_list">[docs]</a><span class="k">def</span> <span class="nf">list_from_tuple_list</span><span class="p">(</span><span class="n">metric_tuple_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="n">position</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve all values at `position` of a tuple.&quot;&quot;&quot;</span>
+    <span class="n">metric_list</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="n">metric_tuple_list</span><span class="p">:</span>
+        <span class="n">fold_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">fold</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">fold_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">fold</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">position</span><span class="p">]})</span>
+        <span class="n">metric_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fold_dict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">metric_list</span></div>
+
+
+<div class="viewcode-block" id="nested_list_from_dict_list"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.nested_list_from_dict_list">[docs]</a><span class="k">def</span> <span class="nf">nested_list_from_dict_list</span><span class="p">(</span><span class="n">metric_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Create a nested List from a given Dict.&quot;&quot;&quot;</span>
+    <span class="n">nested_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">metric_name_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metric_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">save_metric</span> <span class="ow">in</span> <span class="n">metric</span> <span class="k">for</span> <span class="n">save_metric</span> <span class="ow">in</span> <span class="n">save_epoch_metrics</span><span class="p">):</span>
+            <span class="n">nested_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">fold</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="n">metric_list</span><span class="p">])</span>
+            <span class="n">metric_name_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nested_list</span><span class="p">,</span> <span class="n">metric_name_list</span></div>
+
+
+<div class="viewcode-block" id="scale_to_unit_circle"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.scale_to_unit_circle">[docs]</a><span class="k">def</span> <span class="nf">scale_to_unit_circle</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Rescales data to [-1,1] range.&quot;&quot;&quot;</span>
+    <span class="n">min_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">scaled_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">min_</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">min_</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">scaled_data</span></div>
+
+
+<div class="viewcode-block" id="retrieve_model_specification"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.retrieve_model_specification">[docs]</a><span class="k">def</span> <span class="nf">retrieve_model_specification</span><span class="p">(</span><span class="n">run_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve model uri, fold and version from existing model path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        run_path: Path of previous run.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        URI, fold and version of run.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">is_wandb_model_link</span><span class="p">(</span><span class="n">run_path</span><span class="p">):</span>
+        <span class="n">run_information</span><span class="p">,</span> <span class="n">run_version</span> <span class="o">=</span> <span class="n">run_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+        <span class="n">run_uri</span><span class="p">,</span> <span class="n">fold</span> <span class="o">=</span> <span class="n">run_information</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_fold&#39;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">run_uri</span><span class="p">,</span> <span class="n">fold</span> <span class="o">=</span> <span class="n">run_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_fold&#39;</span><span class="p">)</span>
+        <span class="n">run_version</span> <span class="o">=</span> <span class="s1">&#39;latest&#39;</span>
+
+    <span class="k">return</span> <span class="n">run_uri</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">run_version</span></div>
+
+
+<div class="viewcode-block" id="scale_weights"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.scale_weights">[docs]</a><span class="k">def</span> <span class="nf">scale_weights</span><span class="p">(</span>
+    <span class="n">real_label</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">percentage_normal</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Scale the loss of some input based on the training data imbalance.</span>
+
+<span class="sd">    Assumes a binary classification. The imbalance weighting is calculated per batch.</span>
+<span class="sd">    Manual reduction is possible because &quot;reduction=&#39;none&#39;&quot; was passed during loss init.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        real_label: Tensor of binary labels.</span>
+<span class="sd">        loss: Network loss.</span>
+<span class="sd">        percentage_normal: Share of labels in the whole dataset which are normal.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The scaled average loss.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Possible improvement: scale per class?</span>
+    <span class="k">if</span> <span class="n">percentage_normal</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Avoid zero division:</span>
+        <span class="n">count_anomalies</span> <span class="o">=</span> <span class="n">real_label</span><span class="p">[</span><span class="n">real_label</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">if</span> <span class="n">real_label</span><span class="p">[</span><span class="n">real_label</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">imbalance</span> <span class="o">=</span> <span class="n">real_label</span><span class="p">[</span><span class="n">real_label</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">/</span> <span class="n">count_anomalies</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">imbalance</span> <span class="o">=</span> <span class="n">percentage_normal</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">percentage_normal</span><span class="p">)</span>
+
+    <span class="n">loss</span><span class="p">[</span><span class="n">real_label</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="n">imbalance</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="to_numpy"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.to_numpy">[docs]</a><span class="k">def</span> <span class="nf">to_numpy</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Convert a Tensor of type Union[np.ndarray, torch.Tensor] to np.ndarray.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tensor</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="k">else</span> <span class="n">tensor</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>  <span class="c1"># type: ignore</span></div>
+
+
+<div class="viewcode-block" id="to_torch"><a class="viewcode-back" href="../../../api/utils/miscellaneous.html#ecgan.utils.miscellaneous.to_torch">[docs]</a><span class="k">def</span> <span class="nf">to_torch</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Convert a Tensor of type Union[np.ndarray, torch.Tensor] to torch.Tensor.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">tensor</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="k">else</span> <span class="n">tensor</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

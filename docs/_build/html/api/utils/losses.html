@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loss functions &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Miscellaneous" href="miscellaneous.html" />
+    <link rel="prev" title="Logging" href="log.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Utils</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html">Logging</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">ECGAN Python API</a> &raquo;</li>
+          <li><a href="index.html">Utils</a> &raquo;</li>
+      <li>Loss functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/utils/losses.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ecgan.utils.losses">
+<span id="loss-functions"></span><h1>Loss functions<a class="headerlink" href="#module-ecgan.utils.losses" title="Permalink to this headline"></a></h1>
+<p>Implementation of various loss functions for PyTorch models.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.SupervisedLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">SupervisedLoss</span></span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#SupervisedLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.SupervisedLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="configurable.html#ecgan.utils.configurable.Configurable" title="ecgan.utils.configurable.Configurable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.Configurable</span></code></a></p>
+<p>Base class for supervised loss functions.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.SupervisedLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#SupervisedLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.SupervisedLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Return the loss of a given component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.SupervisedLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#SupervisedLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.SupervisedLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for a general loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.L2Loss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">L2Loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#L2Loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.L2Loss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.SupervisedLoss" title="ecgan.utils.losses.SupervisedLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.SupervisedLoss</span></code></a></p>
+<p>Wrapper over the mean squared error loss of the torch module.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.L2Loss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#L2Loss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.L2Loss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for a general loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.BCELoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">BCELoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#BCELoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.BCELoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.SupervisedLoss" title="ecgan.utils.losses.SupervisedLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.SupervisedLoss</span></code></a></p>
+<p>Wrapper over the binary cross entropy loss of the torch module.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.BCELoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#BCELoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.BCELoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for a general loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.CrossEntropyLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">CrossEntropyLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#CrossEntropyLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.CrossEntropyLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.SupervisedLoss" title="ecgan.utils.losses.SupervisedLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.SupervisedLoss</span></code></a></p>
+<p>Wrapper over the cross entropy loss of the torch module.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.CrossEntropyLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#CrossEntropyLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.CrossEntropyLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for a general loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.KLLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">KLLoss</span></span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#KLLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.KLLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Kullback-Divergence loss for the usage in variational auto-encoders.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.KLLoss.forward">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#KLLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.KLLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate Kullback-Leibler divergence for standard Gaussian distribution.</p>
+<p>Calculate KL divergence for a given expected value and log variance.
+The input tensors are expected to be in shape (N x DIM) where N is the number of
+samples and DIM is the dimension of the multivariate Gaussian. The result will be
+the average KL-Divergence of a batch of distributions and a unit Gaussian.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.KLLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#KLLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.KLLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the BCE loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.GANBaseLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">GANBaseLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">discriminator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_sampler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#GANBaseLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.GANBaseLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="configurable.html#ecgan.utils.configurable.Configurable" title="ecgan.utils.configurable.Configurable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.configurable.Configurable</span></code></a></p>
+<p>Base loss class for custom GAN losses.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.GANBaseLoss.forward">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#GANBaseLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.GANBaseLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Return the loss of a given component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.GANBaseLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#GANBaseLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.GANBaseLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for a general loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.BceGeneratorLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">BceGeneratorLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">discriminator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#BceGeneratorLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.BceGeneratorLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.GANBaseLoss" title="ecgan.utils.losses.GANBaseLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.GANBaseLoss</span></code></a></p>
+<p>BCE Loss using the PyTorch implementation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.BceGeneratorLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#BceGeneratorLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.BceGeneratorLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the BCE loss and update a given optimizer to minimize the loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.BceGeneratorLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#BceGeneratorLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.BceGeneratorLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the BCE loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.BceDiscriminatorLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">BceDiscriminatorLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">discriminator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#BceDiscriminatorLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.BceDiscriminatorLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.BceGeneratorLoss" title="ecgan.utils.losses.BceGeneratorLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.BceGeneratorLoss</span></code></a></p>
+<p>Two component BCE Loss using the PyTorch implementation.</p>
+<p>The class assumes that corresponding <cite>BaseSampler`s for each component are implemented. The fake data is sampled by
+the `sample</cite> method of the provided generator. The BCE loss is commonly used when optimizing the discriminator
+of a vanilla GAN.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.BceDiscriminatorLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#BceDiscriminatorLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.BceDiscriminatorLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the two component BCE loss and update a given optimizer to minimize the loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.BceDiscriminatorLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#BceDiscriminatorLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.BceDiscriminatorLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the two component BCE loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.WassersteinDiscriminatorLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">WassersteinDiscriminatorLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">discriminator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_penalty_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clipping_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#WassersteinDiscriminatorLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.WassersteinDiscriminatorLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.GANBaseLoss" title="ecgan.utils.losses.GANBaseLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.GANBaseLoss</span></code></a></p>
+<p>Wasserstein loss for the discriminator.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.WassersteinDiscriminatorLoss.apply_gp">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">apply_gp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#WassersteinDiscriminatorLoss.apply_gp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.WassersteinDiscriminatorLoss.apply_gp" title="Permalink to this definition"></a></dt>
+<dd><p>GP penalty is applied outside the forward call during optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.WassersteinDiscriminatorLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#WassersteinDiscriminatorLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.WassersteinDiscriminatorLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the Wasserstein distance and minimize it using a given optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.WassersteinDiscriminatorLoss.get_gradient_penalty">
+<span class="sig-name descname"><span class="pre">get_gradient_penalty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">real_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generated_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#WassersteinDiscriminatorLoss.get_gradient_penalty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.WassersteinDiscriminatorLoss.get_gradient_penalty" title="Permalink to this definition"></a></dt>
+<dd><p>Based on <a class="reference external" href="https://github.com/EmilienDupont/wgan-gp/blob/master/training.py">https://github.com/EmilienDupont/wgan-gp/blob/master/training.py</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.WassersteinDiscriminatorLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#WassersteinDiscriminatorLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.WassersteinDiscriminatorLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the Wasserstein discriminator loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.WassersteinGeneratorLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">WassersteinGeneratorLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">discriminator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_sampler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#WassersteinGeneratorLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.WassersteinGeneratorLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.GANBaseLoss" title="ecgan.utils.losses.GANBaseLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.GANBaseLoss</span></code></a></p>
+<p>Wasserstein loss for the discriminator.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.WassersteinGeneratorLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#WassersteinGeneratorLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.WassersteinGeneratorLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the Wasserstein distance and minimize it using a given optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.WassersteinGeneratorLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#WassersteinGeneratorLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.WassersteinGeneratorLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the Wasserstein generator loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.AEGANGeneratorLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">AEGANGeneratorLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">discriminator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_sampler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#AEGANGeneratorLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.AEGANGeneratorLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.GANBaseLoss" title="ecgan.utils.losses.GANBaseLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.GANBaseLoss</span></code></a></p>
+<p>Loss function for the auto-encoder based GANs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.AEGANGeneratorLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#AEGANGeneratorLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.AEGANGeneratorLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Perform the forward for the AEGAN generator loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.AEGANGeneratorLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#AEGANGeneratorLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.AEGANGeneratorLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the AEGAN generator loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.AEGANDiscriminatorLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">AEGANDiscriminatorLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">discriminator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_sampler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#AEGANDiscriminatorLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.AEGANDiscriminatorLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.GANBaseLoss" title="ecgan.utils.losses.GANBaseLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.GANBaseLoss</span></code></a></p>
+<p>Discriminator loss for a AEGAN module.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.AEGANDiscriminatorLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#AEGANDiscriminatorLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.AEGANDiscriminatorLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Perform a forward pass for the loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.AEGANDiscriminatorLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#AEGANDiscriminatorLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.AEGANDiscriminatorLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the AEGAN discriminator loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.VAEGANGeneratorLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">VAEGANGeneratorLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">discriminator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reconstruction_loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kl_beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#VAEGANGeneratorLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.VAEGANGeneratorLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.losses.GANBaseLoss" title="ecgan.utils.losses.GANBaseLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.losses.GANBaseLoss</span></code></a></p>
+<p>Generator loss for the VAEGAN module.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.VAEGANGeneratorLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#VAEGANGeneratorLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.VAEGANGeneratorLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Perform a forward pass for the loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.utils.losses.VAEGANGeneratorLoss.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#VAEGANGeneratorLoss.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.VAEGANGeneratorLoss.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the VAEGAN generator loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.SupervisedLossFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">SupervisedLossFactory</span></span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#SupervisedLossFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.SupervisedLossFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Meta module for creating correct loss functions.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.losses.GANLossFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.losses.</span></span><span class="sig-name descname"><span class="pre">GANLossFactory</span></span><a class="reference internal" href="../../_modules/ecgan/utils/losses.html#GANLossFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.losses.GANLossFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Meta module for creating correct GAN loss functions.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="log.html" class="btn btn-neutral float-left" title="Logging" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="miscellaneous.html" class="btn btn-neutral float-right" title="Miscellaneous" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

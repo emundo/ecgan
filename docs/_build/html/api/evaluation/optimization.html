@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optimization &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tracker" href="tracker.html" />
+    <link rel="prev" title="Metrics" href="metrics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Evaluation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="metrics.html">Metrics</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">ECGAN Python API</a> &raquo;</li>
+          <li><a href="index.html">Evaluation</a> &raquo;</li>
+      <li>Optimization</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/evaluation/optimization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ecgan.evaluation.optimization">
+<span id="optimization"></span><h1>Optimization<a class="headerlink" href="#module-ecgan.evaluation.optimization" title="Permalink to this headline"></a></h1>
+<p>Optimize the parameters of a model by maximizing the performance on a given metric.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.evaluation.optimization.optimize_svm">
+<span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.optimization.</span></span><span class="sig-name descname"><span class="pre">optimize_svm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">SklearnSVMKernels.RBF</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/optimization.html#optimize_svm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.optimization.optimize_svm" title="Permalink to this definition"></a></dt>
+<dd><p>Optimize metric via Support Vector Machines (SVMs).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric</strong> (<a class="reference internal" href="../utils/custom_types.html#ecgan.utils.custom_types.MetricType" title="ecgan.utils.custom_types.MetricType"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetricType</span></code></a>) -- The metric that has to be optimized.</p></li>
+<li><p><strong>errors</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]) -- The errors used to train the SVM.</p></li>
+<li><p><strong>labels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Real input labels.</p></li>
+<li><p><strong>kernel</strong> (<a class="reference internal" href="../utils/custom_types.html#ecgan.utils.custom_types.SklearnSVMKernels" title="ecgan.utils.custom_types.SklearnSVMKernels"><code class="xref py py-class docutils literal notranslate"><span class="pre">SklearnSVMKernels</span></code></a>) -- Kernel used in SVM.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Label predictions from SVM.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.evaluation.optimization.query_svm">
+<span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.optimization.</span></span><span class="sig-name descname"><span class="pre">query_svm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/optimization.html#query_svm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.optimization.query_svm" title="Permalink to this definition"></a></dt>
+<dd><p>Query an already trained SVM (usually during train/vali) on test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clf</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code>) -- Trained classifier (SVM).</p></li>
+<li><p><strong>errors</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]) -- The errors used to test the SVM.</p></li>
+<li><p><strong>labels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Real input labels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Label predictions from classifier.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.evaluation.optimization.optimize_metric">
+<span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.optimization.</span></span><span class="sig-name descname"><span class="pre">optimize_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth_labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/optimization.html#optimize_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.optimization.optimize_metric" title="Permalink to this definition"></a></dt>
+<dd><p>Optimize the given metric by weighting multiple errors using a grid-search approach.</p>
+<p>To achieve this, a weighted (anomaly) score will be created. If there is only one parameter, the score will be
+aggregated and it will be checked if it exceeds a given value <span class="math notranslate nohighlight">\(\tau\)</span>. If the score is higher than a given
+<span class="math notranslate nohighlight">\(\tau\)</span>, the value is labeled as an anomaly.</p>
+<p>If there are multiple error components <span class="math notranslate nohighlight">\(e_i\)</span>, all combinations of error weights (params) which are less or
+equal than 1 are used to calculate an error score.
+For two errors (e.g. <a class="reference internal" href="../../anomaly_detection.html#anogan"><span class="std std-ref">AnoGAN</span></a>), a datum will be anomalous if
+<span class="math notranslate nohighlight">\(\lambda_1 \cdot e_1+(1-\lambda_1) \cdot e_2 &gt;= \tau\)</span>.</p>
+<p>This holds true for multiple errors <span class="math notranslate nohighlight">\(e_i\)</span> and lambdas <span class="math notranslate nohighlight">\(\lambda_i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\lambda_1 \cdot e_1+\lambda_2 \cdot e_2+....+\lambda_{n-1}+e_{n-1}+\left(1 - \sum_i{\lambda_i}\right) \cdot e_n
+\geq \tau\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While <span class="math notranslate nohighlight">\(\tau\)</span> can take arbitrary values, the weighting factors have to add up to 1! To avoid
+overwhelming error components, you might want to normalize the errors.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>errors</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>]) -- List of error Tensors.</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="../utils/custom_types.html#ecgan.utils.custom_types.MetricType" title="ecgan.utils.custom_types.MetricType"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetricType</span></code></a>) -- The type of the metric that should be optimized.</p></li>
+<li><p><strong>taus</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) -- Search range for optimizing the threshold tau.</p></li>
+<li><p><strong>params</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) -- Ranges of weighting parameters (requires n-1 weights for n tensors).
+Only params adding up to &lt;1 are considered, you do not need to ensure this tho.</p></li>
+<li><p><strong>ground_truth_labels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- The real labels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An array of the 10 best scores for the specified metric given the parameterization.
+The shape will be [scores, taus, params].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.evaluation.optimization.get_weighted_error">
+<span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.optimization.</span></span><span class="sig-name descname"><span class="pre">get_weighted_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/optimization.html#get_weighted_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.optimization.get_weighted_error" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the weighted error.</p>
+<p>Given n errors and n-1 parameters <span class="math notranslate nohighlight">\(\lambda_i, i\in\{1,...n-1\}\)</span>, the calculation is based on the formula:</p>
+<div class="math notranslate nohighlight">
+\[\lambda_1 \cdot e_1+\lambda_2 \cdot e_2+...+\lambda_{n-1} + e_{n-1} + \left(1-\sum_i{\lambda_i}\right) \cdot e_n\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.evaluation.optimization.label_score_get_best">
+<span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.optimization.</span></span><span class="sig-name descname"><span class="pre">label_score_get_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighted_errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_classifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/optimization.html#label_score_get_best"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.optimization.label_score_get_best" title="Permalink to this definition"></a></dt>
+<dd><p>Generate labels based on an absolute threshold and calculate the metric.</p>
+<p>Check if the returned metric is one of the best weights and return the updated array of best weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.evaluation.optimization.retrieve_labels_from_weights">
+<span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.optimization.</span></span><span class="sig-name descname"><span class="pre">retrieve_labels_from_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighting_params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/optimization.html#retrieve_labels_from_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.optimization.retrieve_labels_from_weights" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve labels from a given pair of weighting parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.evaluation.optimization.optimize_grid_search">
+<span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.optimization.</span></span><span class="sig-name descname"><span class="pre">optimize_grid_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/optimization.html#optimize_grid_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.optimization.optimize_grid_search" title="Permalink to this definition"></a></dt>
+<dd><p>Optimize anomaly detection via grid-search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecgan.evaluation.optimization.optimize_tau_single_error">
+<span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.optimization.</span></span><span class="sig-name descname"><span class="pre">optimize_tau_single_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MetricType.FSCORE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/optimization.html#optimize_tau_single_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.optimization.optimize_tau_single_error" title="Permalink to this definition"></a></dt>
+<dd><p>Optimize threshold given a metric for a single error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true_labels</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- Real labels of the data.</p></li>
+<li><p><strong>error</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>) -- List of errors (1D Tensor) using any metric which can be used to formulate a thresholdable error score.</p></li>
+<li><p><strong>tau_range</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>) -- Range of taus grid searched.</p></li>
+<li><p><strong>metric</strong> (<a class="reference internal" href="../utils/custom_types.html#ecgan.utils.custom_types.MetricType" title="ecgan.utils.custom_types.MetricType"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetricType</span></code></a>) -- Metric to optimize on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Highest score.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="metrics.html" class="btn btn-neutral float-left" title="Metrics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tracker.html" class="btn btn-neutral float-right" title="Tracker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

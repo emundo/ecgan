@@ -1,0 +1,599 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ecgan.utils.splitting &mdash; ECGAN 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../synthesis.html#beatgan">BeatGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classification.html">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ecgan.utils.splitting</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ecgan.utils.splitting</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Functions to split the dataset.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ndarray</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">StratifiedShuffleSplit</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">SplitMethods</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_splits"><a class="viewcode-back" href="../../../api/utils/splitting.html#ecgan.utils.splitting.create_splits">[docs]</a><span class="k">def</span> <span class="nf">create_splits</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">label</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">folds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="n">SplitMethods</span> <span class="o">=</span> <span class="n">SplitMethods</span><span class="o">.</span><span class="n">MIXED</span><span class="p">,</span>
+    <span class="n">split</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take given data and label tensors and split them into n folds with train, test and validation data.</span>
+
+<span class="sd">    Currently we support the creation of two kinds of splits:</span>
+
+<span class="sd">    #. Mixed train split: A standard split of all data into train, test and validation using the</span>
+<span class="sd">       sklearn :code:`StratifiedShuffleSplit`, frequently used in classification tasks.</span>
+<span class="sd">       The split-tuple has to sum up to 1, containing the respective percentages for the (training+validation, test)</span>
+<span class="sd">       set. Using at least 60% of data for training is common.</span>
+<span class="sd">    #. Healthy only train split: Training is only performed on healthy data. To create the training set, all normal</span>
+<span class="sd">       data (label==0) is shuffled and the training set contains</span>
+<span class="sd">       :math:`train\_x = len(normal\_data) * split[0])` samples. The test/validation set contain</span>
+<span class="sd">       the remaining normal samples and all anomalous samples.</span>
+<span class="sd">       In this implementation we follow the cross-validation setup and use the same test set for all folds. This</span>
+<span class="sd">       means that the abnormal validation data also remains the same.</span>
+<span class="sd">       The split-tuple determines how many of the normal data is used in train/vali and test.</span>
+<span class="sd">       Make sure to keep possible data imbalances in mind.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: Input data of shape :code:`(num_samples, seq_len, channels)`.</span>
+<span class="sd">        label: Input labels as tensor.</span>
+<span class="sd">        folds: Amount of folds.</span>
+<span class="sd">        seed: PyTorch/Numpy RNG seed to deterministically create splits.</span>
+<span class="sd">        method: Indicator of how to split dataset. Based on random split</span>
+<span class="sd">            (&#39;mixed&#39;) or splitting the data such that only the normal class is used during training (&#39;normal_only&#39;)</span>
+<span class="sd">            and normal and abnormal classes are used during validation/testing.</span>
+<span class="sd">            0 if no instance of the normal data are used, 1 if all instances are used in the test set.</span>
+<span class="sd">        split: Fraction of data in the (train+vali, test) sets.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Split indices dictionary containing n folds with indices to construct</span>
+<span class="sd">        n datasets consisting of (train_x, test_x, vali_x, train_y, test_y, vali_y).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">)</span> <span class="k">else</span> <span class="n">data</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">int</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">)</span> <span class="k">else</span> <span class="n">label</span>
+
+    <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">split</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Sum of all splits has to equal 1.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">folds</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s2">&quot;Invalid number of folds: </span><span class="si">{0}</span><span class="s2"> (type: </span><span class="si">{1}</span><span class="s2">. Has to be an integer &gt; 1.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folds</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">folds</span><span class="p">))</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="n">SplitMethods</span><span class="o">.</span><span class="n">NORMAL_ONLY</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">train_only_normal_split</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">folds</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">split</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="n">SplitMethods</span><span class="o">.</span><span class="n">MIXED</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mixed_split</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">folds</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">split</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Method </span><span class="si">{0}</span><span class="s1"> is not applicable.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="train_only_normal_split"><a class="viewcode-back" href="../../../api/utils/splitting.html#ecgan.utils.splitting.train_only_normal_split">[docs]</a><span class="k">def</span> <span class="nf">train_only_normal_split</span><span class="p">(</span>
+    <span class="n">label</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">folds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">split</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take given data and label tensors and split them into a train, test and validation set.</span>
+
+<span class="sd">    Training is only performed on healthy data. To create the training set, all normal</span>
+<span class="sd">    data (label==0) is shuffled and the training set contains</span>
+<span class="sd">    :math:`train\_x = len(normal\_data) * split[0])` samples. The test/validation set contain</span>
+<span class="sd">    the remaining normal samples and all anomalous samples.</span>
+<span class="sd">    In this implementation we follow the cross-validation setup and use the same test set for all folds. This</span>
+<span class="sd">    means that the abnormal validation data also remains the same.</span>
+<span class="sd">    The split-tuple determines how many of the normal data is used in train/vali and test.</span>
+<span class="sd">    Make sure to keep possible data imbalances in mind.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        label: Input labels as tensor.</span>
+<span class="sd">        folds: Amount of splits performed.</span>
+<span class="sd">        seed: Random seed.</span>
+<span class="sd">        split: Fraction of data in the (train, test) set.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Index dictionary with n folds containing indices used in train, test and validation set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">split_indices</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">normal_mask</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">label</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">anomalous_mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">normal_mask</span>
+
+    <span class="n">normal_indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">normal_mask</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">anomalous_indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">anomalous_mask</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">shuffled_normal_idx</span> <span class="o">=</span> <span class="n">normal_indices</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="n">normal_indices</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="n">shuffled_anomalous_idx</span> <span class="o">=</span> <span class="n">anomalous_indices</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="n">anomalous_indices</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="n">test_idx_normal</span> <span class="o">=</span> <span class="n">shuffled_normal_idx</span><span class="p">[</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">normal_indices</span><span class="p">)</span> <span class="o">*</span> <span class="n">split</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:]</span>
+    <span class="n">idx_train_vali_normal</span> <span class="o">=</span> <span class="n">shuffled_normal_idx</span><span class="p">[:</span> <span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">normal_indices</span><span class="p">)</span> <span class="o">*</span> <span class="n">split</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+
+    <span class="n">samples_per_fold</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">idx_train_vali_normal</span><span class="p">)</span> <span class="o">/</span> <span class="n">folds</span><span class="p">)</span>
+    <span class="n">idx_fold</span> <span class="o">=</span> <span class="n">idx_train_vali_normal</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">samples_per_fold</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Use same proportion of stratified abnormal data in test and vali</span>
+    <span class="n">test_size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_idx_normal</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_idx_normal</span><span class="p">)</span> <span class="o">+</span> <span class="n">samples_per_fold</span><span class="p">)</span>
+    <span class="n">num_abnormal_test</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shuffled_anomalous_idx</span><span class="p">)</span> <span class="o">*</span> <span class="n">test_size</span><span class="p">)</span>
+    <span class="n">test_idx_abnormal</span> <span class="o">=</span> <span class="n">shuffled_anomalous_idx</span><span class="p">[:</span><span class="n">num_abnormal_test</span><span class="p">]</span>
+    <span class="n">vali_idx_abnormal</span> <span class="o">=</span> <span class="n">shuffled_anomalous_idx</span><span class="p">[</span><span class="n">num_abnormal_test</span><span class="p">:]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">idx_test</span> <span class="o">=</span> <span class="n">test_idx_normal</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="n">test_idx_abnormal</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">idx_test_upper_limit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">idx_fold</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">idx_train</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">idx_train_vali_normal</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">idx_test_upper_limit</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+        <span class="n">idx_vali_normal</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">idx_train_vali_normal</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">idx_train</span><span class="p">))</span>
+        <span class="n">idx_vali</span> <span class="o">=</span> <span class="n">idx_vali_normal</span> <span class="o">+</span> <span class="n">vali_idx_abnormal</span>
+
+        <span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">idx_test</span><span class="p">)</span>
+        <span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">idx_vali</span><span class="p">)</span>
+
+        <span class="n">split_indices</span><span class="p">[</span><span class="s1">&#39;fold_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">idx</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;train_ids&#39;</span><span class="p">:</span> <span class="n">idx_train</span><span class="p">,</span>
+            <span class="s1">&#39;test_ids&#39;</span><span class="p">:</span> <span class="n">idx_test</span><span class="p">,</span>
+            <span class="s1">&#39;vali_ids&#39;</span><span class="p">:</span> <span class="n">idx_vali</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">split_indices</span></div>
+
+
+<div class="viewcode-block" id="mixed_split"><a class="viewcode-back" href="../../../api/utils/splitting.html#ecgan.utils.splitting.mixed_split">[docs]</a><span class="k">def</span> <span class="nf">mixed_split</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">label</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">folds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">split</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take given data and label tensors and split them into a training and test set.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: Input dataset as tensor.</span>
+<span class="sd">        label: Input labels as tensor.</span>
+<span class="sd">        folds: Amount of folds.</span>
+<span class="sd">        seed: PyTorch/Numpy RNG seed to deterministically create splits.</span>
+<span class="sd">        split: Fraction of data in the test set.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Index dictionary with n folds containing indices used in train, test and validation set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">split_indices</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">sss_test</span> <span class="o">=</span> <span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">split</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">sss_test</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+        <span class="n">sss_vali</span> <span class="o">=</span> <span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">folds</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">folds</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">train_index_</span><span class="p">,</span> <span class="n">vali_index</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sss_vali</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">train_index</span><span class="p">]),</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="n">split_indices</span><span class="p">[</span><span class="s1">&#39;fold_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">idx</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;train_ids&#39;</span><span class="p">:</span> <span class="n">train_index</span><span class="p">[</span><span class="n">train_index_</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;test_ids&#39;</span><span class="p">:</span> <span class="n">test_index</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;vali_ids&#39;</span><span class="p">:</span> <span class="n">train_index</span><span class="p">[</span><span class="n">vali_index</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">split_indices</span></div>
+
+
+<div class="viewcode-block" id="load_split"><a class="viewcode-back" href="../../../api/utils/splitting.html#ecgan.utils.splitting.load_split">[docs]</a><span class="k">def</span> <span class="nf">load_split</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">label</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">index_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">fold</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Load split from a given fold of a previous run.&quot;&quot;&quot;</span>
+    <span class="n">fold_dict</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">index_dict</span><span class="p">[</span><span class="s1">&#39;fold_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fold</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">{</span><span class="s1">&#39;train_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;test_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;vali_ids&#39;</span><span class="p">}</span> <span class="o">==</span> <span class="n">fold_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Index dict does not contain the required keys: &#39;</span>
+            <span class="s1">&#39;&quot;train_ids&quot;, &quot;test_ids&quot; and &quot;vali_ids&quot; or&#39;</span>
+            <span class="s1">&#39;&quot;test_anormal_ids&quot;, &quot;test_normal_ids&quot;.&#39;</span>
+        <span class="p">)</span>
+    <span class="n">train_ids</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">fold_dict</span><span class="p">[</span><span class="s1">&#39;train_ids&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+    <span class="n">test_ids</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">fold_dict</span><span class="p">[</span><span class="s1">&#39;test_ids&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+    <span class="n">vali_ids</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">fold_dict</span><span class="p">[</span><span class="s1">&#39;vali_ids&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">train_ids</span><span class="p">),</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">test_ids</span><span class="p">),</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vali_ids</span><span class="p">),</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">train_ids</span><span class="p">),</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">test_ids</span><span class="p">),</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vali_ids</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="select_channels"><a class="viewcode-back" href="../../../api/utils/splitting.html#ecgan.utils.splitting.select_channels">[docs]</a><span class="k">def</span> <span class="nf">select_channels</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">channels</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select channels based on their indices (given as a list or an int).</span>
+
+<span class="sd">    If an int n is selected, the first n columns are used. However, it is usually</span>
+<span class="sd">    preferred to pass a list of ints to be sure to select the correct columns.</span>
+<span class="sd">    Passed channels are zero-indexed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: Tensor containing series of shape :code:`(num_samples, seq_len, num_channels)`.</span>
+<span class="sd">        channels: Selected channels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">channels</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">channels</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">channels</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="verbose_channel_selection"><a class="viewcode-back" href="../../../api/utils/splitting.html#ecgan.utils.splitting.verbose_channel_selection">[docs]</a><span class="k">def</span> <span class="nf">verbose_channel_selection</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">channels</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Verbose output corresponding to the select_channel function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: Tensor containing series of shape :code:`(num_samples, seq_len, num_channels)`.</span>
+<span class="sd">        channels: Selected channels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">channels</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;All channels will be used, no channels are removed.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">channels</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;Removing </span><span class="si">{0}</span><span class="s1"> channel(s), the first </span><span class="si">{1}</span><span class="s1"> channel(s) will remain.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">channels</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Selecting channels by index: taking channels </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">channels</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

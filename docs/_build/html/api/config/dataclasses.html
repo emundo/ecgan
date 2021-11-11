@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Dataclasses &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Global configuration" href="global_configs.html" />
+    <link rel="prev" title="Config" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager.html">Manager</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Config</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">ECGAN Python API</a> &raquo;</li>
+          <li><a href="index.html">Config</a> &raquo;</li>
+      <li>Custom Dataclasses</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/config/dataclasses.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ecgan.config.dataclasses">
+<span id="custom-dataclasses"></span><h1>Custom Dataclasses<a class="headerlink" href="#module-ecgan.config.dataclasses" title="Permalink to this headline"></a></h1>
+<p>Custom (partially nested) dataclasses describing configurations of individual components.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.OptimizerConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">OptimizerConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WEIGHT_DECAY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MOMENTUM</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DAMPENING</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BETAS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EPS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ALPHA</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CENTERED</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#OptimizerConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.OptimizerConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Type hints for Optimizer dicts.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.LossConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">LossConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GRADIENT_PENALTY_WEIGHT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLIPPING_BOUND</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">REDUCTION</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#LossConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.LossConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Type hints for a generic loss configuration.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.BaseCNNConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">BaseCNNConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">HIDDEN_CHANNELS</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#BaseCNNConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.BaseCNNConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generalized configuration of an CNN module.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.BaseRNNConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">BaseRNNConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">HIDDEN_DIMS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">HIDDEN_SIZE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#BaseRNNConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.BaseRNNConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generalized configuration of an RNN module.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.TrackingConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">TrackingConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TRACKER_NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ENTITY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PROJECT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EXPERIMENT_NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LOCAL_SAVE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SAVE_PDF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S3_CHECKPOINT_UPLOAD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LOG_LEVEL</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#TrackingConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.TrackingConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Config for tracking and logging information.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.PreprocessingConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">PreprocessingConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">LOADING_DIR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUM_WORKERS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WINDOW_LENGTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WINDOW_STEP_SIZE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RESAMPLING_ALGORITHM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TARGET_SEQUENCE_LENGTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LOADING_SRC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUM_SAMPLES</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#PreprocessingConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.PreprocessingConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Create a preprocessing config object.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.PreprocessingConfig.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_sequence_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lttb'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#PreprocessingConfig.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.PreprocessingConfig.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return a default preprocessing configuration.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.SyntheticPreprocessingConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">SyntheticPreprocessingConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">LOADING_DIR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUM_WORKERS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WINDOW_LENGTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WINDOW_STEP_SIZE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RESAMPLING_ALGORITHM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TARGET_SEQUENCE_LENGTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LOADING_SRC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUM_SAMPLES</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RANGE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ANOMALY_PERCENTAGE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NOISE_PERCENTAGE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SYNTHESIS_SEED</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#SyntheticPreprocessingConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.SyntheticPreprocessingConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.config.dataclasses.PreprocessingConfig" title="ecgan.config.dataclasses.PreprocessingConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.config.dataclasses.PreprocessingConfig</span></code></a></p>
+<p>Preprocessing configuration for synthetic datasets.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.SyntheticPreprocessingConfig.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_sequence_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lttb'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">25)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomaly_percentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_percentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1337</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#SyntheticPreprocessingConfig.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.SyntheticPreprocessingConfig.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Provide a default configuration for a synthetic dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.SinePreprocessingConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">SinePreprocessingConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">LOADING_DIR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUM_WORKERS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WINDOW_LENGTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">WINDOW_STEP_SIZE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RESAMPLING_ALGORITHM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TARGET_SEQUENCE_LENGTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LOADING_SRC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUM_SAMPLES</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RANGE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ANOMALY_PERCENTAGE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NOISE_PERCENTAGE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SYNTHESIS_SEED</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AMPLITUDE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FREQUENCY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PHASE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VERTICAL_TRANSLATION</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#SinePreprocessingConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.SinePreprocessingConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.config.dataclasses.SyntheticPreprocessingConfig" title="ecgan.config.dataclasses.SyntheticPreprocessingConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.config.dataclasses.SyntheticPreprocessingConfig</span></code></a></p>
+<p>Preprocessing config for the synthetic sine dataset.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.SinePreprocessingConfig.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_sequence_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lttb'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">25)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomaly_percentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_percentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synthesis_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1337</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertical_translation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#SinePreprocessingConfig.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.SinePreprocessingConfig.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return the default configuration for the sine dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.TrainerConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">TrainerConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NUM_WORKERS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CHANNELS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EPOCHS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BATCH_SIZE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TRANSFORMATION</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SPLIT_PATH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SPLIT_METHOD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SPLIT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TRAIN_ONLY_NORMAL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CROSS_VAL_FOLDS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CHECKPOINT_INTERVAL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SAMPLE_INTERVAL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BINARY_LABELS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MANUAL_SEED</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#TrainerConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.TrainerConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Used to initialize a config for training.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.TrainerConfig.configure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transformation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Transformation.NONE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'split.pkl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.85,</span> <span class="pre">0.15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_val_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_only_normal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binary_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">48923</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#TrainerConfig.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.TrainerConfig.configure" title="Permalink to this definition"></a></dt>
+<dd><p>Return a default configuration for the trainer.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.TrainerConfig.transformation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transformation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../utils/custom_types.html#ecgan.utils.custom_types.Transformation" title="ecgan.utils.custom_types.Transformation"><span class="pre">ecgan.utils.custom_types.Transformation</span></a></em><a class="headerlink" href="#ecgan.config.dataclasses.TrainerConfig.transformation" title="Permalink to this definition"></a></dt>
+<dd><p>Return an instance of the internal enum class <cite>Transformation</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../utils/custom_types.html#ecgan.utils.custom_types.Transformation" title="ecgan.utils.custom_types.Transformation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transformation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.WeightInitializationConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">WeightInitializationConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NAME</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#WeightInitializationConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.WeightInitializationConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base weight initialization config.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.NormalInitializationConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">NormalInitializationConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MEAN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">STD</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#NormalInitializationConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.NormalInitializationConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.config.dataclasses.WeightInitializationConfig" title="ecgan.config.dataclasses.WeightInitializationConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.config.dataclasses.WeightInitializationConfig</span></code></a></p>
+<p>Base weight initialization config for drawing from a normal distribution.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.UniformInitializationConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">UniformInitializationConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LOWER_BOUND</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UPPER_BOUND</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#UniformInitializationConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.UniformInitializationConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.config.dataclasses.WeightInitializationConfig" title="ecgan.config.dataclasses.WeightInitializationConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.config.dataclasses.WeightInitializationConfig</span></code></a></p>
+<p>Base weight initialization config for drawing from a uniform distribution.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.config.dataclasses.DetectionConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.config.dataclasses.</span></span><span class="sig-name descname"><span class="pre">DetectionConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">DETECTOR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BATCH_SIZE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NUM_WORKERS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AMOUNT_OF_RUNS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SAVE_DATA</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/config/dataclasses.html#DetectionConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.config.dataclasses.DetectionConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generalized configuration of a module.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="global_configs.html" class="btn btn-neutral float-right" title="Global configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,555 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ecgan.manager &mdash; ECGAN 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ECGAN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synthesis.html">Data Synthesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../synthesis.html#beatgan">BeatGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../classification.html">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ECGAN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>ecgan.manager</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ecgan.manager</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Manages initialization, preprocessing, training and anomaly detection of ecgan.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.anomaly_detection.anomaly_manager</span> <span class="kn">import</span> <span class="n">AnomalyManager</span>
+<span class="kn">from</span> <span class="nn">ecgan.config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ExperimentConfig</span><span class="p">,</span>
+    <span class="n">GANModuleConfig</span><span class="p">,</span>
+    <span class="n">TrainConfig</span><span class="p">,</span>
+    <span class="n">TrainerConfig</span><span class="p">,</span>
+    <span class="n">get_global_ad_config</span><span class="p">,</span>
+    <span class="n">get_global_config</span><span class="p">,</span>
+    <span class="n">get_run_config</span><span class="p">,</span>
+    <span class="n">set_global_ad_config</span><span class="p">,</span>
+    <span class="n">set_global_config</span><span class="p">,</span>
+    <span class="n">set_global_inv_config</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ecgan.config.initialization.anomaly_detection</span> <span class="kn">import</span> <span class="n">init_detection</span>
+<span class="kn">from</span> <span class="nn">ecgan.config.initialization.inverse</span> <span class="kn">import</span> <span class="n">init_inverse</span>
+<span class="kn">from</span> <span class="nn">ecgan.evaluation.tracker</span> <span class="kn">import</span> <span class="n">TrackerFactory</span>
+<span class="kn">from</span> <span class="nn">ecgan.modules.factory</span> <span class="kn">import</span> <span class="n">ModuleFactory</span>
+<span class="kn">from</span> <span class="nn">ecgan.modules.inverse_mapping.inversion</span> <span class="kn">import</span> <span class="n">inverse_train</span>
+<span class="kn">from</span> <span class="nn">ecgan.preprocessing.data_retrieval</span> <span class="kn">import</span> <span class="n">DataRetrieverFactory</span><span class="p">,</span> <span class="n">retrieve_fold_from_existing_split</span>
+<span class="kn">from</span> <span class="nn">ecgan.preprocessing.preprocessor</span> <span class="kn">import</span> <span class="n">PreprocessorFactory</span>
+<span class="kn">from</span> <span class="nn">ecgan.training.trainer</span> <span class="kn">import</span> <span class="n">Trainer</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.datasets</span> <span class="kn">import</span> <span class="n">DatasetFactory</span><span class="p">,</span> <span class="n">SineDataset</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.log</span> <span class="kn">import</span> <span class="n">set_log_level</span><span class="p">,</span> <span class="n">setup_logger</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.miscellaneous</span> <span class="kn">import</span> <span class="n">load_pickle_numpy</span><span class="p">,</span> <span class="n">merge_dicts</span><span class="p">,</span> <span class="n">update_dicts</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.parser</span> <span class="kn">import</span> <span class="n">config_parser</span><span class="p">,</span> <span class="n">detection_parser</span><span class="p">,</span> <span class="n">init_parser</span><span class="p">,</span> <span class="n">inverse_parser</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="s1">&#39;ecgan&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="init"><a class="viewcode-back" href="../../api/manager.html#ecgan.manager.init">[docs]</a><span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Run initialization for ecgan and generate a config file.&quot;&quot;&quot;</span>
+    <span class="n">data_location</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">project</span> <span class="o">=</span> <span class="n">init_parser</span><span class="p">()</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Each returned dict contains the configuration for the respective component.</span>
+    <span class="c1"># Additionally, the &#39;update&#39; key can be used to update other components.</span>
+    <span class="n">experiment_config</span> <span class="o">=</span> <span class="n">ExperimentConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+        <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
+        <span class="n">experiment_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
+        <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+        <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">preprocessing_config</span> <span class="o">=</span> <span class="n">DataRetrieverFactory</span><span class="o">.</span><span class="n">choose_class</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">configure</span><span class="p">()</span>
+    <span class="n">trainer_config</span> <span class="o">=</span> <span class="n">TrainerConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">channels</span><span class="o">=</span><span class="n">DatasetFactory</span><span class="p">()(</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">num_channels</span><span class="p">)</span>
+    <span class="n">module_config</span> <span class="o">=</span> <span class="n">ModuleFactory</span><span class="o">.</span><span class="n">choose_class</span><span class="p">(</span><span class="n">module_name</span><span class="o">=</span><span class="n">module</span><span class="p">)</span><span class="o">.</span><span class="n">configure</span><span class="p">()</span>
+    <span class="n">preprocessing_config</span><span class="p">[</span><span class="s1">&#39;preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;LOADING_DIR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_location</span>
+
+    <span class="n">update_config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="p">[</span><span class="n">experiment_config</span><span class="p">,</span> <span class="n">preprocessing_config</span><span class="p">,</span> <span class="n">trainer_config</span><span class="p">,</span> <span class="n">module_config</span><span class="p">]:</span>
+        <span class="n">update_dicts</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">update_config</span><span class="p">,</span> <span class="n">cfg</span><span class="p">)</span>
+    <span class="n">merge_dicts</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">update_config</span><span class="p">)</span>
+
+    <span class="n">configuration</span> <span class="o">=</span> <span class="n">TrainConfig</span><span class="p">(</span><span class="n">base_config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="n">output_file</span><span class="p">)</span>
+    <span class="n">configuration</span><span class="o">.</span><span class="n">generate_config_file</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="preprocess"><a class="viewcode-back" href="../../api/manager.html#ecgan.manager.preprocess">[docs]</a><span class="k">def</span> <span class="nf">preprocess</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Start preprocessing a dataset with parameters defined in the config file.</span>
+
+<span class="sd">    Requires a config file generated by `ecgan-init`. Raw data will be downloaded to the provided data path to</span>
+<span class="sd">    &#39;&lt;data_path&gt;/&lt;dataset_name&gt;/raw&#39; in an arbitrary format given by the different datasets. The data will then be</span>
+<span class="sd">    preprocessed and saved to &#39;&lt;data_path&gt;/&lt;dataset_name&gt;/processed&#39; in a format suitable for all other ecgan</span>
+<span class="sd">    components.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">config_parser</span><span class="p">()</span>
+    <span class="n">set_global_config</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">preprocess_config</span> <span class="o">=</span> <span class="n">get_global_config</span><span class="p">()</span><span class="o">.</span><span class="n">preprocessing_config</span>
+    <span class="n">exp_config</span> <span class="o">=</span> <span class="n">get_global_config</span><span class="p">()</span><span class="o">.</span><span class="n">experiment_config</span>
+
+    <span class="n">DataRetrieverFactory</span><span class="p">()(</span><span class="n">dataset</span><span class="o">=</span><span class="n">exp_config</span><span class="o">.</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">cfg</span><span class="o">=</span><span class="n">preprocess_config</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Executing preprocessing procedure for dataset </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exp_config</span><span class="o">.</span><span class="n">DATASET</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">exp_config</span><span class="o">.</span><span class="n">DATASET</span> <span class="o">==</span> <span class="n">SineDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Sine dataset is already in matching format. Skipping preprocessing.&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">preprocessor</span> <span class="o">=</span> <span class="n">PreprocessorFactory</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">preprocess_config</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">exp_config</span><span class="o">.</span><span class="n">DATASET</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">preprocess</span><span class="p">()</span>
+        <span class="n">preprocessor</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="train"><a class="viewcode-back" href="../../api/manager.html#ecgan.manager.train">[docs]</a><span class="k">def</span> <span class="nf">train</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Start a training run.</span>
+
+<span class="sd">    Requires a config file generated by `ecgan-init`.</span>
+<span class="sd">    Requires data preprocessed by `ecgan-preprocess`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">config_parser</span><span class="p">()</span>
+
+    <span class="n">set_global_config</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">exp_config</span> <span class="o">=</span> <span class="n">get_global_config</span><span class="p">()</span><span class="o">.</span><span class="n">experiment_config</span>
+    <span class="n">preprocessing_cfg</span> <span class="o">=</span> <span class="n">get_global_config</span><span class="p">()</span><span class="o">.</span><span class="n">preprocessing_config</span>
+    <span class="n">set_log_level</span><span class="p">(</span><span class="n">exp_config</span><span class="o">.</span><span class="n">TRACKER</span><span class="o">.</span><span class="n">LOG_LEVEL</span><span class="p">)</span>
+    <span class="n">target_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">preprocessing_cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">,</span> <span class="n">exp_config</span><span class="o">.</span><span class="n">DATASET</span><span class="p">,</span> <span class="s1">&#39;processed&#39;</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">load_pickle_numpy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;data.pkl&#39;</span><span class="p">))</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">load_pickle_numpy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;label.pkl&#39;</span><span class="p">))</span>
+
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="inverse"><a class="viewcode-back" href="../../api/manager.html#ecgan.manager.inverse">[docs]</a><span class="k">def</span> <span class="nf">inverse</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Start an inverse mapping run for a trained model.</span>
+
+<span class="sd">    The inverse mapping requires an additional configuration. This configuration has to be generated using the</span>
+<span class="sd">    init (`-i`) flag before the run can be started.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">inverse_parser</span><span class="p">()</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">out</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">init</span><span class="p">:</span>
+        <span class="n">init_inverse</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">init</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">set_global_inv_config</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">inverse_train</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="detect"><a class="viewcode-back" href="../../api/manager.html#ecgan.manager.detect">[docs]</a><span class="k">def</span> <span class="nf">detect</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Start the anomaly detection process.</span>
+
+<span class="sd">    Requires generating an anomaly detection config file first using the `-i`flag. `entity`, `project` and `run_name`</span>
+<span class="sd">    are mandatory during init to create the config file and not permitted as CLI parameters afterwards.</span>
+<span class="sd">    Requires data preprocessed by `ecgan-preprocess`.</span>
+<span class="sd">    Requires trained model from `ecgan-train`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">detection_parser</span><span class="p">()</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">config</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">init</span><span class="p">:</span>
+        <span class="n">init_detection</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">set_global_ad_config</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">ad_config</span> <span class="o">=</span> <span class="n">get_global_ad_config</span><span class="p">()</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">get_run_config</span><span class="p">(</span><span class="n">ad_config</span><span class="p">)</span>
+    <span class="n">set_global_config</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">config_dict</span><span class="p">)</span>
+
+    <span class="n">trainer_cfg</span> <span class="o">=</span> <span class="n">get_global_config</span><span class="p">()</span><span class="o">.</span><span class="n">trainer_config</span>
+    <span class="n">exp_cfg</span> <span class="o">=</span> <span class="n">get_global_config</span><span class="p">()</span><span class="o">.</span><span class="n">experiment_config</span>
+    <span class="n">set_log_level</span><span class="p">(</span><span class="n">exp_cfg</span><span class="o">.</span><span class="n">TRACKER</span><span class="o">.</span><span class="n">LOG_LEVEL</span><span class="p">)</span>
+
+    <span class="n">tracker</span> <span class="o">=</span> <span class="n">TrackerFactory</span><span class="p">()(</span><span class="n">config</span><span class="o">=</span><span class="n">ad_config</span><span class="o">.</span><span class="n">ad_experiment_config</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s1">&#39;Starting anomaly detection process with dataset </span><span class="si">{0}</span><span class="s1"> and model stored in </span><span class="si">{1}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">experiment_config</span><span class="o">.</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">ad_config</span><span class="o">.</span><span class="n">ad_experiment_config</span><span class="o">.</span><span class="n">RUN_URI</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">data_source_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exp_cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">,</span> <span class="n">exp_cfg</span><span class="o">.</span><span class="n">DATASET</span><span class="p">,</span> <span class="s1">&#39;processed&#39;</span><span class="p">)</span>
+
+    <span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">vali_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">vali_y</span><span class="p">,)</span> <span class="o">=</span> <span class="n">retrieve_fold_from_existing_split</span><span class="p">(</span>
+        <span class="n">data_dir</span><span class="o">=</span><span class="n">data_source_dir</span><span class="p">,</span>
+        <span class="n">split_path</span><span class="o">=</span><span class="n">ad_config</span><span class="o">.</span><span class="n">ad_experiment_config</span><span class="o">.</span><span class="n">RUN_URI</span><span class="p">,</span>
+        <span class="n">split_file</span><span class="o">=</span><span class="n">trainer_cfg</span><span class="o">.</span><span class="n">SPLIT_PATH</span><span class="p">,</span>
+        <span class="n">fold</span><span class="o">=</span><span class="n">ad_config</span><span class="o">.</span><span class="n">ad_experiment_config</span><span class="o">.</span><span class="n">FOLD</span><span class="p">,</span>
+        <span class="n">location</span><span class="o">=</span><span class="n">exp_cfg</span><span class="o">.</span><span class="n">TRACKER</span><span class="o">.</span><span class="n">tracker_name</span><span class="p">,</span>
+        <span class="n">target_dir</span><span class="o">=</span><span class="n">tracker</span><span class="o">.</span><span class="n">run_dir</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">module_cfg</span> <span class="o">=</span> <span class="n">get_global_config</span><span class="p">()</span><span class="o">.</span><span class="n">module_config</span>
+
+    <span class="n">rescale_to_unit_circle</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module_cfg</span><span class="p">,</span> <span class="n">GANModuleConfig</span><span class="p">):</span>
+        <span class="n">rescale_to_unit_circle</span> <span class="o">=</span> <span class="n">module_cfg</span><span class="o">.</span><span class="n">GENERATOR</span><span class="o">.</span><span class="n">TANH_OUT</span>
+
+    <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">vali_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">vali_y</span> <span class="o">=</span> <span class="n">Trainer</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">(</span>
+        <span class="n">train_x</span><span class="p">,</span>
+        <span class="n">test_x</span><span class="p">,</span>
+        <span class="n">vali_x</span><span class="p">,</span>
+        <span class="n">train_y</span><span class="p">,</span>
+        <span class="n">test_y</span><span class="p">,</span>
+        <span class="n">vali_y</span><span class="p">,</span>
+        <span class="n">trainer_cfg</span><span class="p">,</span>
+        <span class="n">rescale_to_unit_circle</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">anomaly_detection_manager</span> <span class="o">=</span> <span class="n">AnomalyManager</span><span class="p">(</span>
+        <span class="n">ad_config</span><span class="p">,</span>
+        <span class="n">seq_len</span><span class="o">=</span><span class="n">train_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">tracker</span><span class="o">=</span><span class="n">tracker</span><span class="p">,</span>
+        <span class="n">num_channels</span><span class="o">=</span><span class="n">train_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">anomaly_detection_manager</span><span class="o">.</span><span class="n">start_detection</span><span class="p">(</span>
+        <span class="n">train_x</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span>
+        <span class="n">train_y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span>
+        <span class="n">vali_x</span><span class="o">=</span><span class="n">vali_x</span><span class="p">,</span>
+        <span class="n">vali_y</span><span class="o">=</span><span class="n">vali_y</span><span class="p">,</span>
+        <span class="n">test_x</span><span class="o">=</span><span class="n">test_x</span><span class="p">,</span>
+        <span class="n">test_y</span><span class="o">=</span><span class="n">test_y</span><span class="p">,</span>
+    <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

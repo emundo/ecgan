@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>References &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="About" href="about.html" />
+    <link rel="prev" title="Transformation" href="api/utils/transformation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>References</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/references.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="references">
+<h1>References<a class="headerlink" href="#references" title="Permalink to this headline"></a></h1>
+<p>This page is meant to be a centralized source of information for ECGAN.
+This includes</p>
+<ol class="arabic simple">
+<li><p>a list of abbreviations used in the code and documentation,</p></li>
+<li><p>distinctions between terms used,</p></li>
+<li><p>references to papers, repositories and other information from external sources.</p></li>
+</ol>
+<p>The references are usually also included as source in the implementation.</p>
+<section id="related-work">
+<h2>Related Work<a class="headerlink" href="#related-work" title="Permalink to this headline"></a></h2>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Permalink to this headline"></a></h3>
+<ol class="arabic">
+<li><p>MITBIH (<a class="reference external" href="http://ecg.mit.edu/george/publications/mitdb-embs-2001.pdf">Moody and Mark, 2001</a>, <a class="reference external" href="https://physionet.org/content/mitdb/1.0.0/">MITBIH Website</a>):</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>Original MITBIH (no additional preprocessing, binary classification from kaggle): <a class="reference external" href="https://www.kaggle.com/mondejar/mitbih-database">Original MITBIH Dataset</a></p></li>
+<li><p>MITBIH per-beat, classes according to AAMI (non-binary by default): <a class="reference external" href="https://arxiv.org/abs/1805.00794">Kachuee et al. 2018</a>, <a class="reference external" href="https://www.kaggle.com/shayanfazeli/heartbeat">Preprocessed MITBIH Dataset</a></p></li>
+<li><p>MITBIH BeatGAN: per-beat, centered, standardized, classes according to AAMI (non-binary), removed some patients: <a class="reference external" href="https://www.ijcai.org/Proceedings/2019/0616.pdf">Zhou et al. 2019</a>, <a class="reference external" href="https://www.dropbox.com/sh/b17k2pb83obbrkn/AADzJigiIrottyTOyvAEU1LOa?dl=0">Dataset</a>, <a class="reference external" href="https://github.com/Vniex/BeatGAN">Repository</a></p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Shaoxing (<a class="reference external" href="https://www.nature.com/articles/s41597-020-0386-x">Zheng et al. 2020</a>, <a class="reference external" href="https://figshare.com/collections/ChapmanECG/4560497/2">Shaoxing Dataset</a>)</p></li>
+<li><p>Not supported but also of relevance: PTB (<a class="reference external" href="https://www.degruyter.com/document/doi/10.1515/bmte.1995.40.s1.317/html">Bousseljot et al. 1995</a>) and PTB-XL (<a class="reference external" href="https://www.nature.com/articles/s41597-020-0495-6">Wagner et al. 2020</a>).</p></li>
+</ol>
+</section>
+<section id="related-modules">
+<h3>Related Modules<a class="headerlink" href="#related-modules" title="Permalink to this headline"></a></h3>
+<ol class="arabic">
+<li><p>Generative Models</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>DCGAN: Paper: <a class="reference external" href="https://arxiv.org/abs/1511.06434">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks, Radford et al. 2015</a>, Repository:  <a class="reference external" href="https://github.com/Newmu/dcgan_code">DCGAN GitHub</a></p></li>
+<li><p>RGAN: Paper: <a class="reference external" href="https://arxiv.org/pdf/1706.02633.pdf">Real-valued (Medical) Time Series Generation with Recurrent Conditional GANs, Esteban et al. 2017</a>, Repository: <a class="reference external" href="https://github.com/ratschlab/RGAN">RGAN GitHub</a></p></li>
+<li><p>BeatGAN: Paper: <a class="reference external" href="https://www.ijcai.org/proceedings/2019/0616.pdf">BeatGAN: Anomalous Rhythm Detection using Adversarially Generated Time Series, Zhou et al. 2019</a>, Repository: <a class="reference external" href="https://github.com/Vniex/BeatGAN">BeatGAN Github</a></p></li>
+<li><p>VaeGAN: BeatGAN as well as &quot;Survival-oriented embeddings with application to CT scans of colorectal carcinoma patients with liver metastases&quot; by Tobias Weber, 2021.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+<p>The modules have received significant improvements, often inspired by more recent developments. This
+especially includes:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The Wasserstein distance (including gradient penalties) as objective function. Papers: <a class="reference external" href="https://arxiv.org/abs/1701.07875">Wasserstein GAN, Arjovsky et al. 2017</a> and <a class="reference external" href="https://arxiv.org/abs/1704.00028">Improved Training of Wasserstein GANs, Gulrajani et al. 2017 (WGAN-GP)</a></p></li>
+<li><p>Spectral norm as weight normalization (usually instead of input normalization in respective layers): <a class="reference external" href="https://arxiv.org/abs/1802.05957">Spectral Normalization for Generative Adversarial Networks, Miyato et al. 2018</a></p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic">
+<li><p>Anomaly detection</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>AnoGAN: Optimization of latent variables towards similar samples, Paper: <a class="reference external" href="https://arxiv.org/pdf/1703.05921.pdf">Schlegl et al. 2017</a> .</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api/utils/transformation.html" class="btn btn-neutral float-left" title="Transformation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="about.html" class="btn btn-neutral float-right" title="About" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

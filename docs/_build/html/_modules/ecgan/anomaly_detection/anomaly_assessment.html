@@ -1,0 +1,542 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ecgan.anomaly_detection.anomaly_assessment &mdash; ECGAN 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../synthesis.html#beatgan">BeatGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classification.html">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ecgan.anomaly_detection.anomaly_assessment</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ecgan.anomaly_detection.anomaly_assessment</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Functions and classes which are commonly used to calculate anomaly scores.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">torch.nn</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="nb">sum</span> <span class="k">as</span> <span class="n">torchsum</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">DiscriminationStrategy</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.distances</span> <span class="kn">import</span> <span class="n">L2Distance</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.sampler</span> <span class="kn">import</span> <span class="n">DiscriminatorSampler</span><span class="p">,</span> <span class="n">FeatureDiscriminatorSampler</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="InferenceDiscriminator"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.InferenceDiscriminator">[docs]</a><span class="k">class</span> <span class="nc">InferenceDiscriminator</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for different discrimination inference strategies.</span>
+
+<span class="sd">    .. note::   This base class is intended to be used for anomaly detection.</span>
+<span class="sd">                It is intended to help deciding if some data is drawn from the data distribution by</span>
+<span class="sd">                e.g. using the direct output of an already trained GAN discriminator but also by comparing the</span>
+<span class="sd">                activations between real and synthetic data to evaluate if they are similar.</span>
+
+<span class="sd">    Generally, this type of Discriminator is used to calculate a score which can be used to asses if data belongs to a</span>
+<span class="sd">    given distribution. In this class we utilize only neural network based discriminators inspired by GAN architectures</span>
+<span class="sd">    and :ref:`AnoGAN`. This discriminator can not be used for training.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">disc_sampler</span><span class="p">:</span> <span class="n">DiscriminatorSampler</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disc_sampler</span> <span class="o">=</span> <span class="n">disc_sampler</span>
+
+<div class="viewcode-block" id="InferenceDiscriminator.discriminate"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.InferenceDiscriminator.discriminate">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">discriminate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Discriminate a Tensor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: A data sample that should be discriminated.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           Discrimination score.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Discriminator needs to implement the `discriminate` method.&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RawInferenceDiscriminator"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.RawInferenceDiscriminator">[docs]</a><span class="k">class</span> <span class="nc">RawInferenceDiscriminator</span><span class="p">(</span><span class="n">InferenceDiscriminator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the output of the discriminator.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RawInferenceDiscriminator.discriminate"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.RawInferenceDiscriminator.discriminate">[docs]</a>    <span class="k">def</span> <span class="nf">discriminate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the raw disc output and return the difference from the target value (1).</span>
+
+<span class="sd">        The output depends a lot on the training state of the discriminator and is not necessarily reliable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">disc_scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disc_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">target_difference</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">disc_scores</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">target_difference</span></div></div>
+
+
+<div class="viewcode-block" id="LogInferenceDiscriminator"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.LogInferenceDiscriminator">[docs]</a><span class="k">class</span> <span class="nc">LogInferenceDiscriminator</span><span class="p">(</span><span class="n">InferenceDiscriminator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the logarithmic output of the discriminator.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LogInferenceDiscriminator.discriminate"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.LogInferenceDiscriminator.discriminate">[docs]</a>    <span class="k">def</span> <span class="nf">discriminate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the log of the disc output.</span>
+
+<span class="sd">        The output depends a lot on the training state of the discriminator and is not necessarily reliable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">disc_scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disc_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">log</span><span class="p">(</span><span class="n">disc_scores</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span></div></div>
+
+
+<div class="viewcode-block" id="FeatureMatchingInferenceDiscriminator"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.FeatureMatchingInferenceDiscriminator">[docs]</a><span class="k">class</span> <span class="nc">FeatureMatchingInferenceDiscriminator</span><span class="p">(</span><span class="n">InferenceDiscriminator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Match the features of the real and reconstructed series.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">disc_sampler</span><span class="p">:</span> <span class="n">DiscriminatorSampler</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">disc_sampler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mse_criterion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disc_sampler</span><span class="p">:</span> <span class="n">FeatureDiscriminatorSampler</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">disc_sampler</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FeatureMatchingInferenceDiscriminator.discriminate"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.FeatureMatchingInferenceDiscriminator.discriminate">[docs]</a>    <span class="k">def</span> <span class="nf">discriminate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the features of real and fake data are similar.</span>
+
+<span class="sd">        The similarity is measured by the MSELoss/L2 distance between the real data and the reconstructed data. This</span>
+<span class="sd">        also means that, in comparison to many other discriminators, we do not only need to reconstructed samples but</span>
+<span class="sd">        the real samples as well.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;real_data&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s2">&quot;Feature matching requires the real data. &quot;</span>
+                <span class="s2">&quot;Please pass the data or select a different discrimination strategy.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">real_data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;real_data&#39;</span><span class="p">]</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">disc_out_fake_feat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disc_sampler</span><span class="o">.</span><span class="n">sample_features</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">disc_out_real_feat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disc_sampler</span><span class="o">.</span><span class="n">sample_features</span><span class="p">(</span><span class="n">real_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">L2Distance</span><span class="p">()(</span><span class="n">disc_out_real_feat</span><span class="p">,</span> <span class="n">disc_out_fake_feat</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DiscriminatorFactory"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.DiscriminatorFactory">[docs]</a><span class="k">class</span> <span class="nc">DiscriminatorFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Factory module for creating Discriminator objects.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">disc_sampler</span><span class="p">:</span> <span class="n">DiscriminatorSampler</span><span class="p">,</span>
+        <span class="n">strategy</span><span class="p">:</span> <span class="n">DiscriminationStrategy</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InferenceDiscriminator</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return an InferenceDiscriminator instance.&quot;&quot;&quot;</span>
+        <span class="n">strategies</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">DiscriminationStrategy</span><span class="o">.</span><span class="n">TARGET_VALUE</span><span class="p">:</span> <span class="n">RawInferenceDiscriminator</span><span class="p">(</span><span class="n">disc_sampler</span><span class="p">),</span>
+            <span class="n">DiscriminationStrategy</span><span class="o">.</span><span class="n">LOG</span><span class="p">:</span> <span class="n">LogInferenceDiscriminator</span><span class="p">(</span><span class="n">disc_sampler</span><span class="p">),</span>
+            <span class="n">DiscriminationStrategy</span><span class="o">.</span><span class="n">FEATURE_MATCHING</span><span class="p">:</span> <span class="n">FeatureMatchingInferenceDiscriminator</span><span class="p">(</span><span class="n">disc_sampler</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">strategies</span><span class="p">[</span><span class="n">strategy</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s1">&#39;Unknown discriminator strategy: </span><span class="si">{0}</span><span class="s1">. Please select a valid DiscriminationStrategy.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">strategy</span><span class="p">)</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span></div>
+
+
+<div class="viewcode-block" id="get_pointwise_anomaly_score_anogan"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.get_pointwise_anomaly_score_anogan">[docs]</a><span class="k">def</span> <span class="nf">get_pointwise_anomaly_score_anogan</span><span class="p">(</span>
+    <span class="n">discrimination_error</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">reconstruction_error</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">lambda_</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the series-wise anomaly scores.</span>
+
+<span class="sd">    Calculate the series-wise anomaly scores including all channel- and pointwise anomaly scores. Currently based on the</span>
+<span class="sd">    AnoGAN approach (:math:`lambda` is the weighting between discrimination error and reconstruction error).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        discrimination_error: Pointwise discrimination error.</span>
+<span class="sd">        reconstruction_error: Pointwise reconstruction error.</span>
+<span class="sd">        lambda_: Weighting of the reconstruction error (the higher lambda,</span>
+<span class="sd">            the less relevant the discrimination_error. The weight is assumed to be in [0, 1].</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The pointwise anomaly score.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">discrimination_error</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">reconstruction_error</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Anomaly Score Error: Shape of samples used for anomaly detection is not equal.&#39;</span><span class="p">)</span>
+
+    <span class="n">anomaly_scores</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="n">lambda_</span> <span class="o">*</span> <span class="n">reconstruction_error</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">lambda_</span><span class="p">)</span> <span class="o">*</span> <span class="n">discrimination_error</span>
+
+    <span class="k">return</span> <span class="n">anomaly_scores</span></div>
+
+
+<div class="viewcode-block" id="get_anomaly_score"><a class="viewcode-back" href="../../../api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.get_anomaly_score">[docs]</a><span class="k">def</span> <span class="nf">get_anomaly_score</span><span class="p">(</span>
+    <span class="n">discrimination_error</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">reconstruction_error</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">pointwise</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">lambda_</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return an anomaly score.</span>
+
+<span class="sd">    Anomaly score:</span>
+
+<span class="sd">        1. Default: all points for each channel.</span>
+<span class="sd">        2. All points inside one series summarized.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        discrimination_error: Pointwise discrimination error.</span>
+<span class="sd">        reconstruction_error: Pointwise reconstruction error.</span>
+<span class="sd">        pointwise: Signals that the pointwise anomaly score should be returned.</span>
+<span class="sd">            If :code:`pointwise=False`: Return serieswise anomaly score.</span>
+<span class="sd">        lambda_: Weighting of the reconstruction error.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">         The pointwise or channelwise reconstruction error for each time series.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">discrimination_error</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reconstruction_error</span><span class="o">.</span><span class="n">shape</span>
+    <span class="p">),</span> <span class="s1">&#39;Anomaly Score: Shape of samples used for anomaly detection is not equal.&#39;</span>
+    <span class="n">anomaly_score</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="n">get_pointwise_anomaly_score_anogan</span><span class="p">(</span>
+        <span class="n">discrimination_error</span><span class="p">,</span> <span class="n">reconstruction_error</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="n">lambda_</span>
+    <span class="p">)</span>
+    <span class="c1"># Returns anomaly values for every point in every univariate series of all multivariate series</span>
+    <span class="k">if</span> <span class="n">pointwise</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">anomaly_score</span>
+
+    <span class="c1"># Returns a single anomaly value for each multivariate series.</span>
+    <span class="k">return</span> <span class="n">torchsum</span><span class="p">(</span><span class="n">anomaly_score</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

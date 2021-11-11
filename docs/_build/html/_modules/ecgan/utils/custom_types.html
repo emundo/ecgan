@@ -1,0 +1,597 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ecgan.utils.custom_types &mdash; ECGAN 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../synthesis.html#beatgan">BeatGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classification.html">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ecgan.utils.custom_types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ecgan.utils.custom_types</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Custom enums of supported functionality and types of for the ecgan library.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+
+<span class="c1"># List of metrics which can trigger `save_epoch` if they are improved.</span>
+<span class="c1"># TODO read from config</span>
+<span class="n">save_epoch_metrics</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;grid/lambda_fscore&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;grid/lambda_mcc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;grid/lambda_auroc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svm/minmax_fscore&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svm/minmax_auroc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svm/minmax_mcc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svm/scaled_latent_mcc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svm/scaled_latent_fscore&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svm/scaled_latent_auroc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;only_disc_error&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;only_reconstruction_error&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;only_latent_error&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="AnomalyDetectionStrategies"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.AnomalyDetectionStrategies">[docs]</a><span class="k">class</span> <span class="nc">AnomalyDetectionStrategies</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Implemented strategies for anomaly detection.&quot;&quot;&quot;</span>
+
+    <span class="n">ANOGAN</span> <span class="o">=</span> <span class="s1">&#39;anogan&#39;</span>
+    <span class="n">ARGMAX</span> <span class="o">=</span> <span class="s1">&#39;argmax&#39;</span>
+    <span class="n">INVERSE_MAPPING</span> <span class="o">=</span> <span class="s1">&#39;inverse_mapping&#39;</span></div>
+
+
+<div class="viewcode-block" id="Transformation"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.Transformation">[docs]</a><span class="k">class</span> <span class="nc">Transformation</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Implemented transformations which can be set before passing data to a module.&quot;&quot;&quot;</span>
+
+    <span class="n">STANDARDIZE</span> <span class="o">=</span> <span class="s1">&#39;standard&#39;</span>
+    <span class="n">MINMAX</span> <span class="o">=</span> <span class="s1">&#39;minmax&#39;</span>
+    <span class="n">WHITENING</span> <span class="o">=</span> <span class="s1">&#39;whitening&#39;</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+    <span class="n">FOURIER</span> <span class="o">=</span> <span class="s1">&#39;fourier&#39;</span>
+    <span class="n">INDIVIDUAL</span> <span class="o">=</span> <span class="s1">&#39;individual&#39;</span></div>
+
+
+<div class="viewcode-block" id="SplitMethods"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.SplitMethods">[docs]</a><span class="k">class</span> <span class="nc">SplitMethods</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Available split methods.&quot;&quot;&quot;</span>
+
+    <span class="n">MIXED</span> <span class="o">=</span> <span class="s1">&#39;mixed&#39;</span>
+    <span class="n">NORMAL_ONLY</span> <span class="o">=</span> <span class="s1">&#39;normal_only&#39;</span></div>
+
+
+<div class="viewcode-block" id="SampleDataset"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.SampleDataset">[docs]</a><span class="k">class</span> <span class="nc">SampleDataset</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Available datasets a DatasetSampler can sample from.&quot;&quot;&quot;</span>
+
+    <span class="n">TRAIN</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+    <span class="n">TEST</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+    <span class="n">VALI</span> <span class="o">=</span> <span class="s1">&#39;vali&#39;</span></div>
+
+
+<div class="viewcode-block" id="InverseMappingType"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.InverseMappingType">[docs]</a><span class="k">class</span> <span class="nc">InverseMappingType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Available inverse mappings.&quot;&quot;&quot;</span>
+
+    <span class="n">SIMPLE</span> <span class="o">=</span> <span class="s1">&#39;simple&#39;</span></div>
+
+
+<div class="viewcode-block" id="ReconstructionType"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.ReconstructionType">[docs]</a><span class="k">class</span> <span class="nc">ReconstructionType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Different ways to reconstruct data using an already trained GAN generator.&quot;&quot;&quot;</span>
+
+    <span class="n">INTERPOLATE</span> <span class="o">=</span> <span class="s1">&#39;interpolate&#39;</span>
+    <span class="n">INVERSE_MAPPING</span> <span class="o">=</span> <span class="s1">&#39;inverse_mapping&#39;</span></div>
+
+
+<div class="viewcode-block" id="DiscriminationStrategy"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.DiscriminationStrategy">[docs]</a><span class="k">class</span> <span class="nc">DiscriminationStrategy</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Different ways to discriminate data using an already trained GAN discriminator.&quot;&quot;&quot;</span>
+
+    <span class="n">FEATURE_MATCHING</span> <span class="o">=</span> <span class="s1">&#39;feature_matching&#39;</span>
+    <span class="n">TARGET_VALUE</span> <span class="o">=</span> <span class="s1">&#39;target_value&#39;</span>
+    <span class="n">LOG</span> <span class="o">=</span> <span class="s1">&#39;log_discrimination&#39;</span></div>
+
+
+<div class="viewcode-block" id="SimilarityMeasures"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.SimilarityMeasures">[docs]</a><span class="k">class</span> <span class="nc">SimilarityMeasures</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Methods to calculate the similarity between two series.&quot;&quot;&quot;</span>
+
+    <span class="n">RBF_KERNEL</span> <span class="o">=</span> <span class="s1">&#39;rbf_kernel&#39;</span>
+    <span class="n">COSINE</span> <span class="o">=</span> <span class="s1">&#39;cosine_similarity&#39;</span></div>
+
+
+<div class="viewcode-block" id="Optimizers"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.Optimizers">[docs]</a><span class="k">class</span> <span class="nc">Optimizers</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Supported optimizers.&quot;&quot;&quot;</span>
+
+    <span class="n">UNDEFINED</span> <span class="o">=</span> <span class="s1">&#39;undefined_optimizer&#39;</span>
+    <span class="n">STOCHASTIC_GRADIENT_DESCENT</span> <span class="o">=</span> <span class="s1">&#39;sgd&#39;</span>
+    <span class="n">MOMENTUM</span> <span class="o">=</span> <span class="s1">&#39;momentum&#39;</span>
+    <span class="n">ADAM</span> <span class="o">=</span> <span class="s1">&#39;adam&#39;</span>
+    <span class="n">RMS_PROP</span> <span class="o">=</span> <span class="s1">&#39;rms_prop&#39;</span>
+    <span class="n">ADABELIEF</span> <span class="o">=</span> <span class="s1">&#39;ada_belief&#39;</span></div>
+
+
+<div class="viewcode-block" id="MetricOptimization"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.MetricOptimization">[docs]</a><span class="k">class</span> <span class="nc">MetricOptimization</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Supported methods to optimize weighted errors regarding their weighting for a total anomaly score.&quot;&quot;&quot;</span>
+
+    <span class="n">NONE</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">SVM_LAMBDA</span> <span class="o">=</span> <span class="s1">&#39;SVM_LAMBDA&#39;</span>
+    <span class="n">SVM_LAMBDA_GAMMA</span> <span class="o">=</span> <span class="s1">&#39;SVM_LAMBDA_GAMMA&#39;</span>
+    <span class="n">GRID_SEARCH_LAMBDA</span> <span class="o">=</span> <span class="s1">&#39;GRID_SEARCH_LAMBDA&#39;</span>
+    <span class="n">GRID_SEARCH_LAMBDA_GAMMA</span> <span class="o">=</span> <span class="s1">&#39;GRID_SEARCH_LAMBDA_GAMMA&#39;</span></div>
+
+
+<div class="viewcode-block" id="Losses"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.Losses">[docs]</a><span class="k">class</span> <span class="nc">Losses</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Supported losses.&quot;&quot;&quot;</span>
+
+    <span class="n">UNDEFINED</span> <span class="o">=</span> <span class="s1">&#39;undefined_loss&#39;</span>
+    <span class="n">BCE</span> <span class="o">=</span> <span class="s1">&#39;bce&#39;</span>
+    <span class="n">BCE_GENERATOR_LOSS</span> <span class="o">=</span> <span class="s1">&#39;bce_generator_loss&#39;</span>
+    <span class="n">L2</span> <span class="o">=</span> <span class="s2">&quot;l2&quot;</span>
+    <span class="n">TWO_COMPONENT_BCE</span> <span class="o">=</span> <span class="s1">&#39;two_component_bce&#39;</span>
+    <span class="n">KL_DIV</span> <span class="o">=</span> <span class="s1">&#39;kullback_leibler_divergence&#39;</span>
+    <span class="n">WASSERSTEIN_DISCRIMINATOR</span> <span class="o">=</span> <span class="s1">&#39;wasserstein_discriminator&#39;</span>
+    <span class="n">WASSERSTEIN_GENERATOR</span> <span class="o">=</span> <span class="s1">&#39;wasserstein_generator&#39;</span>
+    <span class="n">CROSS_ENTROPY</span> <span class="o">=</span> <span class="s1">&#39;cross_entropy&#39;</span>
+    <span class="n">AEGAN_GENERATOR</span> <span class="o">=</span> <span class="s1">&#39;aegan_generator&#39;</span>
+    <span class="n">AEGAN_DISCRIMINATOR</span> <span class="o">=</span> <span class="s1">&#39;aegan_discriminator&#39;</span>
+    <span class="n">VAEGAN_GENERATOR</span> <span class="o">=</span> <span class="s1">&#39;vaegan_generator&#39;</span></div>
+
+
+<div class="viewcode-block" id="LabelingStrategy"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.LabelingStrategy">[docs]</a><span class="k">class</span> <span class="nc">LabelingStrategy</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine how the points shall be labeled.</span>
+
+<span class="sd">    WARNING: The strategy chosen has implications on the output format.</span>
+<span class="sd">    POINTWISE returns a label for each datapoint in each series.</span>
+<span class="sd">    ACCUMULATE_UNIVARIATE returns a label for each univariate series.</span>
+<span class="sd">    ACCUMULATE_MULTIVARIATE returns a label for each multivariate series.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">POINTWISE</span> <span class="o">=</span> <span class="s1">&#39;pointwise&#39;</span>
+    <span class="n">ACCUMULATE_CHANNELWISE</span> <span class="o">=</span> <span class="s1">&#39;accumulate_channelwise&#39;</span>
+    <span class="n">ACCUMULATE_SERIESWISE</span> <span class="o">=</span> <span class="s1">&#39;accumulate_serieswise&#39;</span>
+    <span class="n">VARIANCE_SERIESWISE</span> <span class="o">=</span> <span class="s1">&#39;variance_serieswise&#39;</span>
+    <span class="n">VARIANCE_CHANNELWISE</span> <span class="o">=</span> <span class="s1">&#39;variance_channelwise&#39;</span></div>
+
+
+<div class="viewcode-block" id="SamplingAlgorithm"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.SamplingAlgorithm">[docs]</a><span class="k">class</span> <span class="nc">SamplingAlgorithm</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Different down- or upsampling algorithms which can be used during preprocessing.&quot;&quot;&quot;</span>
+
+    <span class="n">LTTB</span> <span class="o">=</span> <span class="s1">&#39;lttb&#39;</span>
+    <span class="n">INTERPOLATE</span> <span class="o">=</span> <span class="s1">&#39;interpolate&#39;</span>
+    <span class="n">FIXED_DOWNSAMPLING_RATE</span> <span class="o">=</span> <span class="s1">&#39;fixed_rate&#39;</span></div>
+
+
+<div class="viewcode-block" id="MetricType"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.MetricType">[docs]</a><span class="k">class</span> <span class="nc">MetricType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Supported evaluation metrics.&quot;&quot;&quot;</span>
+
+    <span class="n">FSCORE</span> <span class="o">=</span> <span class="s1">&#39;fscore&#39;</span>
+    <span class="n">MCC</span> <span class="o">=</span> <span class="s1">&#39;mcc&#39;</span>
+    <span class="n">AUROC</span> <span class="o">=</span> <span class="s1">&#39;auroc&#39;</span></div>
+
+
+<div class="viewcode-block" id="WeightInitialization"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.WeightInitialization">[docs]</a><span class="k">class</span> <span class="nc">WeightInitialization</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Different strategies to inititalize weights in neural networks.&quot;&quot;&quot;</span>
+
+    <span class="n">NORMAL</span> <span class="o">=</span> <span class="s1">&#39;normal&#39;</span>
+    <span class="n">UNIFORM</span> <span class="o">=</span> <span class="s1">&#39;uniform&#39;</span>
+    <span class="n">HE</span> <span class="o">=</span> <span class="s1">&#39;he&#39;</span>
+    <span class="n">GLOROT_UNIFORM</span> <span class="o">=</span> <span class="s1">&#39;glorot_uniform&#39;</span>
+    <span class="n">GLOROT_NORMAL</span> <span class="o">=</span> <span class="s1">&#39;glorot_normal&#39;</span></div>
+
+
+<div class="viewcode-block" id="InputNormalization"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.InputNormalization">[docs]</a><span class="k">class</span> <span class="nc">InputNormalization</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Supported normalization layers.&quot;&quot;&quot;</span>
+
+    <span class="n">BATCH</span> <span class="o">=</span> <span class="s1">&#39;batch&#39;</span>
+    <span class="n">GROUP</span> <span class="o">=</span> <span class="s1">&#39;group&#39;</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span></div>
+
+
+<div class="viewcode-block" id="LatentDistribution"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.LatentDistribution">[docs]</a><span class="k">class</span> <span class="nc">LatentDistribution</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Supported latent distributions which can be set via config.&quot;&quot;&quot;</span>
+
+    <span class="n">NORMAL</span> <span class="o">=</span> <span class="s1">&#39;normal_distribution&#39;</span>
+    <span class="n">NORMAL_TRUNCATED</span> <span class="o">=</span> <span class="s1">&#39;truncated_normal_distribution&#39;</span>
+    <span class="n">UNIFORM</span> <span class="o">=</span> <span class="s1">&#39;uniform_distribution&#39;</span>
+    <span class="n">ENCODER_BASED</span> <span class="o">=</span> <span class="s1">&#39;encoder&#39;</span></div>
+
+
+<div class="viewcode-block" id="TrackerType"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.TrackerType">[docs]</a><span class="k">class</span> <span class="nc">TrackerType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Supported trackers that can be set via config.&quot;&quot;&quot;</span>
+
+    <span class="n">LOCAL</span> <span class="o">=</span> <span class="s1">&#39;local&#39;</span>
+    <span class="n">WEIGHTS_AND_BIASES</span> <span class="o">=</span> <span class="s1">&#39;wb&#39;</span></div>
+
+
+<div class="viewcode-block" id="PlotterType"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.PlotterType">[docs]</a><span class="k">class</span> <span class="nc">PlotterType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Different types of plotters.&quot;&quot;&quot;</span>
+
+    <span class="n">BASE</span> <span class="o">=</span> <span class="s1">&#39;base&#39;</span>
+    <span class="n">FOURIER</span> <span class="o">=</span> <span class="s1">&#39;fourier&#39;</span>
+    <span class="n">SCATTER</span> <span class="o">=</span> <span class="s1">&#39;scatter&#39;</span></div>
+
+
+<div class="viewcode-block" id="SklearnAveragingOptions"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.SklearnAveragingOptions">[docs]</a><span class="k">class</span> <span class="nc">SklearnAveragingOptions</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Additional Sklearn type stubs for the available F-score averaging options.</span>
+
+<span class="sd">    More information on the respective effects:</span>
+<span class="sd">    https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_recall_fscore_support.html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BINARY</span> <span class="o">=</span> <span class="s1">&#39;binary&#39;</span>
+    <span class="n">MICRO</span> <span class="o">=</span> <span class="s1">&#39;micro&#39;</span>
+    <span class="n">MACRO</span> <span class="o">=</span> <span class="s1">&#39;macro&#39;</span>
+    <span class="n">SAMPLES</span> <span class="o">=</span> <span class="s1">&#39;samples&#39;</span>
+    <span class="n">WEIGHTED</span> <span class="o">=</span> <span class="s1">&#39;weighted&#39;</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="SklearnSVMKernels"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.SklearnSVMKernels">[docs]</a><span class="k">class</span> <span class="nc">SklearnSVMKernels</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SVM kernels supported by ECGAN from sklearn.</span>
+
+<span class="sd">    More informations can be found in the official [docs]</span>
+<span class="sd">    (https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LINEAR</span> <span class="o">=</span> <span class="s1">&#39;linear&#39;</span>
+    <span class="n">POLY</span> <span class="o">=</span> <span class="s1">&#39;poly&#39;</span>
+    <span class="n">RBF</span> <span class="o">=</span> <span class="s1">&#39;rbf&#39;</span>
+    <span class="n">SIGMOID</span> <span class="o">=</span> <span class="s1">&#39;sigmoid&#39;</span></div>
+
+
+<div class="viewcode-block" id="SupportedModules"><a class="viewcode-back" href="../../../api/utils/custom_types.html#ecgan.utils.custom_types.SupportedModules">[docs]</a><span class="k">class</span> <span class="nc">SupportedModules</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Modules supported by the framework.&quot;&quot;&quot;</span>
+
+    <span class="n">RGAN</span> <span class="o">=</span> <span class="s1">&#39;rgan&#39;</span>
+    <span class="n">DCGAN</span> <span class="o">=</span> <span class="s1">&#39;dcgan&#39;</span>
+    <span class="n">RDCGAN</span> <span class="o">=</span> <span class="s1">&#39;rdcgan&#39;</span>
+    <span class="n">AEGAN</span> <span class="o">=</span> <span class="s1">&#39;aegan&#39;</span>
+    <span class="n">VAEGAN</span> <span class="o">=</span> <span class="s1">&#39;vaegan&#39;</span>
+    <span class="n">RNN</span> <span class="o">=</span> <span class="s1">&#39;rnn&#39;</span>
+    <span class="n">CNN</span> <span class="o">=</span> <span class="s1">&#39;cnn&#39;</span></div>
+
+
+<span class="c1"># Optimizer can either handle a single tensor or multiple losses as a tuple (NAME, LossTensor).</span>
+<span class="n">LossType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]]]</span>
+<span class="n">LossMetricType</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

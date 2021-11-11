@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.visualization.plotter &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.visualization.plotter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.visualization.plotter</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Describes different plotting classes.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">mplcolors</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Axes</span><span class="p">,</span> <span class="n">Figure</span>
+<span class="kn">from</span> <span class="nn">matplotlib.gridspec</span> <span class="kn">import</span> <span class="n">GridSpec</span><span class="p">,</span> <span class="n">GridSpecFromSubplotSpec</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">fftpack</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.config</span> <span class="kn">import</span> <span class="n">TrainerConfig</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">PlotterType</span><span class="p">,</span> <span class="n">Transformation</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.miscellaneous</span> <span class="kn">import</span> <span class="n">to_numpy</span><span class="p">,</span> <span class="n">to_torch</span>
+
+
+<div class="viewcode-block" id="matplotlib_prep"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.matplotlib_prep">[docs]</a><span class="k">def</span> <span class="nf">matplotlib_prep</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">subplots</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y_lim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Figure</span><span class="p">,</span> <span class="n">Axes</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a figure and an axis for a matplotlib plot with a given size.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        size: Target (width, height) of the plot.</span>
+<span class="sd">        subplots: amount of subplots of the figure.</span>
+<span class="sd">        y_lim: Visual y limits of the plot.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The processed figure and axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Standard dpi in matplotlib is 100.</span>
+    <span class="n">dpi</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplots</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">dpi</span><span class="p">,</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">dpi</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">y_lim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
+
+
+<div class="viewcode-block" id="BasePlotter"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter">[docs]</a><span class="k">class</span> <span class="nc">BasePlotter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base class for plotting classes. Creates its plots by simple call to plt.plot.&quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_data_axes</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the x and y axis corresponding to a given time series.</span>
+
+<span class="sd">        The BasePlotter assumes a equidistantly sampled time series in which</span>
+<span class="sd">        case the x-values of the plot are set to [0, 1,..., seq_len].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">data</span><span class="p">])</span>
+
+<div class="viewcode-block" id="BasePlotter.create_plot"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.create_plot">[docs]</a>    <span class="k">def</span> <span class="nf">create_plot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+        <span class="n">y_lim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a plot from given data (default: 2D time series).</span>
+
+<span class="sd">        How the plot is created is subject to the given class implementation. The plot is returned as a mpl Figure.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: A list of data points representing a 2D time series.</span>
+<span class="sd">            color: The color in which to draw the plot.</span>
+<span class="sd">            size: The size the plot image is resized to. Resizing is done via cubic interpolation.</span>
+<span class="sd">            y_lim: Limit the y-axis of the plot to the floating tuple.</span>
+<span class="sd">            label: Optional label which can be drawn into the plot.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The generated images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">matplotlib_prep</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="n">y_lim</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axs</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="BasePlotter.get_sampling_grid"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.get_sampling_grid">[docs]</a>    <span class="k">def</span> <span class="nf">get_sampling_grid</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sample_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">max_num_series</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+        <span class="n">row_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+        <span class="n">scale_per_batch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">x_axis</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">y_axis</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">fig_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get sampled time series data image grid.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sample_data: The data that shall be visualized with shape (amount_of_series, measurements, channels).</span>
+<span class="sd">            max_num_series: Maximum amount of samples visualized.</span>
+<span class="sd">            row_width: Row width.</span>
+<span class="sd">            color: Sets the colour of the plots.</span>
+<span class="sd">            scale_per_batch: Set the y-limit for each plot to min/max of the batch (per channel).</span>
+<span class="sd">            label: Optional labels parameter, which is written to the plots.</span>
+<span class="sd">            x_axis: Flag indicating whether the x-axis should be visible.</span>
+<span class="sd">            y_axis: Flag indicating whether the y-axis should be visible.</span>
+<span class="sd">            fig_size: Optional size for the figure in inches.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Figure of the image grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sample_data_</span> <span class="o">=</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">sample_data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fig_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Make the figure wider if more than the default 4 figures are in one row.</span>
+            <span class="n">extended_row_width</span> <span class="o">=</span> <span class="n">row_width</span> <span class="o">/</span> <span class="mi">5</span> <span class="k">if</span> <span class="n">row_width</span> <span class="o">&gt;</span> <span class="mi">4</span> <span class="k">else</span> <span class="mf">1.0</span>
+            <span class="n">arbitrary_extension</span> <span class="o">=</span> <span class="n">max_num_series</span> <span class="o">/</span> <span class="p">(</span><span class="n">row_width</span> <span class="o">*</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="n">arbitrary_extension</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">arbitrary_extension</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">arbitrary_extension</span>
+            <span class="c1"># DIN A4 size in inches: (11.69, 8.27)</span>
+            <span class="n">extended_height</span> <span class="o">=</span> <span class="mf">8.27</span> <span class="o">*</span> <span class="n">arbitrary_extension</span>
+            <span class="n">extended_width</span> <span class="o">=</span> <span class="mf">11.69</span> <span class="o">*</span> <span class="n">arbitrary_extension</span> <span class="o">*</span> <span class="n">extended_row_width</span>
+            <span class="n">fig_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">extended_width</span><span class="p">,</span> <span class="n">extended_height</span><span class="p">)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">fig_size</span><span class="p">)</span>
+
+        <span class="n">num_data</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">num_channels</span> <span class="o">=</span> <span class="n">sample_data_</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">num_data</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">num_data</span><span class="p">,</span> <span class="n">max_num_series</span><span class="p">)</span>
+
+        <span class="c1"># Univariate series</span>
+        <span class="k">if</span> <span class="n">num_channels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">sample_data_</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">num_data</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">))</span>
+
+        <span class="n">num_of_rows</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_data</span> <span class="o">/</span> <span class="n">row_width</span><span class="p">)</span>
+        <span class="n">outer_grid</span> <span class="o">=</span> <span class="n">GridSpec</span><span class="p">(</span><span class="n">num_of_rows</span><span class="p">,</span> <span class="n">row_width</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+        <span class="n">y_lim</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">scale_per_batch</span><span class="p">:</span>
+            <span class="n">y_lim</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">sample_data_</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">sample_data_</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_of_rows</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row_width</span><span class="p">):</span>
+                <span class="n">inner_grid</span> <span class="o">=</span> <span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span>
+                    <span class="n">num_channels</span><span class="p">,</span>
+                    <span class="mi">1</span><span class="p">,</span>
+                    <span class="n">subplot_spec</span><span class="o">=</span><span class="n">outer_grid</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">row_width</span> <span class="o">+</span> <span class="n">j</span><span class="p">],</span>
+                    <span class="n">wspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                    <span class="n">hspace</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_channels</span><span class="p">):</span>
+                    <span class="n">plot_number</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">row_width</span> <span class="o">+</span> <span class="n">j</span>
+                    <span class="k">if</span> <span class="n">plot_number</span> <span class="o">&gt;=</span> <span class="n">num_data</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">inner_grid</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+                    <span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="n">x_axis</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="n">y_axis</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">y_lim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">y_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">num_channels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+                    <span class="n">label_</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="n">plot_number</span><span class="p">])</span> <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">(</span>
+                        <span class="n">sample_data_</span><span class="p">[</span><span class="n">plot_number</span><span class="p">,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">],</span>
+                        <span class="n">label</span><span class="o">=</span><span class="n">label_</span><span class="p">,</span>
+                        <span class="n">axes</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+        <span class="n">outer_grid</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+    <span class="k">def</span> <span class="nf">_plot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">axes</span><span class="p">:</span> <span class="n">Axes</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot data to given axes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: Data to plot.</span>
+<span class="sd">            axes: Axes to plot the data on.</span>
+<span class="sd">            color: Graph color.</span>
+<span class="sd">            label: Numeric label of the data class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">transformed_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data_axes</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">transformed_data</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Class: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasePlotter.save_sampling_grid"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.save_sampling_grid">[docs]</a>    <span class="k">def</span> <span class="nf">save_sampling_grid</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sample_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">file_location</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+        <span class="n">max_num_series</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+        <span class="n">scale_per_batch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">row_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save sampled time series data to an image grid.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sample_data: The data that shall be visualized with shape (amount_of_series, 1, measurements).</span>
+<span class="sd">            color: Color of the plot.</span>
+<span class="sd">            file_location: Path to file on local system. Should be a UNIQUE identifier.</span>
+<span class="sd">            max_num_series: Maximum amount of samples visualized.</span>
+<span class="sd">            row_width: Width of a row.</span>
+<span class="sd">            scale_per_batch: Set the y-limit for each plot to min/max of the batch (per channel).</span>
+<span class="sd">            label: Optional labels parameter, which is written to the plots.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">image_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sampling_grid</span><span class="p">(</span>
+            <span class="n">sample_data</span><span class="p">,</span>
+            <span class="n">max_num_series</span><span class="p">,</span>
+            <span class="n">row_width</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">scale_per_batch</span><span class="o">=</span><span class="n">scale_per_batch</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">image_grid</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">file_location</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BasePlotter.create_histogram"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.create_histogram">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_histogram</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">x_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">y_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">bins</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create a histogram of given data.&quot;&quot;&quot;</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="BasePlotter.save_plot"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.save_plot">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">save_plot</span><span class="p">(</span>
+        <span class="n">plot</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Figure</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">file_location</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Save a plot (encoded as np.ndarray) to file_location.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">Figure</span><span class="p">):</span>
+            <span class="n">plot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">file_location</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">imsave</span><span class="p">(</span><span class="n">file_location</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">plot</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BasePlotter.create_error_plot"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.create_error_plot">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_error_plot</span><span class="p">(</span>  <span class="c1"># pylint: disable=R0913</span>
+        <span class="n">data_lined</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">data_dashed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">heatmap_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">x_axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">data_range</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">color_lined</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+        <span class="n">color_dashed</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span>
+        <span class="n">color_map</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;plasma&#39;</span><span class="p">,</span>
+        <span class="n">x_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">y_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a plot with two graphs visualizing the difference of the two samples and a heatmap.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data_lined: The sample data that is depicted as a solid line.</span>
+<span class="sd">            data_dashed: The sample data that is depicted as a dashed line.</span>
+<span class="sd">            heatmap_data: Optional data for the drawing of the heatmap.</span>
+<span class="sd">                The default simply computes the absolute value of (data_dashed - data_lined)</span>
+<span class="sd">            x_axis: Sampling of the x-axis. Default assumes range(1, len_of_samples).</span>
+<span class="sd">            data_range: Range of the heatmap. Dynamic by default, requires (min,max) otherwise.</span>
+<span class="sd">            color_lined: Color of the lined plot.</span>
+<span class="sd">            color_dashed: Color of the dashed plot.</span>
+<span class="sd">            color_map: Color map for the heatmap.</span>
+<span class="sd">            x_label: Label of the x-axis.</span>
+<span class="sd">            y_label: Label of the y-axis.</span>
+<span class="sd">            title: Title for the plot.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Heatmap Figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_lined</span> <span class="o">=</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">data_lined</span><span class="p">)</span>
+        <span class="n">data_dashed</span> <span class="o">=</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">data_dashed</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x_axis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">len_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_lined</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_lined</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_dashed</span><span class="p">)</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_dashed</span><span class="p">)</span>
+            <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">len_</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">heatmap_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">heatmap_data</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">data_dashed</span> <span class="o">-</span> <span class="n">data_lined</span><span class="p">)</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;height_ratios&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span>
+
+        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">data_lined</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color_lined</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">data_dashed</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color_dashed</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">data_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">mplcolors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">data_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span><span class="n">data_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">heatmap</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">([</span><span class="n">heatmap_data</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">heatmap</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">([</span><span class="n">heatmap_data</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">heatmap</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="FourierPlotter"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.FourierPlotter">[docs]</a><span class="k">class</span> <span class="nc">FourierPlotter</span><span class="p">(</span><span class="n">BasePlotter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plotter implementation to plot data in the Fourier-domain as a frequency-histogram.&quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_transform_to_complex</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform a tensor to a complex tensors.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: Input data of shape (batch_size, seq_len, 2*num_channels)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tensor of shape (batch_size, seq_length, num_channels) with complex entries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">to_torch</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">twice_num_channels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">num_channels</span> <span class="o">=</span> <span class="n">twice_num_channels</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">float</span> <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">cdouble</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">num_channels</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_channels</span><span class="p">):</span>
+            <span class="n">real</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">channel</span><span class="p">]</span>
+            <span class="n">imag</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">channel</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">result</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">imag</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FourierPlotter.get_sampling_grid"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.FourierPlotter.get_sampling_grid">[docs]</a>    <span class="k">def</span> <span class="nf">get_sampling_grid</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sample_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">max_num_series</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+        <span class="n">row_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+        <span class="n">scale_per_batch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">x_axis</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">y_axis</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">fig_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get sampled time series data image grid.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sample_data: The data that shall be visualized. The tensor is assumed to be of shape</span>
+<span class="sd">                (batch_size, seq_length, 2 * num_of_channels), where each two channels form the real and imaginary parts</span>
+<span class="sd">                of the Fourier coefficients.</span>
+<span class="sd">            max_num_series: Maximum amount of samples visualized.</span>
+<span class="sd">            row_width: Amount of columns if grid shall not be symmetric.</span>
+<span class="sd">            color: Sets the colour of the plots.</span>
+<span class="sd">            scale_per_batch: Set the y-limit for each plot to min/max of the batch (per channel).</span>
+<span class="sd">            label: Optional labels parameter, which is written to the plots.</span>
+<span class="sd">            x_axis: Flag indicating whether the x-axis should be visible.</span>
+<span class="sd">            y_axis: Flag indicating whether the y-axis should be visible.</span>
+<span class="sd">            fig_size: Optional size for the figure in inches.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Image grid as Figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First restore the tensor to a complex number.</span>
+        <span class="n">complex_tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_to_complex</span><span class="p">(</span><span class="n">sample_data</span><span class="p">)</span>
+        <span class="c1"># Now the sampling can continue as declared in the super class.</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_sampling_grid</span><span class="p">(</span>
+            <span class="n">complex_tensor</span><span class="p">,</span>
+            <span class="n">max_num_series</span><span class="p">,</span>
+            <span class="n">row_width</span><span class="p">,</span>
+            <span class="n">color</span><span class="p">,</span>
+            <span class="n">scale_per_batch</span><span class="p">,</span>
+            <span class="n">label</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_transform_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Transform a data tensor in Fourier domain to a histogram of form (freq, abs(data)).&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">seq_len</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sample_rate</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">seq_len</span>  <span class="c1"># Nyquist theorem</span>
+        <span class="n">freqs</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">fftpack</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">*</span> <span class="n">sample_rate</span>
+
+        <span class="k">return</span> <span class="n">freqs</span>
+
+<div class="viewcode-block" id="FourierPlotter.create_plot"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.FourierPlotter.create_plot">[docs]</a>    <span class="k">def</span> <span class="nf">create_plot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+        <span class="n">y_lim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create a plot of the data using the settings of the plotting class.&quot;&quot;&quot;</span>
+        <span class="n">transformed_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">frequencies</span> <span class="o">=</span> <span class="n">transformed_data</span>
+        <span class="n">abs_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftn</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">bottom</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">matplotlib_prep</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">subplots</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="n">y_lim</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">bottom</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Class: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">frequencies</span><span class="p">,</span> <span class="n">abs_</span><span class="p">,</span> <span class="n">markerfmt</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div></div>
+
+
+<div class="viewcode-block" id="ScatterPlotter"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.ScatterPlotter">[docs]</a><span class="k">class</span> <span class="nc">ScatterPlotter</span><span class="p">(</span><span class="n">BasePlotter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plotter specialized on scatter plots for large datasets.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ScatterPlotter.truncate_colormap"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.ScatterPlotter.truncate_colormap">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">truncate_colormap</span><span class="p">(</span>
+        <span class="n">cmap</span><span class="p">:</span> <span class="n">mplcolors</span><span class="o">.</span><span class="n">Colormap</span><span class="p">,</span> <span class="n">min_val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">max_val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">n_cmap</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mplcolors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Truncate a given matplotlib colormap to a specific range.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cmap: matplotlib colormap object.</span>
+<span class="sd">            min_val: Minimum bound of colormap.</span>
+<span class="sd">            max_val: Maximum bound of colormap.</span>
+<span class="sd">            n_cmap: Number of samples from original cmap.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            New colormap object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_cmap</span> <span class="o">=</span> <span class="n">mplcolors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
+            <span class="s1">&#39;trunc(</span><span class="si">{n}</span><span class="s1">,</span><span class="si">{a:.2f}</span><span class="s1">,</span><span class="si">{b:.2f}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">cmap</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">min_val</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">max_val</span><span class="p">),</span>
+            <span class="n">cmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span><span class="p">,</span> <span class="n">n_cmap</span><span class="p">)),</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_cmap</span></div>
+
+<div class="viewcode-block" id="ScatterPlotter.plot_scatter"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.ScatterPlotter.plot_scatter">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">plot_scatter</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">object</span><span class="p">],</span>
+        <span class="n">fig_title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">classes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;plasma&#39;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Visualizes the resulting low dimensional (2D or 3D) embedding.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: Low dimensional embedding, either 2D or 3D plots, i.e. shape (n_samples, 2) or (n_samples, 3).</span>
+<span class="sd">            target: Target values used for visualization encoded as integers.</span>
+<span class="sd">            fig_title: Description of the model saved. Should include the name of the embedding.</span>
+<span class="sd">            classes: Class names according to the encoding in `target`.</span>
+<span class="sd">            dpi: DPI of the resulting figure.</span>
+<span class="sd">            alpha: Alpha blending value. Is between 0 (transparent) and 1 (opaque).</span>
+<span class="sd">            cmap: Colormap.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Figure containing the scatter plot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="p">),</span> <span class="s1">&#39;Can only visualize 2D or 3D embeddings input shape was </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">_set_dpi</span><span class="p">(</span><span class="n">dpi</span><span class="p">)</span>  <span class="c1"># pylint: disable=W0212</span>
+
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+            <span class="n">scatterplot</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                <span class="n">c</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+                <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+            <span class="n">scaling</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">5000</span> <span class="k">else</span> <span class="mi">30</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">scatterplot</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span>
+                <span class="n">s</span><span class="o">=</span><span class="n">scaling</span><span class="p">,</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                <span class="n">c</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">zticks</span><span class="o">=</span><span class="p">[])</span>
+
+        <span class="k">if</span> <span class="n">classes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatterplot</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)))</span>
+            <span class="n">cbar</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fig_title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">fig_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.03</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="ScatterPlotter.plot_interpolation_path"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.ScatterPlotter.plot_interpolation_path">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">plot_interpolation_path</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">trace</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">classes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">fig_size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">),</span>
+        <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;plasma&#39;</span><span class="p">,</span>
+        <span class="n">cmap_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">path_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+        <span class="n">scatter_alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Plot a trace between points in a scatter plot.&quot;&quot;&quot;</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">fig_size</span><span class="p">)</span>
+
+        <span class="c1"># Plot latent embedding</span>
+        <span class="n">new_cmap</span> <span class="o">=</span> <span class="n">ScatterPlotter</span><span class="o">.</span><span class="n">truncate_colormap</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">),</span> <span class="n">cmap_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">scatterplot</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">new_cmap</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">scatter_alpha</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="c1"># Create legend</span>
+        <span class="k">if</span> <span class="n">classes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatterplot</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">cb</span><span class="o">.</span><span class="n">solids</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">cb</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)))</span>
+            <span class="n">cb</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+
+        <span class="c1"># Plot walk route</span>
+        <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No trace supplied to `ScatterPlotter.plot_interpolation_path`.&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">trace</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">trace</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">path_color</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">trace</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">path_color</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span>
+            <span class="n">trace</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">trace</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">trace</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">trace</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">trace</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">trace</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">path_color</span><span class="p">,</span>
+            <span class="n">head_width</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">head_length</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># fig.tight_layout()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div></div>
+
+
+<div class="viewcode-block" id="PlotterFactory"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.PlotterFactory">[docs]</a><span class="k">class</span> <span class="nc">PlotterFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Used to retrieve instance of desired plotter.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PlotterFactory.choose_class"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.PlotterFactory.choose_class">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">choose_class</span><span class="p">(</span><span class="n">plotter_type</span><span class="p">:</span> <span class="n">PlotterType</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Choose the correct class based on the provided plotter name.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">plotter_type</span> <span class="o">==</span> <span class="n">PlotterType</span><span class="o">.</span><span class="n">FOURIER</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">FourierPlotter</span>
+        <span class="k">if</span> <span class="n">plotter_type</span> <span class="o">==</span> <span class="n">PlotterType</span><span class="o">.</span><span class="n">BASE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BasePlotter</span>
+        <span class="k">if</span> <span class="n">plotter_type</span> <span class="o">==</span> <span class="n">PlotterType</span><span class="o">.</span><span class="n">SCATTER</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ScatterPlotter</span>
+
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Argument </span><span class="si">{0}</span><span class="s1"> is not set correctly.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">plotter_type</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plotter_type</span><span class="p">:</span> <span class="n">PlotterType</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BasePlotter</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create and return Plotter object.&quot;&quot;&quot;</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="n">PlotterFactory</span><span class="o">.</span><span class="n">choose_class</span><span class="p">(</span><span class="n">plotter_type</span><span class="p">)</span>
+        <span class="n">base_plotter</span><span class="p">:</span> <span class="n">BasePlotter</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">base_plotter</span>
+
+<div class="viewcode-block" id="PlotterFactory.from_config"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.PlotterFactory.from_config">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span><span class="n">train_cfg</span><span class="p">:</span> <span class="n">TrainerConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BasePlotter</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate a plotter from a config dictionary.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">train_cfg</span><span class="o">.</span><span class="n">transformation</span> <span class="o">==</span> <span class="n">Transformation</span><span class="o">.</span><span class="n">FOURIER</span><span class="p">:</span>
+            <span class="n">plotter</span> <span class="o">=</span> <span class="n">PlotterFactory</span><span class="p">()(</span><span class="n">PlotterType</span><span class="o">.</span><span class="n">FOURIER</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plotter</span> <span class="o">=</span> <span class="n">PlotterFactory</span><span class="p">()(</span><span class="n">PlotterType</span><span class="o">.</span><span class="n">BASE</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">plotter</span></div></div>
+
+
+<div class="viewcode-block" id="visualize_reconstruction"><a class="viewcode-back" href="../../../api/visualization/plotter.html#ecgan.visualization.plotter.visualize_reconstruction">[docs]</a><span class="k">def</span> <span class="nf">visualize_reconstruction</span><span class="p">(</span>
+    <span class="n">series</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">plotter</span><span class="p">:</span> <span class="n">BasePlotter</span><span class="p">,</span>
+    <span class="n">max_intermediate_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Visualize a fixed amount of series for a variable amount of input series.</span>
+
+<span class="sd">    Total steps=max_intermediate_samples+original sample+final sample.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        series: Tensor of series that shall be reconstructed.</span>
+<span class="sd">        plotter: The plotter to use for the visualization.</span>
+<span class="sd">        max_intermediate_samples: Maximum amount of interpolation steps.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A mpl Figure containing a sequence of series.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">max_intermediate_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">)</span> <span class="o">//</span> <span class="n">max_intermediate_samples</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">max_intermediate_samples</span>
+    <span class="n">idx_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">)</span> <span class="o">//</span> <span class="n">max_intermediate_samples</span><span class="p">))</span>
+    <span class="n">idx_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">get_sampling_grid</span><span class="p">(</span><span class="n">series</span><span class="p">[</span><span class="n">idx_list</span><span class="p">])</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

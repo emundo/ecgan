@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.networks.helpers &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.networks.helpers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.networks.helpers</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Helper functions and networks.&quot;&quot;&quot;</span>
+<span class="c1"># pylint: disable=C0103</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">InputNormalization</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="apply_input_normalization"><a class="viewcode-back" href="../../../api/networks/index.html#ecgan.networks.helpers.apply_input_normalization">[docs]</a><span class="k">def</span> <span class="nf">apply_input_normalization</span><span class="p">(</span>
+    <span class="n">channel_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">InputNormalization</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply input normalization to a layer of size `channel_size`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        channel_size: Size of the channel/layer.</span>
+<span class="sd">        normalization: Selected normalization method.</span>
+<span class="sd">        kwargs: Optional parameters which might be required for normalizations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">normalization</span> <span class="ow">is</span> <span class="n">InputNormalization</span><span class="o">.</span><span class="n">NONE</span> <span class="ow">or</span> <span class="n">normalization</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">normalization</span> <span class="o">==</span> <span class="n">InputNormalization</span><span class="o">.</span><span class="n">BATCH</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">channel_size</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;track_running_stats&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">normalization</span> <span class="o">==</span> <span class="n">InputNormalization</span><span class="o">.</span><span class="n">GROUP</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">GroupNorm</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;n_groups&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">channel_size</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Invalid normalization </span><span class="si">{}</span><span class="s2"> - defaulting to no normalization.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">normalization</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="conv1d_block"><a class="viewcode-back" href="../../../api/networks/index.html#ecgan.networks.helpers.conv1d_block">[docs]</a><span class="k">def</span> <span class="nf">conv1d_block</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abbreviate the creation of a Conv1d block.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        in_channels: input channels.</span>
+<span class="sd">        out_channels: output channels.</span>
+<span class="sd">        k: kernel size.</span>
+<span class="sd">        s: stride.</span>
+<span class="sd">        p: padding.</span>
+<span class="sd">        bias: bias.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A Conv1d block.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+        <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">stride</span><span class="o">=</span><span class="n">s</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+        <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="conv1d_trans_block"><a class="viewcode-back" href="../../../api/networks/index.html#ecgan.networks.helpers.conv1d_trans_block">[docs]</a><span class="k">def</span> <span class="nf">conv1d_trans_block</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose1d</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abbreviate the creation of a 1d convolutional transpose block.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        in_channels: input channels.</span>
+<span class="sd">        out_channels: output channels.</span>
+<span class="sd">        k: kernel size.</span>
+<span class="sd">        s: stride.</span>
+<span class="sd">        p: padding.</span>
+<span class="sd">        bias: bias.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ConvTranspose1d block.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose1d</span><span class="p">(</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+        <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">stride</span><span class="o">=</span><span class="n">s</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+        <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_5_hidden_layer_convnet"><a class="viewcode-back" href="../../../api/networks/index.html#ecgan.networks.helpers.create_5_hidden_layer_convnet">[docs]</a><span class="k">def</span> <span class="nf">create_5_hidden_layer_convnet</span><span class="p">(</span>
+    <span class="n">input_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">hidden_channels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">output_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">seq_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">input_norm</span><span class="p">:</span> <span class="n">InputNormalization</span><span class="p">,</span>
+    <span class="n">spectral_norm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">track_running_stats</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a downsampling CNN architecture, with LeakyReLU activation and optionally weight/input normalization.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        seq_len has to be divisible by 32 for the pooling kernel.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_channels: Amount of input channels.</span>
+<span class="sd">        hidden_channels: List of hidden channel sizes. Should be of length 5.</span>
+<span class="sd">        output_channels: Amount of output channels.</span>
+<span class="sd">        seq_len: Sequence length of the data.</span>
+<span class="sd">        input_norm: Type of input normalization.</span>
+<span class="sd">        spectral_norm: Flag to indicate if spectral weight normalization should be performed</span>
+<span class="sd">        track_running_stats: Flag to indicate if a BatchNorm layer should track the running statistics.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A five hidden layer CNN as nn.Module.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pooling_kernel</span> <span class="o">=</span> <span class="n">seq_len</span> <span class="o">//</span> <span class="mi">32</span>
+    <span class="c1"># Exemplary calculation for seq_len=320 -&gt; pooling_kernel=10.</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 1 IN: IN_CHANNELS x 320, OUT: hidden_channels x 160</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv1</span> <span class="o">=</span> <span class="n">conv1d_block</span><span class="p">(</span><span class="n">input_channels</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 2 OUT : HIDDEN x 80</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv2</span> <span class="o">=</span> <span class="n">conv1d_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 3 OUT : HIDDEN x 40</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv3</span> <span class="o">=</span> <span class="n">conv1d_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 4 OUT : HIDDEN x 20</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv4</span> <span class="o">=</span> <span class="n">conv1d_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 5 OUT : HIDDEN x 10</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv5</span> <span class="o">=</span> <span class="n">conv1d_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 6 OUT : OUT_CHANNELS x 1</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv6</span> <span class="o">=</span> <span class="n">conv1d_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">output_channels</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">pooling_kernel</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">spectral_norm</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using weight normalization spectral norm in conv net.&quot;</span><span class="p">)</span>
+        <span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">spectral_norm</span><span class="p">(</span><span class="n">conv2</span><span class="p">)</span>
+        <span class="n">conv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">spectral_norm</span><span class="p">(</span><span class="n">conv3</span><span class="p">)</span>
+        <span class="n">conv4</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">spectral_norm</span><span class="p">(</span><span class="n">conv4</span><span class="p">)</span>
+        <span class="n">conv5</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">spectral_norm</span><span class="p">(</span><span class="n">conv5</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using </span><span class="si">{}</span><span class="s2"> input normalization in conv net.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_norm</span><span class="p">))</span>
+
+    <span class="n">norm1</span> <span class="o">=</span> <span class="n">apply_input_normalization</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">input_norm</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">track_running_stats</span><span class="p">)</span>
+    <span class="n">norm2</span> <span class="o">=</span> <span class="n">apply_input_normalization</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">input_norm</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">track_running_stats</span><span class="p">)</span>
+    <span class="n">norm3</span> <span class="o">=</span> <span class="n">apply_input_normalization</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">input_norm</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">track_running_stats</span><span class="p">)</span>
+    <span class="n">norm4</span> <span class="o">=</span> <span class="n">apply_input_normalization</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">input_norm</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">track_running_stats</span><span class="p">)</span>
+
+    <span class="n">module_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">conv1</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv2</span><span class="p">,</span>
+        <span class="n">norm1</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv3</span><span class="p">,</span>
+        <span class="n">norm2</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv4</span><span class="p">,</span>
+        <span class="n">norm3</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv5</span><span class="p">,</span>
+        <span class="n">norm4</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv6</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">module_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">mod</span> <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">module_list</span> <span class="k">if</span> <span class="n">mod</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">module_list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">return</span> <span class="n">net</span></div>
+
+
+<div class="viewcode-block" id="create_transpose_conv_net"><a class="viewcode-back" href="../../../api/networks/index.html#ecgan.networks.helpers.create_transpose_conv_net">[docs]</a><span class="k">def</span> <span class="nf">create_transpose_conv_net</span><span class="p">(</span>
+    <span class="n">input_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">hidden_channels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">output_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">seq_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">input_norm</span><span class="p">:</span> <span class="n">InputNormalization</span><span class="p">,</span>
+    <span class="n">spectral_norm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">track_running_stats</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a 5 hidden layer conv transposed network.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_channels: Amount of input channels.</span>
+<span class="sd">        hidden_channels: List of hidden channel sizes. Should be of length 5.</span>
+<span class="sd">        output_channels: Amount of output channels.</span>
+<span class="sd">        seq_len: Sequence length of the data.</span>
+<span class="sd">        input_norm: Type of input normalization.</span>
+<span class="sd">        spectral_norm: Flag to indicate if spectral weight normalization should be performed</span>
+<span class="sd">        track_running_stats: Flag to indicate if a BatchNorm layer should track the running statistics.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A five hidden layer transposed CNN as nn.Module.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pooling_kernel</span> <span class="o">=</span> <span class="n">seq_len</span> <span class="o">//</span> <span class="mi">32</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 1 IN: LATENT_SIZE x 1 OUT : HIDDEN x 10 (pooling_kernel)</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv1t</span> <span class="o">=</span> <span class="n">conv1d_trans_block</span><span class="p">(</span><span class="n">input_channels</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="n">pooling_kernel</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 2 OUT : HIDDEN x 20</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv2t</span> <span class="o">=</span> <span class="n">conv1d_trans_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 3 OUT : HIDDEN x 40</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv3t</span> <span class="o">=</span> <span class="n">conv1d_trans_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 4 OUT : HIDDEN x 80</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv4t</span> <span class="o">=</span> <span class="n">conv1d_trans_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 5 OUT : HIDDEN x 160</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv5t</span> <span class="o">=</span> <span class="n">conv1d_trans_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">hidden_channels</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#####################################</span>
+    <span class="c1"># CONV LAYER 6 OUT : IN_CHANNELS x 320</span>
+    <span class="c1">#####################################</span>
+    <span class="n">conv6t</span> <span class="o">=</span> <span class="n">conv1d_trans_block</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">output_channels</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using </span><span class="si">{}</span><span class="s2"> input normalization in transpose net.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_norm</span><span class="p">))</span>
+
+    <span class="n">norm1</span> <span class="o">=</span> <span class="n">apply_input_normalization</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">input_norm</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">track_running_stats</span><span class="p">)</span>
+    <span class="n">norm2</span> <span class="o">=</span> <span class="n">apply_input_normalization</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">input_norm</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">track_running_stats</span><span class="p">)</span>
+    <span class="n">norm3</span> <span class="o">=</span> <span class="n">apply_input_normalization</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">input_norm</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">track_running_stats</span><span class="p">)</span>
+    <span class="n">norm4</span> <span class="o">=</span> <span class="n">apply_input_normalization</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">input_norm</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">track_running_stats</span><span class="p">)</span>
+    <span class="n">norm5</span> <span class="o">=</span> <span class="n">apply_input_normalization</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">input_norm</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="n">track_running_stats</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">spectral_norm</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using weight normalization spectral norm in transpose net.&quot;</span><span class="p">)</span>
+        <span class="n">conv2t</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">spectral_norm</span><span class="p">(</span><span class="n">conv2t</span><span class="p">)</span>
+        <span class="n">conv3t</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">spectral_norm</span><span class="p">(</span><span class="n">conv3t</span><span class="p">)</span>
+        <span class="n">conv4t</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">spectral_norm</span><span class="p">(</span><span class="n">conv4t</span><span class="p">)</span>
+        <span class="n">conv5t</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">spectral_norm</span><span class="p">(</span><span class="n">conv5t</span><span class="p">)</span>
+
+    <span class="n">module_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">conv1t</span><span class="p">,</span>
+        <span class="n">norm1</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv2t</span><span class="p">,</span>
+        <span class="n">norm2</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv3t</span><span class="p">,</span>
+        <span class="n">norm3</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv4t</span><span class="p">,</span>
+        <span class="n">norm4</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv5t</span><span class="p">,</span>
+        <span class="n">norm5</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">conv6t</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">module_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">mod</span> <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">module_list</span> <span class="k">if</span> <span class="n">mod</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">module_list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">return</span> <span class="n">net</span></div>
+
+
+<div class="viewcode-block" id="conv_norm_relu"><a class="viewcode-back" href="../../../api/networks/index.html#ecgan.networks.helpers.conv_norm_relu">[docs]</a><span class="k">def</span> <span class="nf">conv_norm_relu</span><span class="p">(</span>
+    <span class="n">input_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">output_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">kernel_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">stride</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">padding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Chain convolutional layers with ReLU activations and batch norm.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">input_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="n">output_channels</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span>
+            <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="n">padding</span><span class="p">,</span>
+            <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">output_channels</span><span class="p">),</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+    <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.config.dataclasses &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.config.dataclasses</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.config.dataclasses</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Custom (partially nested) dataclasses describing configurations of individual components.&quot;&quot;&quot;</span>
+<span class="c1"># pylint: disable=C0103</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.config.nested_dataclass</span> <span class="kn">import</span> <span class="n">nested_dataclass</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DiscriminationStrategy</span><span class="p">,</span>
+    <span class="n">LatentDistribution</span><span class="p">,</span>
+    <span class="n">MetricOptimization</span><span class="p">,</span>
+    <span class="n">SamplingAlgorithm</span><span class="p">,</span>
+    <span class="n">TrackerType</span><span class="p">,</span>
+    <span class="n">Transformation</span><span class="p">,</span>
+    <span class="n">WeightInitialization</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.miscellaneous</span> <span class="kn">import</span> <span class="n">generate_seed</span>
+
+
+<div class="viewcode-block" id="OptimizerConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.OptimizerConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">OptimizerConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Type hints for Optimizer dicts.&quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;optimizer&#39;</span>
+    <span class="n">NAME</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">LR</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># Learning rate</span>
+    <span class="n">WEIGHT_DECAY</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">MOMENTUM</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">DAMPENING</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">BETAS</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">EPS</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">ALPHA</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">CENTERED</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">InverseModuleConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Type hints for the module config of an inverse mapping module.&quot;&quot;&quot;</span>
+
+    <span class="n">KERNEL_SIZES</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">LOSS</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">NAME</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">OPTIMIZER</span><span class="p">:</span> <span class="n">OptimizerConfig</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">ReconstructionConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Type hints for ReconstructionType dicts.&quot;&quot;&quot;</span>
+
+    <span class="n">STRATEGY</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">EmbeddingConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Type hints for ReconstructionType dicts.&quot;&quot;&quot;</span>
+
+    <span class="n">CREATE_UMAP</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">LOAD_PRETRAINED_UMAP</span><span class="p">:</span> <span class="nb">bool</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">LatentWalkReconstructionConfig</span><span class="p">(</span><span class="n">ReconstructionConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Type hints for latent walk reconstructions.&quot;&quot;&quot;</span>
+
+    <span class="n">MAX_RECONSTRUCTION_ITERATIONS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">EPSILON</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">LATENT_OPTIMIZER</span><span class="p">:</span> <span class="n">OptimizerConfig</span>
+    <span class="n">CRITERION</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">ADAPT_LR</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">LR_THRESHOLD</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">VERBOSE_STEPS</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="LossConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.LossConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">LossConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Type hints for a generic loss configuration.&quot;&quot;&quot;</span>
+
+    <span class="n">NAME</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">GRADIENT_PENALTY_WEIGHT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">CLIPPING_BOUND</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">REDUCTION</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="BaseCNNConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.BaseCNNConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseCNNConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generalized configuration of an CNN module.&quot;&quot;&quot;</span>
+
+    <span class="n">HIDDEN_CHANNELS</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="BaseRNNConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.BaseRNNConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseRNNConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generalized configuration of an RNN module.&quot;&quot;&quot;</span>
+
+    <span class="n">HIDDEN_DIMS</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># Amount of layers</span>
+    <span class="n">HIDDEN_SIZE</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># Size of each layer</span></div>
+
+
+<div class="viewcode-block" id="TrackingConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.TrackingConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TrackingConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Config for tracking and logging information.&quot;&quot;&quot;</span>
+
+    <span class="n">TRACKER_NAME</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">ENTITY</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">PROJECT</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">EXPERIMENT_NAME</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">LOCAL_SAVE</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">SAVE_PDF</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">S3_CHECKPOINT_UPLOAD</span><span class="p">:</span> <span class="nb">bool</span>  <span class="c1"># Currently only supported for W&amp;B tracker</span>
+    <span class="n">LOG_LEVEL</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;info&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tracker_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TrackerType</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">TrackerType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TRACKER_NAME</span><span class="p">)</span></div>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">ExperimentConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters regarding the experiment itself.</span>
+
+<span class="sd">    Includes information on the experiment, the used dataset and the directory from where the dataset is loaded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;experiment&#39;</span>
+    <span class="n">TRACKER</span><span class="p">:</span> <span class="n">TrackingConfig</span>
+    <span class="n">DATASET</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">MODULE</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">LOADING_DIR</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">TRAIN_ON_GPU</span><span class="p">:</span> <span class="nb">bool</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span>  <span class="c1"># pylint: disable=R0913</span>
+        <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">project</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">experiment_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">module</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">tracker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">TrackerType</span><span class="o">.</span><span class="n">LOCAL</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">local_save</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">save_pdf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">loading_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span>
+        <span class="n">train_on_gpu</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">s3_checkpoint_upload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">log_level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a default experiment configuration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;experiment&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;TRACKER&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;TRACKER_NAME&#39;</span><span class="p">:</span> <span class="n">tracker</span><span class="p">,</span>
+                    <span class="s1">&#39;PROJECT&#39;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+                    <span class="s1">&#39;EXPERIMENT_NAME&#39;</span><span class="p">:</span> <span class="n">experiment_name</span><span class="p">,</span>
+                    <span class="s1">&#39;ENTITY&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+                    <span class="s1">&#39;LOCAL_SAVE&#39;</span><span class="p">:</span> <span class="n">local_save</span><span class="p">,</span>
+                    <span class="s1">&#39;SAVE_PDF&#39;</span><span class="p">:</span> <span class="n">save_pdf</span><span class="p">,</span>
+                    <span class="s1">&#39;S3_CHECKPOINT_UPLOAD&#39;</span><span class="p">:</span> <span class="n">s3_checkpoint_upload</span><span class="p">,</span>
+                    <span class="s1">&#39;LOG_LEVEL&#39;</span><span class="p">:</span> <span class="n">log_level</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;MODULE&#39;</span><span class="p">:</span> <span class="n">module</span><span class="p">,</span>
+                <span class="s1">&#39;DATASET&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">,</span>
+                <span class="s1">&#39;LOADING_DIR&#39;</span><span class="p">:</span> <span class="n">loading_dir</span><span class="p">,</span>
+                <span class="s1">&#39;TRAIN_ON_GPU&#39;</span><span class="p">:</span> <span class="n">train_on_gpu</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+
+<div class="viewcode-block" id="PreprocessingConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.PreprocessingConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">PreprocessingConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create a preprocessing config object.&quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;preprocessing&#39;</span>
+    <span class="n">LOADING_DIR</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">NUM_WORKERS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">WINDOW_LENGTH</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">WINDOW_STEP_SIZE</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">RESAMPLING_ALGORITHM</span><span class="p">:</span> <span class="n">SamplingAlgorithm</span>
+    <span class="n">TARGET_SEQUENCE_LENGTH</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">LOADING_SRC</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">NUM_SAMPLES</span><span class="p">:</span> <span class="nb">int</span>
+
+<div class="viewcode-block" id="PreprocessingConfig.configure"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.PreprocessingConfig.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span>
+        <span class="n">loading_src</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">target_sequence_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">loading_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">window_step_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">resampling_algo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;lttb&#39;</span><span class="p">,</span>
+        <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a default preprocessing configuration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;preprocessing&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;LOADING_DIR&#39;</span><span class="p">:</span> <span class="n">loading_dir</span><span class="p">,</span>
+                <span class="s1">&#39;LOADING_SRC&#39;</span><span class="p">:</span> <span class="n">loading_src</span><span class="p">,</span>
+                <span class="s1">&#39;NUM_WORKERS&#39;</span><span class="p">:</span> <span class="n">num_workers</span><span class="p">,</span>
+                <span class="s1">&#39;WINDOW_LENGTH&#39;</span><span class="p">:</span> <span class="n">window_length</span><span class="p">,</span>
+                <span class="s1">&#39;WINDOW_STEP_SIZE&#39;</span><span class="p">:</span> <span class="n">window_step_size</span><span class="p">,</span>
+                <span class="s1">&#39;RESAMPLING_ALGORITHM&#39;</span><span class="p">:</span> <span class="n">resampling_algo</span><span class="p">,</span>
+                <span class="s1">&#39;TARGET_SEQUENCE_LENGTH&#39;</span><span class="p">:</span> <span class="n">target_sequence_length</span><span class="p">,</span>
+                <span class="s1">&#39;NUM_SAMPLES&#39;</span><span class="p">:</span> <span class="n">num_samples</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resampling_algorithm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SamplingAlgorithm</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">SamplingAlgorithm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RESAMPLING_ALGORITHM</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SyntheticPreprocessingConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.SyntheticPreprocessingConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SyntheticPreprocessingConfig</span><span class="p">(</span><span class="n">PreprocessingConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Preprocessing configuration for synthetic datasets.&quot;&quot;&quot;</span>
+
+    <span class="n">RANGE</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+    <span class="n">ANOMALY_PERCENTAGE</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">NOISE_PERCENTAGE</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">SYNTHESIS_SEED</span><span class="p">:</span> <span class="nb">int</span>
+
+<div class="viewcode-block" id="SyntheticPreprocessingConfig.configure"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.SyntheticPreprocessingConfig.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span>  <span class="c1"># pylint: disable=R0913, W0221</span>
+        <span class="n">loading_src</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">target_sequence_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">loading_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">window_step_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">resampling_algo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;lttb&#39;</span><span class="p">,</span>
+        <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">data_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span>
+        <span class="n">anomaly_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">noise_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">synthesis_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1337</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Provide a default configuration for a synthetic dataset.&quot;&quot;&quot;</span>
+        <span class="n">result_dict</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">PreprocessingConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+            <span class="n">loading_src</span><span class="o">=</span><span class="n">loading_src</span><span class="p">,</span>
+            <span class="n">target_sequence_length</span><span class="o">=</span><span class="n">target_sequence_length</span><span class="p">,</span>
+            <span class="n">loading_dir</span><span class="o">=</span><span class="n">loading_dir</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+            <span class="n">window_length</span><span class="o">=</span><span class="n">window_length</span><span class="p">,</span>
+            <span class="n">window_step_size</span><span class="o">=</span><span class="n">window_step_size</span><span class="p">,</span>
+            <span class="n">resampling_algo</span><span class="o">=</span><span class="n">resampling_algo</span><span class="p">,</span>
+            <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">update_dict</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;RANGE&quot;</span><span class="p">:</span> <span class="n">data_range</span><span class="p">,</span>
+            <span class="s2">&quot;ANOMALY_PERCENTAGE&quot;</span><span class="p">:</span> <span class="n">anomaly_percentage</span><span class="p">,</span>
+            <span class="s2">&quot;NOISE_PERCENTAGE&quot;</span><span class="p">:</span> <span class="n">noise_percentage</span><span class="p">,</span>
+            <span class="s2">&quot;SYNTHESIS_SEED&quot;</span><span class="p">:</span> <span class="n">synthesis_seed</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">result_dict</span><span class="p">[</span><span class="s1">&#39;preprocessing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result_dict</span></div></div>
+
+
+<div class="viewcode-block" id="SinePreprocessingConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.SinePreprocessingConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SinePreprocessingConfig</span><span class="p">(</span><span class="n">SyntheticPreprocessingConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Preprocessing config for the synthetic sine dataset.&quot;&quot;&quot;</span>
+
+    <span class="n">AMPLITUDE</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span>
+    <span class="n">FREQUENCY</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span>
+    <span class="n">PHASE</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span>
+    <span class="n">VERTICAL_TRANSLATION</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<div class="viewcode-block" id="SinePreprocessingConfig.configure"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.SinePreprocessingConfig.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span>  <span class="c1"># pylint: disable=W0221, R0913</span>
+        <span class="n">loading_src</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">target_sequence_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">loading_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">window_step_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">resampling_algo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;lttb&#39;</span><span class="p">,</span>
+        <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">data_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span>
+        <span class="n">anomaly_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">noise_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">synthesis_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1337</span><span class="p">,</span>
+        <span class="n">amplitude</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">phase</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">vertical_translation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the sine dataset.&quot;&quot;&quot;</span>
+        <span class="n">result_dict</span> <span class="o">=</span> <span class="n">SyntheticPreprocessingConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+            <span class="n">loading_src</span><span class="o">=</span><span class="n">loading_src</span><span class="p">,</span>
+            <span class="n">target_sequence_length</span><span class="o">=</span><span class="n">target_sequence_length</span><span class="p">,</span>
+            <span class="n">loading_dir</span><span class="o">=</span><span class="n">loading_dir</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+            <span class="n">window_length</span><span class="o">=</span><span class="n">window_length</span><span class="p">,</span>
+            <span class="n">window_step_size</span><span class="o">=</span><span class="n">window_step_size</span><span class="p">,</span>
+            <span class="n">resampling_algo</span><span class="o">=</span><span class="n">resampling_algo</span><span class="p">,</span>
+            <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span>
+            <span class="n">data_range</span><span class="o">=</span><span class="n">data_range</span><span class="p">,</span>
+            <span class="n">anomaly_percentage</span><span class="o">=</span><span class="n">anomaly_percentage</span><span class="p">,</span>
+            <span class="n">noise_percentage</span><span class="o">=</span><span class="n">noise_percentage</span><span class="p">,</span>
+            <span class="n">synthesis_seed</span><span class="o">=</span><span class="n">synthesis_seed</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">update_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;AMPLITUDE&quot;</span><span class="p">:</span> <span class="n">amplitude</span><span class="p">,</span>
+            <span class="s2">&quot;FREQUENCY&quot;</span><span class="p">:</span> <span class="n">frequency</span><span class="p">,</span>
+            <span class="s2">&quot;PHASE&quot;</span><span class="p">:</span> <span class="n">phase</span><span class="p">,</span>
+            <span class="s2">&quot;VERTICAL_TRANSLATION&quot;</span><span class="p">:</span> <span class="n">vertical_translation</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">result_dict</span><span class="p">[</span><span class="s1">&#39;preprocessing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result_dict</span></div></div>
+
+
+<div class="viewcode-block" id="TrainerConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.TrainerConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TrainerConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Used to initialize a config for training.&quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;trainer&quot;</span>
+    <span class="n">NUM_WORKERS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">CHANNELS</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+    <span class="n">EPOCHS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">BATCH_SIZE</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">TRANSFORMATION</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">SPLIT_PATH</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">SPLIT_METHOD</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">SPLIT</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+    <span class="n">TRAIN_ONLY_NORMAL</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">CROSS_VAL_FOLDS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">CHECKPOINT_INTERVAL</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">SAMPLE_INTERVAL</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">BINARY_LABELS</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">MANUAL_SEED</span><span class="p">:</span> <span class="nb">int</span>
+
+<div class="viewcode-block" id="TrainerConfig.configure"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.TrainerConfig.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span>  <span class="c1"># pylint: disable=R0913</span>
+        <span class="n">transformation</span><span class="p">:</span> <span class="n">Transformation</span> <span class="o">=</span> <span class="n">Transformation</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span>
+        <span class="n">split_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;split.pkl&#39;</span><span class="p">,</span>
+        <span class="n">split_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;random&#39;</span><span class="p">,</span>
+        <span class="n">split</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span>
+        <span class="n">cross_val_folds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">checkpoint_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">sample_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">train_only_normal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">binary_labels</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">channels</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">manual_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">generate_seed</span><span class="p">(),</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a default configuration for the trainer.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;trainer&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;NUM_WORKERS&#39;</span><span class="p">:</span> <span class="n">num_workers</span><span class="p">,</span>
+                <span class="s1">&#39;CHANNELS&#39;</span><span class="p">:</span> <span class="n">channels</span><span class="p">,</span>
+                <span class="s1">&#39;EPOCHS&#39;</span><span class="p">:</span> <span class="n">epochs</span><span class="p">,</span>
+                <span class="s1">&#39;BATCH_SIZE&#39;</span><span class="p">:</span> <span class="n">batch_size</span><span class="p">,</span>
+                <span class="s1">&#39;TRANSFORMATION&#39;</span><span class="p">:</span> <span class="n">transformation</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="s1">&#39;SPLIT_PATH&#39;</span><span class="p">:</span> <span class="n">split_path</span><span class="p">,</span>
+                <span class="s1">&#39;SPLIT_METHOD&#39;</span><span class="p">:</span> <span class="n">split_method</span><span class="p">,</span>
+                <span class="s1">&#39;SPLIT&#39;</span><span class="p">:</span> <span class="n">split</span><span class="p">,</span>
+                <span class="s1">&#39;CROSS_VAL_FOLDS&#39;</span><span class="p">:</span> <span class="n">cross_val_folds</span><span class="p">,</span>
+                <span class="s1">&#39;CHECKPOINT_INTERVAL&#39;</span><span class="p">:</span> <span class="n">checkpoint_interval</span><span class="p">,</span>
+                <span class="s1">&#39;SAMPLE_INTERVAL&#39;</span><span class="p">:</span> <span class="n">sample_interval</span><span class="p">,</span>
+                <span class="s1">&#39;TRAIN_ONLY_NORMAL&#39;</span><span class="p">:</span> <span class="n">train_only_normal</span><span class="p">,</span>
+                <span class="s1">&#39;BINARY_LABELS&#39;</span><span class="p">:</span> <span class="n">binary_labels</span><span class="p">,</span>
+                <span class="s1">&#39;MANUAL_SEED&#39;</span><span class="p">:</span> <span class="n">manual_seed</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">transformation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transformation</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return an instance of the internal enum class `Transformation`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Transformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TRANSFORMATION</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WeightInitializationConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.WeightInitializationConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">WeightInitializationConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base weight initialization config.&quot;&quot;&quot;</span>
+
+    <span class="n">NAME</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">weight_init_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WeightInitialization</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">WeightInitialization</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NAME</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NormalInitializationConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.NormalInitializationConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">NormalInitializationConfig</span><span class="p">(</span><span class="n">WeightInitializationConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base weight initialization config for drawing from a normal distribution.&quot;&quot;&quot;</span>
+
+    <span class="n">MEAN</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">STD</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+<div class="viewcode-block" id="UniformInitializationConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.UniformInitializationConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">UniformInitializationConfig</span><span class="p">(</span><span class="n">WeightInitializationConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base weight initialization config for drawing from a uniform distribution.&quot;&quot;&quot;</span>
+
+    <span class="n">LOWER_BOUND</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">UPPER_BOUND</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">ModuleConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generalized configuration of a module.&quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;module&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">BaseNNConfig</span><span class="p">(</span><span class="n">ModuleConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generic neural network configuration.&quot;&quot;&quot;</span>
+
+    <span class="n">OPTIMIZER</span><span class="p">:</span> <span class="n">OptimizerConfig</span>
+    <span class="n">LOSS</span><span class="p">:</span> <span class="n">LossConfig</span>
+    <span class="n">LAYER_SPECIFICATION</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseCNNConfig</span><span class="p">,</span> <span class="n">BaseRNNConfig</span><span class="p">]</span>
+    <span class="n">WEIGHT_INIT</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WeightInitializationConfig</span><span class="p">,</span> <span class="n">NormalInitializationConfig</span><span class="p">,</span> <span class="n">UniformInitializationConfig</span><span class="p">]</span>
+    <span class="n">SPECTRAL_NORM</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">INPUT_NORMALIZATION</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">GeneratorConfig</span><span class="p">(</span><span class="n">BaseNNConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generic generator configuration.&quot;&quot;&quot;</span>
+
+    <span class="n">TANH_OUT</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">GANModuleConfig</span><span class="p">(</span><span class="n">ModuleConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generalized configuration of a GAN module.&quot;&quot;&quot;</span>
+
+    <span class="n">LATENT_SIZE</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">GENERATOR</span><span class="p">:</span> <span class="n">GeneratorConfig</span>
+    <span class="n">DISCRIMINATOR</span><span class="p">:</span> <span class="n">BaseNNConfig</span>
+    <span class="n">GENERATOR_ROUNDS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">DISCRIMINATOR_ROUNDS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">LATENT_SPACE</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">latent_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LatentDistribution</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Convenience conversion to internal enum type.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">LatentDistribution</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LATENT_SPACE</span><span class="p">)</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">EncoderGANConfig</span><span class="p">(</span><span class="n">GANModuleConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generalized configuration for the BeatGAN module.&quot;&quot;&quot;</span>
+
+    <span class="n">ENCODER</span><span class="p">:</span> <span class="n">BaseNNConfig</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">VAEGANConfig</span><span class="p">(</span><span class="n">EncoderGANConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;VAEGAN config.&quot;&quot;&quot;</span>
+
+    <span class="n">KL_WARMUP</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">KL_ANNEAL_ROUNDS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">KL_BETA</span><span class="p">:</span> <span class="nb">int</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">AdExperimentConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Basic experimental settings for the anomaly detection process.&quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;ad_experiment&#39;</span>
+    <span class="n">TRACKER</span><span class="p">:</span> <span class="n">TrackingConfig</span>
+    <span class="n">RUN_URI</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">RUN_VERSION</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">FOLD</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">SAVE_DIR</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+
+<div class="viewcode-block" id="DetectionConfig"><a class="viewcode-back" href="../../../api/config/dataclasses.html#ecgan.config.dataclasses.DetectionConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">DetectionConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generalized configuration of a module.&quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;detection&quot;</span>
+    <span class="n">DETECTOR</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">BATCH_SIZE</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">NUM_WORKERS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">AMOUNT_OF_RUNS</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">SAVE_DATA</span><span class="p">:</span> <span class="nb">bool</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span></div>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">ReconstructionDetectionConfig</span><span class="p">(</span><span class="n">DetectionConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generalized configuration of a module.&quot;&quot;&quot;</span>
+
+    <span class="n">EMBEDDING</span><span class="p">:</span> <span class="n">EmbeddingConfig</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">GANDetectorConfig</span><span class="p">(</span><span class="n">ReconstructionDetectionConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base config for GAN based anomaly detection.&quot;&quot;&quot;</span>
+
+    <span class="n">DISCRIMINATION_STRATEGY</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">AD_SCORE_STRATEGY</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">NORMALIZE_ERROR</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">RECONSTRUCTION</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ReconstructionConfig</span><span class="p">,</span> <span class="n">LatentWalkReconstructionConfig</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ad_score_strategy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MetricOptimization</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MetricOptimization</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AD_SCORE_STRATEGY</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">discrimination_strategy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DiscriminationStrategy</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DiscriminationStrategy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DISCRIMINATION_STRATEGY</span><span class="p">)</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">InverseDetectorConfig</span><span class="p">(</span><span class="n">GANDetectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Config for anomaly detectors utilizing GAN inversion.&quot;&quot;&quot;</span>
+
+    <span class="n">RECONSTRUCTION</span><span class="p">:</span> <span class="n">ReconstructionConfig</span>
+    <span class="n">INVERSE_MAPPING_URI</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+
+<span class="nd">@nested_dataclass</span>
+<span class="k">class</span> <span class="nc">GANLatentWalkConfig</span><span class="p">(</span><span class="n">GANDetectorConfig</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Config for anomaly detectors utilizing latent walks to approximate the reconstructed series.&quot;&quot;&quot;</span>
+
+    <span class="n">RECONSTRUCTION</span><span class="p">:</span> <span class="n">LatentWalkReconstructionConfig</span>
+    <span class="n">INVERSE_MAPPING_URI</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

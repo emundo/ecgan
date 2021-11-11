@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datasets &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Distances" href="distances.html" />
+    <link rel="prev" title="Custom Types" href="custom_types.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Utils</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html">Custom Types</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">ECGAN Python API</a> &raquo;</li>
+          <li><a href="index.html">Utils</a> &raquo;</li>
+      <li>Datasets</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/utils/datasets.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="datasets">
+<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline"></a></h1>
+<p>As ECGAN aims to support a large variety of ECG datasets and tries to be compatible with
+other tasks related to time series, creating and using new datasets is a key feature.</p>
+<section id="role-in-the-ecgan-pipeline">
+<h2>Role in the ECGAN Pipeline<a class="headerlink" href="#role-in-the-ecgan-pipeline" title="Permalink to this headline"></a></h2>
+<p>Datasets are the input to any model used in this framework and we expect them to be implemented in
+a consistent way. The dataset is given as an argument during initialization of the config and used
+during all steps - preprocessing, training and evaluation. The default values can impact the
+suggested parameter choices and are preconfigured depending on the dataset. This means that generating a new
+config file for a new dataset is usually better than just manually changing the name of the dataset in the config.</p>
+</section>
+<section id="adding-new-datasets">
+<h2>Adding new Datasets<a class="headerlink" href="#adding-new-datasets" title="Permalink to this headline"></a></h2>
+<p>To add a new datasets please follow these steps:</p>
+<ol class="arabic simple">
+<li><p>Think of an identifier which describes your dataset (e.g.:code:<cite>my_ecg</cite>).</p></li>
+<li><p>Add a descriptive class for your dataset which inherits from <code class="code docutils literal notranslate"><span class="pre">ecgan.utils.datasets.Dataset</span></code> (e.g.
+<code class="code docutils literal notranslate"><span class="pre">MyEcgDataset</span></code>) and add it to the <code class="code docutils literal notranslate"><span class="pre">ecgan.utils.datasets.DatasetFactory</span></code>.</p></li>
+<li><p>Add retrieval class to download the data and store it in a data directory with
+the prefix <code class="code docutils literal notranslate"><span class="pre">DATASET_NAME/raw</span></code> (e.g. <code class="code docutils literal notranslate"><span class="pre">data/my_ecg/raw</span></code>. The stored
+information can be split into an arbitrary amount of files at this point. Add the
+class to the <code class="code docutils literal notranslate"><span class="pre">ecgan.preprocessing.data_retrieval.DataRetrieverFactory</span></code>.</p></li>
+<li><p>Add preprocessing class for your dataset inheriting from
+<code class="code docutils literal notranslate"><span class="pre">ecgan.preprocessing.preprocessor.Preprocessor</span></code>. The output is saved into
+<code class="code docutils literal notranslate"><span class="pre">DATASET_NAME/processed</span></code> (e.g. <code class="code docutils literal notranslate"><span class="pre">data/my_ecg/processed</span></code>). At this point
+the data has to conform to the dataset format: it has to be saved to
+the <code class="code docutils literal notranslate"><span class="pre">data.pkl</span></code> file as a 3D Tensor of shape <code class="code docutils literal notranslate"><span class="pre">(num_samples,</span> <span class="pre">seq_len,</span> <span class="pre">num_channels)</span></code>.
+Add the class to the <code class="code docutils literal notranslate"><span class="pre">ecgan.preprocessing.preprocessor.PreprocessorFactory</span></code> class.</p></li>
+</ol>
+<p>Datasets supported by the framework can be found at <a class="reference internal" href="../../supported.html#supported-datasets"><span class="std std-ref">Supported Datasets</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While the <a class="reference internal" href="#ecgan.utils.datasets.Dataset" title="ecgan.utils.datasets.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.datasets.Dataset</span></code></a> class is used to describe arbitrary
+datasets, ECGAN further implements a <a class="reference internal" href="../training/datasets.html#ecgan.training.datasets.BaseDataset" title="ecgan.training.datasets.BaseDataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.training.datasets.BaseDataset</span></code></a>.
+This is a class inheriting from the PyTorch <code class="code docutils literal notranslate"><span class="pre">dataset</span></code> class used to iterate
+through datasets. Keep in mind that these two are different.</p>
+</div>
+<span class="target" id="module-ecgan.utils.datasets"></span><p>Descriptions of supported datasets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.datasets.Dataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.datasets.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beat_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/datasets.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.datasets.Dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for static descriptions of ECG datasets.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.datasets.ShaoxingDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.datasets.</span></span><span class="sig-name descname"><span class="pre">ShaoxingDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beat_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/datasets.html#ShaoxingDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.datasets.ShaoxingDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.datasets.Dataset" title="ecgan.utils.datasets.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.datasets.Dataset</span></code></a></p>
+<p>Static description of the Shaoxing dataset.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.datasets.MitbihDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.datasets.</span></span><span class="sig-name descname"><span class="pre">MitbihDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beat_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/datasets.html#MitbihDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.datasets.MitbihDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.datasets.Dataset" title="ecgan.utils.datasets.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.datasets.Dataset</span></code></a></p>
+<p>Static description of the Mitbih dataset.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.datasets.MitbihExtractedBeatsDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.datasets.</span></span><span class="sig-name descname"><span class="pre">MitbihExtractedBeatsDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beat_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/datasets.html#MitbihExtractedBeatsDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.datasets.MitbihExtractedBeatsDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.datasets.Dataset" title="ecgan.utils.datasets.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.datasets.Dataset</span></code></a></p>
+<p>Static description of the MITBIH dataset with extracted and downsampled single beats.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.datasets.MitbihBeatganDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.datasets.</span></span><span class="sig-name descname"><span class="pre">MitbihBeatganDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beat_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/datasets.html#MitbihBeatganDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.datasets.MitbihBeatganDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.datasets.Dataset" title="ecgan.utils.datasets.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.datasets.Dataset</span></code></a></p>
+<p>Static description of the MITBIH Beatgan dataset.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.datasets.SineDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.datasets.</span></span><span class="sig-name descname"><span class="pre">SineDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beat_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/datasets.html#SineDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.datasets.SineDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.datasets.Dataset" title="ecgan.utils.datasets.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.datasets.Dataset</span></code></a></p>
+<p>Static description of the sine dataset.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.datasets.PTBExtractedBeatsDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.datasets.</span></span><span class="sig-name descname"><span class="pre">PTBExtractedBeatsDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beat_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loading_src</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/utils/datasets.html#PTBExtractedBeatsDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.datasets.PTBExtractedBeatsDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.utils.datasets.Dataset" title="ecgan.utils.datasets.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.utils.datasets.Dataset</span></code></a></p>
+<p>Static description of the PTB dataset.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.utils.datasets.DatasetFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.utils.datasets.</span></span><span class="sig-name descname"><span class="pre">DatasetFactory</span></span><a class="reference internal" href="../../_modules/ecgan/utils/datasets.html#DatasetFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.utils.datasets.DatasetFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Meta module for creating datasets objects containing static data to describe the datasets.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="custom_types.html" class="btn btn-neutral float-left" title="Custom Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="distances.html" class="btn btn-neutral float-right" title="Distances" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.anomaly_detection.reconstruction &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.anomaly_detection.reconstruction</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.anomaly_detection.reconstruction</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Functions related to the reconstruction of series.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">timeit</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">torch.nn</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="n">empty</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">tensor</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">InverseDetectorConfig</span><span class="p">,</span>
+    <span class="n">LatentWalkReconstructionConfig</span><span class="p">,</span>
+    <span class="n">OptimizerConfig</span><span class="p">,</span>
+    <span class="n">ReconstructionConfig</span><span class="p">,</span>
+    <span class="n">get_global_ad_config</span><span class="p">,</span>
+    <span class="n">get_global_inv_config_attribs</span><span class="p">,</span>
+    <span class="n">get_inv_run_config</span><span class="p">,</span>
+    <span class="n">get_model_path</span><span class="p">,</span>
+    <span class="n">set_global_inv_config</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ecgan.config.initialization.inverse</span> <span class="kn">import</span> <span class="n">init_inverse</span>
+<span class="kn">from</span> <span class="nn">ecgan.evaluation.tracker</span> <span class="kn">import</span> <span class="n">BaseTracker</span>
+<span class="kn">from</span> <span class="nn">ecgan.modules.generative.base</span> <span class="kn">import</span> <span class="n">BaseEncoderGANModule</span><span class="p">,</span> <span class="n">BaseGANModule</span>
+<span class="kn">from</span> <span class="nn">ecgan.modules.inverse_mapping.inverse_mapping</span> <span class="kn">import</span> <span class="n">InvertibleBaseModule</span>
+<span class="kn">from</span> <span class="nn">ecgan.modules.inverse_mapping.inversion</span> <span class="kn">import</span> <span class="n">inverse_train</span>
+<span class="kn">from</span> <span class="nn">ecgan.modules.inverse_mapping.vanilla_inverse_mapping</span> <span class="kn">import</span> <span class="n">SimpleGANInverseMapping</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">ReconstructionType</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.optimizer</span> <span class="kn">import</span> <span class="n">BaseOptimizer</span><span class="p">,</span> <span class="n">OptimizerFactory</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.reconstruction_criteria</span> <span class="kn">import</span> <span class="n">get_reconstruction_criterion</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.sampler</span> <span class="kn">import</span> <span class="n">EncoderBasedGeneratorSampler</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Reconstructor"><a class="viewcode-back" href="../../../api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.Reconstructor">[docs]</a><span class="k">class</span> <span class="nc">Reconstructor</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for different reconstruction strategies.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reconstruction_cfg</span><span class="p">:</span> <span class="n">ReconstructionConfig</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">BaseGANModule</span><span class="p">,</span> <span class="o">**</span><span class="n">_kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_cfg</span> <span class="o">=</span> <span class="n">reconstruction_cfg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_passed</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Reconstructor.reconstruct"><a class="viewcode-back" href="../../../api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.Reconstructor.reconstruct">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">reconstruct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reconstruct the latent representation of a given Tensor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A single data sample which is to be reconstructed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           Reconstructed series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Reconstructor needs to implement the `reconstruct` method.&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="InterpolationReconstructor"><a class="viewcode-back" href="../../../api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InterpolationReconstructor">[docs]</a><span class="k">class</span> <span class="nc">InterpolationReconstructor</span><span class="p">(</span><span class="n">Reconstructor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reconstruct samples based on the AnoGAN approach (`Schlegl et al. 2017 &lt;https://arxiv.org/pdf/1703.05921.pdf&gt;`_).</span>
+
+<span class="sd">    Optimize through latent space to search for a series similar to the input series.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        module: Generative module used for interpolation.</span>
+<span class="sd">        reconstruction_cfg: Config containing relevant parameters for latent walk.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">BaseGANModule</span><span class="p">,</span> <span class="n">reconstruction_cfg</span><span class="p">:</span> <span class="n">LatentWalkReconstructionConfig</span><span class="p">,</span> <span class="o">**</span><span class="n">_kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">reconstruction_cfg</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span> <span class="o">=</span> <span class="n">reconstruction_cfg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="n">get_reconstruction_criterion</span><span class="p">(</span><span class="n">reconstruction_cfg</span><span class="o">.</span><span class="n">CRITERION</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adapt_lr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">ADAPT_LR</span>
+
+        <span class="n">verbose_steps</span> <span class="o">=</span> <span class="n">reconstruction_cfg</span><span class="o">.</span><span class="n">VERBOSE_STEPS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose_steps</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">verbose_steps</span> <span class="k">if</span> <span class="n">verbose_steps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">reconstruction_cfg</span><span class="o">.</span><span class="n">MAX_RECONSTRUCTION_ITERATIONS</span> <span class="o">//</span> <span class="mi">10</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_sequence</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">series_samples</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">losses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_sequences</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Contains the first z_sequence of each batch. Used for visualization later on.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_z_distance</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="InterpolationReconstructor.reconstruct"><a class="viewcode-back" href="../../../api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InterpolationReconstructor.reconstruct">[docs]</a>    <span class="k">def</span> <span class="nf">reconstruct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reconstruct the latent representation of a given Tensor.</span>
+
+<span class="sd">        Procedure:</span>
+
+<span class="sd">            #. Randomly sample data :math:`z_0` from the latent space of the model.</span>
+<span class="sd">            #. Create a synthetic series :math:`G(z_0)`.</span>
+<span class="sd">            #. Compare the similarity :math:`sim(x, G(z_0))`.</span>
+<span class="sd">            #. Optimize through latent space to find :math:`z_1` which generates a series</span>
+<span class="sd">               :math:`G(z_1)` which is more similar to :math:`x` than :math:`G(z_0)`.</span>
+<span class="sd">            #. Repeat until :math:`G(z_i)` is similar enough, defined by:</span>
+<span class="sd">               :math:`dissimilarity(x, G(z_i)) = 1-sim(x, G(z_i)) \leq \epsilon`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: The input data in shape (N x +) that shall be reconstructed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           Reconstructed series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="n">BaseEncoderGANModule</span><span class="p">):</span>
+            <span class="c1"># Use for inverse mapping + latent optimization</span>
+            <span class="n">z_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample_encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+            <span class="c1"># Use for latent optimization only</span>
+            <span class="c1"># z_sample: Tensor = torch.distributions.normal.Normal(0,1).sample((batch_size, 1, self.module.latent_size))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">z_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample_z</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+
+        <span class="c1"># Enables usage for RNN/CNN generator.</span>
+        <span class="k">if</span> <span class="n">z_sample</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># If the sampler is an RNN generator sampler: latent space should only</span>
+            <span class="c1"># have one latent space sample per sample and not per step.</span>
+            <span class="c1"># Avoid optimizing (batch_size, seq_len, latent_space)</span>
+            <span class="c1"># but optimizes (batch_size, 1, latent_space) instead.</span>
+            <span class="n">z_sample</span> <span class="o">=</span> <span class="n">z_sample</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+            <span class="n">z_sample</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">z_sequence</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="n">z_sample</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">seq_len</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If the sampler is a CNN generator sampler: latent space will by default</span>
+            <span class="c1"># only be of shape (1,1,latent_space)</span>
+            <span class="n">z_sample</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">z_sequence</span> <span class="o">=</span> <span class="n">z_sample</span>
+
+        <span class="n">series_samples</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">OptimizerFactory</span><span class="p">()(</span>
+            <span class="p">[</span><span class="n">z_sample</span><span class="p">],</span>
+            <span class="n">OptimizerConfig</span><span class="p">(</span>
+                <span class="n">NAME</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">LATENT_OPTIMIZER</span><span class="o">.</span><span class="n">NAME</span><span class="p">,</span>
+                <span class="n">LR</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">LATENT_OPTIMIZER</span><span class="o">.</span><span class="n">LR</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="n">reached_target</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">z_sequences</span> <span class="o">=</span> <span class="n">z_sequence</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+        <span class="n">loss</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)])</span>
+        <span class="n">reconstructed_series</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">total_z_distance</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">previous_z_tensor</span> <span class="o">=</span> <span class="n">z_sequence</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">MAX_RECONSTRUCTION_ITERATIONS</span><span class="p">):</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+            <span class="n">reconstructed_series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">z_sequence</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">(</span><span class="n">reconstructed_series</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+            <span class="c1"># Future improvement: make sure that the gradient doesnt lead into area with high norm</span>
+            <span class="c1"># Adapt LR -&gt; Maybe longer latent space walk but better results</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">adapt_learning_rate</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">),</span> <span class="n">optimizer</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">EPSILON</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s1">&#39;Loss has reached target epsilon of </span><span class="si">{0}</span><span class="s1"> in iteration </span><span class="si">{1}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">EPSILON</span><span class="p">,</span> <span class="n">iteration</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">reached_target</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="n">current_z_sequence</span> <span class="o">=</span> <span class="n">z_sequence</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># Add distance of current iteration to total distance</span>
+            <span class="n">total_z_distance</span> <span class="o">=</span> <span class="n">total_z_distance</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">PairwiseDistance</span><span class="p">()(</span><span class="n">previous_z_tensor</span><span class="p">,</span> <span class="n">current_z_sequence</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">device</span>
+            <span class="p">)</span>
+            <span class="n">previous_z_tensor</span> <span class="o">=</span> <span class="n">current_z_sequence</span>
+
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose_steps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Iteration </span><span class="si">{0:4}</span><span class="s1"> | Loss: </span><span class="si">{1:2.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iteration</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">)))</span>
+
+                <span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">))</span>
+                <span class="n">z_sequences</span> <span class="o">=</span> <span class="n">cat</span><span class="p">((</span><span class="n">z_sequences</span><span class="p">,</span> <span class="n">z_sequence</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()))</span>
+
+                <span class="n">series_samples</span> <span class="o">=</span> <span class="n">cat</span><span class="p">((</span><span class="n">series_samples</span><span class="p">,</span> <span class="n">reconstructed_series</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">reached_target</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not match epsilon quality criterion. Loss is </span><span class="si">{0:2.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">series_samples</span> <span class="o">=</span> <span class="n">cat</span><span class="p">((</span><span class="n">series_samples</span><span class="p">,</span> <span class="n">reconstructed_series</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_sequences</span> <span class="o">=</span> <span class="n">cat</span><span class="p">((</span><span class="n">z_sequences</span><span class="p">,</span> <span class="n">z_sequence</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_sequence</span> <span class="o">=</span> <span class="n">z_sequence</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">losses</span> <span class="o">=</span> <span class="n">losses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_z_distance</span> <span class="o">=</span> <span class="n">total_z_distance</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">end</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span>
+        <span class="n">avg_time</span> <span class="o">=</span> <span class="p">[(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="n">batch_size</span><span class="p">]</span> <span class="o">*</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_passed</span> <span class="o">=</span> <span class="n">cat</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time_passed</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">avg_time</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">reconstructed_series</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="InterpolationReconstructor.adapt_learning_rate"><a class="viewcode-back" href="../../../api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InterpolationReconstructor.adapt_learning_rate">[docs]</a>    <span class="k">def</span> <span class="nf">adapt_learning_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">BaseOptimizer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Adapt the learning rate if the loss is below a previously set learning rate threshold.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">LR_THRESHOLD</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapt_lr</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Error below threshold of </span><span class="si">{0}</span><span class="s2">. Adapting LR, new LR at </span><span class="si">{1}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">LR_THRESHOLD</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">LATENT_OPTIMIZER</span><span class="o">.</span><span class="n">LR</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">set_param_group</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rec_cfg</span><span class="o">.</span><span class="n">LATENT_OPTIMIZER</span><span class="o">.</span><span class="n">LR</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adapt_lr</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+
+
+<div class="viewcode-block" id="InverseMappingReconstructor"><a class="viewcode-back" href="../../../api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InverseMappingReconstructor">[docs]</a><span class="k">class</span> <span class="nc">InverseMappingReconstructor</span><span class="p">(</span><span class="n">Reconstructor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reconstruct the samples based on the ALAD approach by `Zenati et al. 2018 &lt;https://arxiv.org/abs/1802.06222&gt;`_.</span>
+
+<span class="sd">    Learn an inverse mapping from the data space to the latent space to avoid the costly interpolation of AnoGAN.</span>
+<span class="sd">    The mapping cans be learned during training (e.g. using an autoencoder based GAN or CycleGAN) or after training.</span>
+<span class="sd">    If the mapping is not learned during training (i.e. if the module is not an instance of</span>
+<span class="sd">    :class:`ecgan.modules.generative.base.BaseEncoderGANModule`), we train this module during initialization</span>
+<span class="sd">    of the inverse mapping reconstructor. This can take quite some time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">BaseGANModule</span><span class="p">,</span> <span class="n">reconstruction_cfg</span><span class="p">:</span> <span class="n">ReconstructionConfig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">tracker</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseTracker</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tracker&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">ad_cfg</span> <span class="o">=</span> <span class="n">get_global_ad_config</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ad_cfg</span><span class="o">.</span><span class="n">detection_config</span><span class="p">,</span> <span class="n">InverseDetectorConfig</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;An InverseDetectorConfig has to be supplied if inverse mapping is selected. &quot;</span>
+                <span class="s2">&quot;Current config: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ad_cfg</span><span class="o">.</span><span class="n">detection_config</span><span class="p">))</span>
+            <span class="p">)</span>
+        <span class="n">detection_cfg</span><span class="p">:</span> <span class="n">InverseDetectorConfig</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">InverseDetectorConfig</span><span class="p">,</span> <span class="n">ad_cfg</span><span class="o">.</span><span class="n">detection_config</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">reconstruction_cfg</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="n">BaseEncoderGANModule</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_inverse_mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">encoder</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">get_model_path</span><span class="p">(</span>
+                <span class="n">ad_cfg</span><span class="o">.</span><span class="n">ad_experiment_config</span><span class="o">.</span><span class="n">RUN_URI</span><span class="p">,</span>
+                <span class="n">ad_cfg</span><span class="o">.</span><span class="n">ad_experiment_config</span><span class="o">.</span><span class="n">RUN_VERSION</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">detection_cfg</span><span class="o">.</span><span class="n">INVERSE_MAPPING_URI</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">init_inverse</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;inverse_config.yml&#39;</span><span class="p">)</span>
+                <span class="n">inv_module</span><span class="p">:</span> <span class="n">InvertibleBaseModule</span> <span class="o">=</span> <span class="n">inverse_train</span><span class="p">(</span><span class="n">tracker</span><span class="o">=</span><span class="n">tracker</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_inverse_mapping</span> <span class="o">=</span> <span class="n">inv_module</span><span class="o">.</span><span class="n">inv</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">set_global_inv_config</span><span class="p">(</span><span class="n">get_inv_run_config</span><span class="p">(</span><span class="n">ad_cfg</span><span class="p">)</span><span class="o">.</span><span class="n">config_dict</span><span class="p">)</span>
+                <span class="n">inv_config</span> <span class="o">=</span> <span class="n">get_global_inv_config_attribs</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">inv_config</span><span class="o">.</span><span class="n">RUN_URI</span> <span class="o">!=</span> <span class="n">ad_cfg</span><span class="o">.</span><span class="n">ad_experiment_config</span><span class="o">.</span><span class="n">RUN_URI</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="s2">&quot;Supplied URI of inverse mapping module (</span><span class="si">{0}</span><span class="s2">) differs from &quot;</span>
+                        <span class="s2">&quot;anomaly detection module URI (</span><span class="si">{1}</span><span class="s2">).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">inv_config</span><span class="o">.</span><span class="n">RUN_URI</span><span class="p">,</span> <span class="n">ad_cfg</span><span class="o">.</span><span class="n">ad_experiment_config</span><span class="o">.</span><span class="n">RUN_URI</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+
+                <span class="n">inverse_module</span> <span class="o">=</span> <span class="n">SimpleGANInverseMapping</span><span class="p">(</span>
+                    <span class="n">inv_cfg</span><span class="o">=</span><span class="n">inv_config</span><span class="p">,</span>
+                    <span class="n">module_cfg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span>
+                    <span class="n">run_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span>
+                    <span class="n">seq_len</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">seq_len</span><span class="p">,</span>
+                    <span class="n">num_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">num_channels</span><span class="p">,</span>
+                    <span class="n">tracker</span><span class="o">=</span><span class="n">tracker</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="n">inverse_module</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">detection_cfg</span><span class="o">.</span><span class="n">INVERSE_MAPPING_URI</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_inverse_mapping</span> <span class="o">=</span> <span class="n">inverse_module</span><span class="o">.</span><span class="n">inv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="InverseMappingReconstructor.reconstruct"><a class="viewcode-back" href="../../../api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InverseMappingReconstructor.reconstruct">[docs]</a>    <span class="k">def</span> <span class="nf">reconstruct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reconstruct the latent representation of a given Tensor.</span>
+
+<span class="sd">        Procedure:</span>
+<span class="sd">            #. Query inverse mapping for latent representation of :math:`z_0`.</span>
+<span class="sd">            #. Create a synthetic series :math:`G(z_0)`</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: The input data in shape (N x *) that shall be reconstructed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           Reconstructed series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inverse_mapping</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">discriminator</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">EncoderBasedGeneratorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">generator_sampler</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span>
+            <span class="n">x_hat</span><span class="p">,</span> <span class="n">noise</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_generator_encoder</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span>
+            <span class="n">avg_time</span> <span class="o">=</span> <span class="p">[(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="n">x_hat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="n">x_hat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_passed</span> <span class="o">=</span> <span class="n">cat</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time_passed</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">avg_time</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">noise</span>
+
+        <span class="k">return</span> <span class="n">x_hat</span></div></div>
+
+
+<div class="viewcode-block" id="ReconstructorFactory"><a class="viewcode-back" href="../../../api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.ReconstructorFactory">[docs]</a><span class="k">class</span> <span class="nc">ReconstructorFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Factory module for creating :class:`ecgan.anomaly_detection.reconstruction.Reconstructor` objects.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">reconstructor</span><span class="p">:</span> <span class="n">ReconstructionType</span><span class="p">,</span> <span class="n">reconstruction_cfg</span><span class="p">:</span> <span class="n">ReconstructionConfig</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Reconstructor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a :class:`ecgan.anomaly_detection.reconstruction.Reconstructor` object.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">reconstructor</span> <span class="o">==</span> <span class="n">ReconstructionType</span><span class="o">.</span><span class="n">INTERPOLATE</span><span class="p">:</span>
+            <span class="n">reconstruction_cfg</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">LatentWalkReconstructionConfig</span><span class="p">,</span> <span class="n">reconstruction_cfg</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">InterpolationReconstructor</span><span class="p">(</span><span class="n">reconstruction_cfg</span><span class="o">=</span><span class="n">reconstruction_cfg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reconstructor</span> <span class="o">==</span> <span class="n">ReconstructionType</span><span class="o">.</span><span class="n">INVERSE_MAPPING</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">InverseMappingReconstructor</span><span class="p">(</span><span class="n">reconstruction_cfg</span><span class="o">=</span><span class="n">reconstruction_cfg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Unknown reconstruction type: </span><span class="si">{0}</span><span class="s1">. Please select a valid ReconstructionType.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reconstructor</span><span class="p">)</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

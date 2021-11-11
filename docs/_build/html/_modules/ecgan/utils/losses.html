@@ -1,0 +1,877 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ecgan.utils.losses &mdash; ECGAN 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../synthesis.html#beatgan">BeatGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classification.html">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ecgan.utils.losses</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ecgan.utils.losses</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Implementation of various loss functions for PyTorch models.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">nn</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.config</span> <span class="kn">import</span> <span class="n">LossConfig</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.configurable</span> <span class="kn">import</span> <span class="n">Configurable</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">Losses</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">,</span> <span class="n">LossType</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.sampler</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DiscriminatorSampler</span><span class="p">,</span>
+    <span class="n">EncoderBasedGeneratorSampler</span><span class="p">,</span>
+    <span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span>
+    <span class="n">GeneratorSampler</span><span class="p">,</span>
+    <span class="n">VAEGANGeneratorSampler</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="SupervisedLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.SupervisedLoss">[docs]</a><span class="k">class</span> <span class="nc">SupervisedLoss</span><span class="p">(</span><span class="n">Configurable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for supervised loss functions.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SupervisedLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.SupervisedLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">target_tensor</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the loss of a given component.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">target_tensor</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">target_tensor</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call the forward method implicitly.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">target_tensor</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loss</span><span class="p">()</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Loss needs to implement the `_loss` method.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_configure</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;LOSS&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;REDUCTION&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">}}</span>
+
+<div class="viewcode-block" id="SupervisedLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.SupervisedLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for a general loss function.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SupervisedLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="L2Loss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.L2Loss">[docs]</a><span class="k">class</span> <span class="nc">L2Loss</span><span class="p">(</span><span class="n">SupervisedLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrapper over the mean squared error loss of the torch module.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reduction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="n">reduction</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span>
+
+<div class="viewcode-block" id="L2Loss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.L2Loss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for a general loss function.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SupervisedLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">L2</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="BCELoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.BCELoss">[docs]</a><span class="k">class</span> <span class="nc">BCELoss</span><span class="p">(</span><span class="n">SupervisedLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrapper over the binary cross entropy loss of the torch module.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reduction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">BCELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="n">reduction</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span>
+
+<div class="viewcode-block" id="BCELoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.BCELoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for a general loss function.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SupervisedLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">BCE</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CrossEntropyLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.CrossEntropyLoss">[docs]</a><span class="k">class</span> <span class="nc">CrossEntropyLoss</span><span class="p">(</span><span class="n">SupervisedLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrapper over the cross entropy loss of the torch module.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reduction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="n">reduction</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span>
+
+<div class="viewcode-block" id="CrossEntropyLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.CrossEntropyLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for a general loss function.&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">SupervisedLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">CROSS_ENTROPY</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LOSS&#39;</span><span class="p">][</span><span class="s1">&#39;REDUCTION&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="KLLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.KLLoss">[docs]</a><span class="k">class</span> <span class="nc">KLLoss</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Kullback-Divergence loss for the usage in variational auto-encoders.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="KLLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.KLLoss.forward">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">mean_value</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">log_var</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate Kullback-Leibler divergence for standard Gaussian distribution.</span>
+
+<span class="sd">        Calculate KL divergence for a given expected value and log variance.</span>
+<span class="sd">        The input tensors are expected to be in shape (N x DIM) where N is the number of</span>
+<span class="sd">        samples and DIM is the dimension of the multivariate Gaussian. The result will be</span>
+<span class="sd">        the average KL-Divergence of a batch of distributions and a unit Gaussian.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kl_div</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">log_var</span> <span class="o">-</span> <span class="n">mean_value</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">log_var</span><span class="o">.</span><span class="n">exp</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">kl_div</span> <span class="o">/</span> <span class="n">log_var</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="KLLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.KLLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the BCE loss.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;LOSS&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="n">Losses</span><span class="o">.</span><span class="n">KL_DIV</span><span class="p">}}</span></div></div>
+
+
+<div class="viewcode-block" id="GANBaseLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.GANBaseLoss">[docs]</a><span class="k">class</span> <span class="nc">GANBaseLoss</span><span class="p">(</span><span class="n">Configurable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base loss class for custom GAN losses.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">discriminator_sampler</span><span class="p">:</span> <span class="n">DiscriminatorSampler</span><span class="p">,</span>
+        <span class="n">generator_sampler</span><span class="p">:</span> <span class="n">GeneratorSampler</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span> <span class="o">=</span> <span class="n">discriminator_sampler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span> <span class="o">=</span> <span class="n">generator_sampler</span>
+
+<div class="viewcode-block" id="GANBaseLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.GANBaseLoss.forward">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LossType</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the loss of a given component.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;GANLoss needs to implement the `forward` method.&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LossType</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Loss-specific forward will be applied upon call.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_configure</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;LOSS&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">}}</span>
+
+<div class="viewcode-block" id="GANBaseLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.GANBaseLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for a general loss function.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GANBaseLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="BceGeneratorLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.BceGeneratorLoss">[docs]</a><span class="k">class</span> <span class="nc">BceGeneratorLoss</span><span class="p">(</span><span class="n">GANBaseLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;BCE Loss using the PyTorch implementation.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">discriminator_sampler</span><span class="p">:</span> <span class="n">DiscriminatorSampler</span><span class="p">,</span>
+        <span class="n">generator_sampler</span><span class="p">:</span> <span class="n">GeneratorSampler</span><span class="p">,</span>
+        <span class="n">reduction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">discriminator_sampler</span><span class="p">,</span> <span class="n">generator_sampler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BCELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="n">reduction</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BceGeneratorLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.BceGeneratorLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LossType</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Calculate the BCE loss and update a given optimizer to minimize the loss.&quot;&quot;&quot;</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">training_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample_z</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">gen_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+        <span class="n">fake_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample_label_zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">disc_out_fake</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">gen_samples</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+        <span class="c1"># For GANs: input: disc_outfake, target: target_fake</span>
+        <span class="n">batch_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">disc_out_fake</span><span class="p">,</span> <span class="n">fake_labels</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">batch_loss</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;loss_gen&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">batch_loss</span><span class="p">))]</span></div>
+
+<div class="viewcode-block" id="BceGeneratorLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.BceGeneratorLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the BCE loss.&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">GANBaseLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">BCE_GENERATOR_LOSS</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LOSS&#39;</span><span class="p">][</span><span class="s1">&#39;REDUCTION&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span>
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="BceDiscriminatorLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.BceDiscriminatorLoss">[docs]</a><span class="k">class</span> <span class="nc">BceDiscriminatorLoss</span><span class="p">(</span><span class="n">BceGeneratorLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Two component BCE Loss using the PyTorch implementation.</span>
+
+<span class="sd">    The class assumes that corresponding `BaseSampler`s for each component are implemented. The fake data is sampled by</span>
+<span class="sd">    the `sample` method of the provided generator. The BCE loss is commonly used when optimizing the discriminator</span>
+<span class="sd">    of a vanilla GAN.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BceDiscriminatorLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.BceDiscriminatorLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LossType</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Calculate the two component BCE loss and update a given optimizer to minimize the loss.&quot;&quot;&quot;</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">training_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample_z</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">fake_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+
+        <span class="n">disc_out_fake</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">fake_data</span><span class="p">)</span>
+        <span class="n">disc_out_real</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+        <span class="n">target_fake</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample_label_zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">target_real</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample_label_ones</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="c1"># Train with all-real batch</span>
+        <span class="n">loss_disc_real</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">disc_out_real</span><span class="p">,</span> <span class="n">target_real</span><span class="p">)</span>
+        <span class="c1"># Train with all-fake batch</span>
+        <span class="n">loss_disc_fake</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">disc_out_fake</span><span class="p">,</span> <span class="n">target_fake</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;loss_disc_real&#39;</span><span class="p">,</span> <span class="n">loss_disc_real</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;loss_disc_fake&#39;</span><span class="p">,</span> <span class="n">loss_disc_fake</span><span class="p">)],</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;loss_disc_real&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">loss_disc_real</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;loss_disc_fake&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">loss_disc_fake</span><span class="p">)),</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="BceDiscriminatorLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.BceDiscriminatorLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the two component BCE loss.&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">BceDiscriminatorLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">TWO_COMPONENT_BCE</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LOSS&#39;</span><span class="p">][</span><span class="s1">&#39;REDUCTION&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span>
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="WassersteinDiscriminatorLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss">[docs]</a><span class="k">class</span> <span class="nc">WassersteinDiscriminatorLoss</span><span class="p">(</span><span class="n">GANBaseLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wasserstein loss for the discriminator.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">discriminator_sampler</span><span class="p">:</span> <span class="n">DiscriminatorSampler</span><span class="p">,</span>
+        <span class="n">generator_sampler</span><span class="p">:</span> <span class="n">GeneratorSampler</span><span class="p">,</span>
+        <span class="n">gradient_penalty_weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">clipping_bound</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">discriminator_sampler</span><span class="p">,</span> <span class="n">generator_sampler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient_penalty_weight</span> <span class="o">=</span> <span class="n">gradient_penalty_weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clipping_bound</span> <span class="o">=</span> <span class="n">clipping_bound</span>
+
+<div class="viewcode-block" id="WassersteinDiscriminatorLoss.apply_gp"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss.apply_gp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">apply_gp</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">target_tensor</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;GP penalty is applied outside the forward call during optimization.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">input_tensor</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">target_tensor</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="WassersteinDiscriminatorLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LossType</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Calculate the Wasserstein distance and minimize it using a given optimizer.&quot;&quot;&quot;</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">training_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample_z</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">fake_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+        <span class="n">disc_out_fake</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">fake_data</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+        <span class="n">disc_out_real</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_gp</span><span class="p">(</span><span class="n">disc_out_fake</span><span class="p">,</span> <span class="n">disc_out_real</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient_penalty_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient_penalty_weight</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">flags</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="n">gp_penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_gradient_penalty</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="n">fake_data</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient_penalty_weight</span> <span class="o">*</span> <span class="n">gp_penalty</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clipping_bound</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">clipping_bound</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">component</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clamp_</span><span class="p">(</span>
+                    <span class="nb">min</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">clipping_bound</span><span class="p">,</span>  <span class="c1"># pylint: disable=E1130</span>
+                    <span class="nb">max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">clipping_bound</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;loss_disc&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">))]</span></div>
+
+<div class="viewcode-block" id="WassersteinDiscriminatorLoss.get_gradient_penalty"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss.get_gradient_penalty">[docs]</a>    <span class="k">def</span> <span class="nf">get_gradient_penalty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">real_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">generated_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Based on https://github.com/EmilienDupont/wgan-gp/blob/master/training.py.&quot;&quot;&quot;</span>
+        <span class="c1"># Interpolate</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">real_data</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span><span class="o">.</span><span class="n">expand_as</span><span class="p">(</span><span class="n">real_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">real_data</span><span class="o">.</span><span class="n">is_cuda</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+        <span class="n">interpolated</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">real_data</span><span class="o">.</span><span class="n">data</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">generated_data</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">interpolated</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Calculate probability of interpolated examples</span>
+        <span class="n">prob_interpolated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">interpolated</span><span class="p">)</span>
+
+        <span class="c1"># Calculate gradients of probabilities with respect to examples</span>
+        <span class="n">gradients</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span>
+            <span class="n">outputs</span><span class="o">=</span><span class="n">prob_interpolated</span><span class="p">,</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="n">interpolated</span><span class="p">,</span>
+            <span class="n">grad_outputs</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">prob_interpolated</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">generated_data</span><span class="o">.</span><span class="n">is_cuda</span>
+            <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">prob_interpolated</span><span class="o">.</span><span class="n">size</span><span class="p">()),</span>
+            <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Gradients have shape (batch_size, seq_len, num_channels),</span>
+        <span class="c1"># so flatten to easily take norm per example in batch</span>
+        <span class="n">gradients</span> <span class="o">=</span> <span class="n">gradients</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Derivatives of the gradient close to 0 can cause problems because of</span>
+        <span class="c1"># the square root, so manually calculate norm and add epsilon</span>
+        <span class="n">gradients_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">gradients</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span>
+
+        <span class="c1"># Return gradient penalty</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">gradients_norm</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="WassersteinDiscriminatorLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the Wasserstein discriminator loss.&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">GANBaseLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">WASSERSTEIN_DISCRIMINATOR</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LOSS&#39;</span><span class="p">][</span><span class="s1">&#39;GRADIENT_PENALTY_WEIGHT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LOSS&#39;</span><span class="p">][</span><span class="s1">&#39;CLIPPING_BOUND&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="WassersteinGeneratorLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.WassersteinGeneratorLoss">[docs]</a><span class="k">class</span> <span class="nc">WassersteinGeneratorLoss</span><span class="p">(</span><span class="n">GANBaseLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wasserstein loss for the discriminator.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WassersteinGeneratorLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.WassersteinGeneratorLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LossType</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Calculate the Wasserstein distance and minimize it using a given optimizer.&quot;&quot;&quot;</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">training_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample_z</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">fake_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+        <span class="n">disc_out_fake</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">fake_data</span><span class="p">)</span>
+        <span class="n">batch_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">disc_out_fake</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">batch_loss</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;loss_gen&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">batch_loss</span><span class="p">))]</span></div>
+
+<div class="viewcode-block" id="WassersteinGeneratorLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.WassersteinGeneratorLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the Wasserstein generator loss.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GANBaseLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">WASSERSTEIN_GENERATOR</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AEGANGeneratorLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.AEGANGeneratorLoss">[docs]</a><span class="k">class</span> <span class="nc">AEGANGeneratorLoss</span><span class="p">(</span><span class="n">GANBaseLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loss function for the auto-encoder based GANs.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">discriminator_sampler</span><span class="p">:</span> <span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span>
+        <span class="n">generator_sampler</span><span class="p">:</span> <span class="n">EncoderBasedGeneratorSampler</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">discriminator_sampler</span><span class="p">,</span> <span class="n">generator_sampler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AEGANGeneratorLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.AEGANGeneratorLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LossType</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Perform the forward for the AEGAN generator loss.&quot;&quot;&quot;</span>
+        <span class="n">faked_output</span><span class="p">,</span> <span class="n">noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample_generator_encoder</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+        <span class="n">feat_fake</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="p">)</span><span class="o">.</span><span class="n">sample_features</span><span class="p">(</span><span class="n">faked_output</span><span class="p">)</span>
+        <span class="n">feat_real</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="p">)</span><span class="o">.</span><span class="n">sample_features</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+        <span class="n">adversarial_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span><span class="p">(</span><span class="n">feat_fake</span><span class="p">,</span> <span class="n">feat_real</span><span class="p">)</span>
+        <span class="n">reconstruction_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span><span class="p">(</span><span class="n">faked_output</span><span class="p">,</span> <span class="n">training_data</span><span class="p">)</span>
+        <span class="n">weighted_error</span> <span class="o">=</span> <span class="n">adversarial_error</span> <span class="o">+</span> <span class="n">reconstruction_error</span>
+
+        <span class="k">return</span> <span class="n">weighted_error</span><span class="p">,</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;adversarial_loss&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">adversarial_error</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;reconstruction_loss&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">reconstruction_error</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;weighted_loss&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">weighted_error</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;noise&#39;</span><span class="p">,</span> <span class="n">noise</span><span class="o">.</span><span class="n">detach</span><span class="p">()),</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="AEGANGeneratorLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.AEGANGeneratorLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the AEGAN generator loss.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GANBaseLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">AEGAN_GENERATOR</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AEGANDiscriminatorLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.AEGANDiscriminatorLoss">[docs]</a><span class="k">class</span> <span class="nc">AEGANDiscriminatorLoss</span><span class="p">(</span><span class="n">GANBaseLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Discriminator loss for a AEGAN module.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">discriminator_sampler</span><span class="p">:</span> <span class="n">DiscriminatorSampler</span><span class="p">,</span>
+        <span class="n">generator_sampler</span><span class="p">:</span> <span class="n">GeneratorSampler</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">discriminator_sampler</span><span class="p">,</span> <span class="n">generator_sampler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">BCELoss</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AEGANDiscriminatorLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.AEGANDiscriminatorLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LossType</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Perform a forward pass for the loss.&quot;&quot;&quot;</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">training_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">fake_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample_label_zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">real_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample_label_ones</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+
+        <span class="n">real_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+        <span class="n">noise</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">EncoderBasedGeneratorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="p">)</span><span class="o">.</span><span class="n">sample_encoder</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+        <span class="n">faked_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+        <span class="n">faked_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">faked_output</span><span class="p">)</span>
+
+        <span class="n">real_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span><span class="p">(</span><span class="n">real_output</span><span class="p">,</span> <span class="n">real_labels</span><span class="p">)</span>
+        <span class="n">fake_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_loss</span><span class="p">(</span><span class="n">faked_output</span><span class="p">,</span> <span class="n">fake_labels</span><span class="p">)</span>
+
+        <span class="n">disc_error</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="n">real_error</span> <span class="o">+</span> <span class="n">fake_error</span>
+
+        <span class="k">return</span> <span class="n">disc_error</span><span class="p">,</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;loss_disc_real&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">real_error</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;loss_disc_fake&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">fake_error</span><span class="p">)),</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="AEGANDiscriminatorLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.AEGANDiscriminatorLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the AEGAN discriminator loss.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GANBaseLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">AEGAN_DISCRIMINATOR</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="VAEGANGeneratorLoss"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.VAEGANGeneratorLoss">[docs]</a><span class="k">class</span> <span class="nc">VAEGANGeneratorLoss</span><span class="p">(</span><span class="n">GANBaseLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generator loss for the VAEGAN module.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">discriminator_sampler</span><span class="p">:</span> <span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span>
+        <span class="n">generator_sampler</span><span class="p">:</span> <span class="n">VAEGANGeneratorSampler</span><span class="p">,</span>
+        <span class="n">reconstruction_loss</span><span class="p">:</span> <span class="n">SupervisedLoss</span><span class="p">,</span>
+        <span class="n">distribution</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">Distribution</span><span class="p">,</span>
+        <span class="n">kl_beta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">discriminator_sampler</span><span class="p">,</span> <span class="n">generator_sampler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconstruction_loss</span> <span class="o">=</span> <span class="n">reconstruction_loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kl_loss</span> <span class="o">=</span> <span class="n">KLLoss</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_adversarial_loss</span> <span class="o">=</span> <span class="n">L2Loss</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kl_beta</span> <span class="o">=</span> <span class="n">kl_beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kl_weight</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">VAEGANGeneratorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span> <span class="o">=</span> <span class="n">distribution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">kl_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kl_weight</span>
+
+    <span class="nd">@kl_weight</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">kl_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_kl_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kl_weight</span> <span class="o">=</span> <span class="n">new_kl_weight</span>
+
+<div class="viewcode-block" id="VAEGANGeneratorLoss.forward"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.VAEGANGeneratorLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LossType</span><span class="p">,</span> <span class="n">LossMetricType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Perform a forward pass for the loss.&quot;&quot;&quot;</span>
+        <span class="n">batch_size</span><span class="p">,</span> <span class="n">num_channel</span><span class="p">,</span> <span class="n">seq_len</span> <span class="o">=</span> <span class="n">training_data</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">rec_loss_scale_factor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">batch_size</span> <span class="o">*</span> <span class="n">num_channel</span> <span class="o">*</span> <span class="n">seq_len</span><span class="p">)</span>
+
+        <span class="n">mu</span><span class="p">,</span> <span class="n">log_var</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">VAEGANGeneratorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="p">)</span><span class="o">.</span><span class="n">sample_mu_logvar</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+        <span class="n">faked_output</span><span class="p">,</span> <span class="n">noise</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">VAEGANGeneratorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="p">)</span><span class="o">.</span><span class="n">sample_pre_computed</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">log_var</span><span class="p">)</span>
+
+        <span class="n">feat_fake</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="p">)</span><span class="o">.</span><span class="n">sample_features</span><span class="p">(</span><span class="n">faked_output</span><span class="p">)</span>
+        <span class="n">feat_real</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="p">)</span><span class="o">.</span><span class="n">sample_features</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+        <span class="n">adversarial_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adversarial_loss</span><span class="p">(</span><span class="n">feat_fake</span><span class="p">,</span> <span class="n">feat_real</span><span class="p">)</span>
+
+        <span class="n">reconstruction_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reconstruction_loss</span><span class="p">(</span><span class="n">faked_output</span><span class="p">,</span> <span class="n">training_data</span><span class="p">)</span> <span class="o">*</span> <span class="n">rec_loss_scale_factor</span>
+
+        <span class="n">kl_loss</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kl_loss</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">log_var</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl_beta</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl_weight</span>
+        <span class="n">weighted_error</span> <span class="o">=</span> <span class="n">kl_loss</span> <span class="o">+</span> <span class="n">adversarial_error</span> <span class="o">+</span> <span class="n">reconstruction_error</span>
+
+        <span class="k">return</span> <span class="n">weighted_error</span><span class="p">,</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;gen_kl_loss&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">kl_loss</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;gen_adversarial_loss&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">adversarial_error</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;gen_reconstruction_loss&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">reconstruction_error</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;latent/z_mu&#39;</span><span class="p">,</span> <span class="n">mu</span><span class="o">.</span><span class="n">detach</span><span class="p">()),</span>
+            <span class="p">(</span><span class="s1">&#39;latent/noise&#39;</span><span class="p">,</span> <span class="n">noise</span><span class="o">.</span><span class="n">detach</span><span class="p">()),</span>
+            <span class="p">(</span><span class="s1">&#39;latent/z_std_avg&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">log_var</span><span class="p">)))),</span>
+            <span class="p">(</span><span class="s1">&#39;gen_weighted_loss&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">weighted_error</span><span class="p">)),</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="VAEGANGeneratorLoss.configure"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.VAEGANGeneratorLoss.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the VAEGAN generator loss.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GANBaseLoss</span><span class="o">.</span><span class="n">_configure</span><span class="p">(</span><span class="n">Losses</span><span class="o">.</span><span class="n">VAEGAN_GENERATOR</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SupervisedLossFactory"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.SupervisedLossFactory">[docs]</a><span class="k">class</span> <span class="nc">SupervisedLossFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Meta module for creating correct loss functions.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">LossConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SupervisedLoss</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return implemented module when a Loss object is created.&quot;&quot;&quot;</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">Losses</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">NAME</span><span class="p">)</span>
+        <span class="n">reduction</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">REDUCTION</span> <span class="ow">or</span> <span class="s1">&#39;mean&#39;</span>
+
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">==</span> <span class="n">Losses</span><span class="o">.</span><span class="n">L2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">L2Loss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="n">reduction</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">==</span> <span class="n">Losses</span><span class="o">.</span><span class="n">BCE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BCELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="n">reduction</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">==</span> <span class="n">Losses</span><span class="o">.</span><span class="n">CROSS_ENTROPY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">CrossEntropyLoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="n">reduction</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Argument </span><span class="si">{0}</span><span class="s1"> is not set correctly.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loss</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="GANLossFactory"><a class="viewcode-back" href="../../../api/utils/losses.html#ecgan.utils.losses.GANLossFactory">[docs]</a><span class="k">class</span> <span class="nc">GANLossFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Meta module for creating correct GAN loss functions.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">LossConfig</span><span class="p">,</span>
+        <span class="n">discriminator_sampler</span><span class="p">:</span> <span class="n">DiscriminatorSampler</span><span class="p">,</span>
+        <span class="n">generator_sampler</span><span class="p">:</span> <span class="n">GeneratorSampler</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GANBaseLoss</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return implemented module when a Loss object is created.&quot;&quot;&quot;</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">Losses</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">NAME</span><span class="p">)</span>
+        <span class="n">reduction</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">REDUCTION</span> <span class="ow">or</span> <span class="s1">&#39;mean&#39;</span>
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">==</span> <span class="n">Losses</span><span class="o">.</span><span class="n">BCE_GENERATOR_LOSS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BceGeneratorLoss</span><span class="p">(</span><span class="n">discriminator_sampler</span><span class="p">,</span> <span class="n">generator_sampler</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="n">reduction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">==</span> <span class="n">Losses</span><span class="o">.</span><span class="n">TWO_COMPONENT_BCE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BceDiscriminatorLoss</span><span class="p">(</span><span class="n">discriminator_sampler</span><span class="p">,</span> <span class="n">generator_sampler</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="n">reduction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">==</span> <span class="n">Losses</span><span class="o">.</span><span class="n">WASSERSTEIN_DISCRIMINATOR</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">WassersteinDiscriminatorLoss</span><span class="p">(</span>
+                <span class="n">discriminator_sampler</span><span class="o">=</span><span class="n">discriminator_sampler</span><span class="p">,</span>
+                <span class="n">generator_sampler</span><span class="o">=</span><span class="n">generator_sampler</span><span class="p">,</span>
+                <span class="n">gradient_penalty_weight</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">GRADIENT_PENALTY_WEIGHT</span><span class="p">,</span>
+                <span class="n">clipping_bound</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">CLIPPING_BOUND</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">==</span> <span class="n">Losses</span><span class="o">.</span><span class="n">WASSERSTEIN_GENERATOR</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">WassersteinGeneratorLoss</span><span class="p">(</span><span class="n">discriminator_sampler</span><span class="p">,</span> <span class="n">generator_sampler</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Argument </span><span class="si">{0}</span><span class="s1"> is not set correctly.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loss</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

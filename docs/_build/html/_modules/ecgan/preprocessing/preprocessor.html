@@ -1,0 +1,962 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ecgan.preprocessing.preprocessor &mdash; ECGAN 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../synthesis.html#beatgan">BeatGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../classification.html">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ecgan.preprocessing.preprocessor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ecgan.preprocessing.preprocessor</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Baseclass for preprocessing as well as the preprocessing classes for the supported datasets.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">KNNImputer</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.config</span> <span class="kn">import</span> <span class="n">PreprocessingConfig</span>
+<span class="kn">from</span> <span class="nn">ecgan.preprocessing.cleansing</span> <span class="kn">import</span> <span class="n">DataCleanser</span>
+<span class="kn">from</span> <span class="nn">ecgan.preprocessing.sampling</span> <span class="kn">import</span> <span class="n">resample</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">SamplingAlgorithm</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.datasets</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DatasetFactory</span><span class="p">,</span>
+    <span class="n">MitbihBeatganDataset</span><span class="p">,</span>
+    <span class="n">MitbihDataset</span><span class="p">,</span>
+    <span class="n">MitbihExtractedBeatsDataset</span><span class="p">,</span>
+    <span class="n">PTBExtractedBeatsDataset</span><span class="p">,</span>
+    <span class="n">ShaoxingDataset</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.miscellaneous</span> <span class="kn">import</span> <span class="n">save_pickle</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BasePreprocessor"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.BasePreprocessor">[docs]</a><span class="k">class</span> <span class="nc">BasePreprocessor</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for preprocessors.</span>
+
+<span class="sd">    Generally, preprocessors expect data to be in :code:`&lt;target_dir&gt;/&lt;dataset_name&gt;/raw` (e.g. :code:`data/mitbih/raw`)</span>
+<span class="sd">    with :code:`target_dir` being given in the config. Processed data should always be saved as :code:`data.pkl` and</span>
+<span class="sd">    :code:`label.pkl` into :code:`&lt;target_dir&gt;/&lt;dataset_name&gt;/processed` (e.g. :code:`data/mitbih/processed`).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cfg: Configuration determining data source and desired preprocessing.</span>
+<span class="sd">        dataset_name: Name of dataset which has to be preprocessed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">PreprocessingConfig</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetFactory</span><span class="p">()(</span><span class="n">dataset_name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;processed&#39;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasePreprocessor.preprocess"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.BasePreprocessor.preprocess">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Preprocess a given dataset.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             Data and label tensors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Preprocessor needs to implement the `preprocess` method.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BasePreprocessor.save"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.BasePreprocessor.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save the data as well as the labels to `save_dir`.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No saving location was provided&#39;</span><span class="p">)</span>
+
+        <span class="n">save_pickle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span><span class="p">,</span> <span class="s1">&#39;data.pkl&#39;</span><span class="p">)</span>
+        <span class="n">save_pickle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span><span class="p">,</span> <span class="s1">&#39;label.pkl&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Data was saved to </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span><span class="p">))</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_impute_nans</span><span class="p">(</span><span class="n">series</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if NaNs are contained in the data and impute them with a KNN imputer.</span>
+
+<span class="sd">        Before impuration, you should make sure that the series do not contain too many NaNs to achieve good imputation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            series: Series of shape: :code:`(num_samples, seq_len, channels)`. May contain NaNs.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             All series with imputed values, i.e. without NaNs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">amount_nan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">series</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">amount_nan</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;No NaNs in the dataset!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">series</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> NaNs found in data. Missing values are imputed.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amount_nan</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">series</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">series</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">KNNImputer</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">series</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">series</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;The data still contains NaN-Values after imputation with KNN.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">series</span></div>
+
+
+<div class="viewcode-block" id="ExtractedBeatsPreprocessor"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor">[docs]</a><span class="k">class</span> <span class="nc">ExtractedBeatsPreprocessor</span><span class="p">(</span><span class="n">BasePreprocessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preprocess the MITBIH/PTB dataset to retrieve beatwise segmented data.</span>
+
+<span class="sd">    The data is already preprocessed according to `Kachuee et al. 2018 &lt;https://arxiv.org/abs/1805.00794&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ExtractedBeatsPreprocessor.preprocess"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor.preprocess">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Preprocess the dataset.</span>
+
+<span class="sd">        Load the raw CSV data, reshape the univariate series into multivariate series,</span>
+<span class="sd">        extract labels, call the _preprocess_worker to cleanse and resample the data.</span>
+<span class="sd">        Each initial raw sample has 187 values and contains the label in the last column.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of data and labels in a framework compatible format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Loading csv data to memory.&#39;</span><span class="p">)</span>
+        <span class="n">src_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_src_files</span><span class="p">()</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">src_file</span><span class="p">),</span>
+                    <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+                    <span class="n">invalid_raise</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">src_file</span> <span class="ow">in</span> <span class="n">src_files</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">raw_data</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting resampling and cleansing.&#39;</span><span class="p">)</span>
+        <span class="n">data_split</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+        <span class="n">labels_split</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_WORKERS</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess_worker</span><span class="p">,</span>
+                    <span class="n">args</span><span class="o">=</span><span class="p">(</span>
+                        <span class="n">data_split</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span>
+                        <span class="n">labels_split</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">TARGET_SEQUENCE_LENGTH</span><span class="p">,</span>
+                        <span class="n">pos</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">output</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">output</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span>
+
+        <span class="n">num_removed</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;removed_total&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">output</span><span class="p">])</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> samples were removed during cleansing process.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_removed</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The number of labels and samples does not match.&#39;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Loaded and cleansed data.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_impute_nans</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;Final dataset has </span><span class="si">{}</span><span class="s1"> samples with shape </span><span class="si">{}</span><span class="s1">. Class distribution: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span></div>
+
+    <span class="k">def</span> <span class="nf">_preprocess_worker</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">resampling_target</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">worker_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform preprocessing using multiprocessing. Each worker is given a batch of data to cleanse and resample.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: Raw downloaded data.</span>
+<span class="sd">            labels: Labels corresponding to the data.</span>
+<span class="sd">            resampling_target: Target sequence length.</span>
+<span class="sd">            worker_id: Identifier of the multiprocessing worker.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A tuple containing the ID of the multiprocessing worker as well as a Dict</span>
+<span class="sd">            containing the preprocessed data, labels and the indices of the removed samples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">target_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">resampling_target</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">cleansed_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cleanser</span> <span class="o">=</span> <span class="n">DataCleanser</span><span class="p">(</span>
+            <span class="n">target_shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">default_seq_len</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">upper_fault_threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">lower_fault_threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">nan_threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">should_resample</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">RESAMPLING_ALGORITHM</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">TARGET_SEQUENCE_LENGTH</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)),</span> <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="n">cleanser</span><span class="o">.</span><span class="n">should_cleanse</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]):</span>
+                <span class="n">cleansed_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+            <span class="c1"># Resample the loaded ECG data if desired.</span>
+            <span class="k">if</span> <span class="n">should_resample</span><span class="p">:</span>
+                <span class="n">target_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+                    <span class="n">algorithm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">resampling_algorithm</span><span class="p">,</span>
+                    <span class="n">target_rate</span><span class="o">=</span><span class="n">resampling_target</span><span class="p">,</span>
+                    <span class="n">interpolation_strategy</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">target_array</span> <span class="k">if</span> <span class="n">should_resample</span> <span class="k">else</span> <span class="n">data</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cleansed_indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">cleansed_indices</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">worker_id</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
+            <span class="s1">&#39;labels&#39;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span>
+            <span class="s1">&#39;removed_total&#39;</span><span class="p">:</span> <span class="n">cleanser</span><span class="o">.</span><span class="n">cleansed_total</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_get_src_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;ExtractedBeat Dataset needs to define source files.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MitbihExtractedBeatsPreprocessor"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.MitbihExtractedBeatsPreprocessor">[docs]</a><span class="k">class</span> <span class="nc">MitbihExtractedBeatsPreprocessor</span><span class="p">(</span><span class="n">ExtractedBeatsPreprocessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Preprocess the MITBIH dataset from `Kachuee et al. 2018 &lt;https://arxiv.org/abs/1805.00794&gt;`_.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_get_src_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;mitbih_train.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;mitbih_test.csv&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="PtbExtractedBeatsPreprocessor"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.PtbExtractedBeatsPreprocessor">[docs]</a><span class="k">class</span> <span class="nc">PtbExtractedBeatsPreprocessor</span><span class="p">(</span><span class="n">ExtractedBeatsPreprocessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Preprocess the PTB dataset from `Kachuee et al. 2018 &lt;https://arxiv.org/abs/1805.00794&gt;`_.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_get_src_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;ptbdb_abnormal.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;ptbdb_normal.csv&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="MitbihBeatganPreprocessor"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.MitbihBeatganPreprocessor">[docs]</a><span class="k">class</span> <span class="nc">MitbihBeatganPreprocessor</span><span class="p">(</span><span class="n">BasePreprocessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Preprocess the MITBIH dataset from `Zhou et al. 2019 &lt;https://www.ijcai.org/Proceedings/2019/0616.pdf&gt;`_.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MitbihBeatganPreprocessor.preprocess"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.MitbihBeatganPreprocessor.preprocess">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Preprocess the MITBIH BEATGAN dataset.</span>
+
+<span class="sd">        Since the data itself is already preprocessed according to the paper, data classes are</span>
+<span class="sd">        concatenated, reshaped and labeled according to the format used in ECGAN.</span>
+<span class="sd">        Data can be additionally resampled, additional cleansing is not supported.</span>
+
+<span class="sd">        It can be useful to remove the second dim (the second feature) since the leads</span>
+<span class="sd">        differ across many series.</span>
+
+<span class="sd">        .. warning:: The data has not been validated and might be erroneous.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Loading csv data to memory.&#39;</span><span class="p">)</span>
+        <span class="n">raw_healthy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;N_samples.npy&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">raw_healthy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">raw_anomalies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">raw_healthy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">raw_healthy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">abnormal_classes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">abnormal_class</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">abnormal_classes</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">abnormal_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_samples.npy&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">abnormal_class</span><span class="p">)))</span>
+            <span class="n">raw_anomalies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">raw_anomalies</span><span class="p">,</span> <span class="n">abnormal_data</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">abnormal_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">raw_healthy</span><span class="p">,</span> <span class="n">raw_anomalies</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># We assume that the data is already cleansed. It can be resampled if desired.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">TARGET_SEQUENCE_LENGTH</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting resampling to target length </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">TARGET_SEQUENCE_LENGTH</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">RESAMPLING_ALGORITHM</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_WORKERS</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+                    <span class="n">data_split</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+                    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess_worker</span><span class="p">,</span>
+                            <span class="n">args</span><span class="o">=</span><span class="p">(</span>
+                                <span class="n">data_split</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">TARGET_SEQUENCE_LENGTH</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">resampling_algorithm</span><span class="p">,</span>
+                                <span class="n">pos</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">)</span>
+                        <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
+                    <span class="p">]</span>
+                    <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+                    <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                    <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+                    <span class="n">output</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">output</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The number of labels and samples does not match.&#39;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Loaded (and resampled) data.&#39;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;Final dataset has </span><span class="si">{}</span><span class="s1"> samples with shape </span><span class="si">{}</span><span class="s1">. Class distribution: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_preprocess_worker</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">resampling_target</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">resample_algorithm</span><span class="p">:</span> <span class="n">SamplingAlgorithm</span><span class="p">,</span>
+        <span class="n">worker_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Worker method for resampling series.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: Unprocessed data array.</span>
+<span class="sd">            resample_algorithm: Resampling algorithm to be chosen.</span>
+<span class="sd">            resampling_target: Target size of resampling.</span>
+<span class="sd">            worker_id: ID of worker.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with worker index and dictionary containing</span>
+<span class="sd">            the resampled data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resampled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">resampling_target</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">resampled</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+                <span class="n">algorithm</span><span class="o">=</span><span class="n">resample_algorithm</span><span class="p">,</span>
+                <span class="n">target_rate</span><span class="o">=</span><span class="n">resampling_target</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">worker_id</span><span class="p">,</span> <span class="n">resampled</span></div>
+
+
+<div class="viewcode-block" id="ShaoxingPreprocessor"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.ShaoxingPreprocessor">[docs]</a><span class="k">class</span> <span class="nc">ShaoxingPreprocessor</span><span class="p">(</span><span class="n">BasePreprocessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Preprocess the Shaoxing dataset from `Zheng et al. 2020 &lt;https://www.nature.com/articles/s41597-020-0386-x&gt;`_.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ShaoxingPreprocessor.preprocess"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.ShaoxingPreprocessor.preprocess">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Start preprocessing the Shaoxing data and save it to disc.&quot;&quot;&quot;</span>
+        <span class="n">label_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;Diagnostics.xlsx&#39;</span><span class="p">)</span>
+        <span class="n">labels_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_labels</span><span class="p">(</span><span class="n">label_path</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Obtained list of labels and files to load.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ecg_data</span><span class="p">(</span>
+            <span class="n">labels_to_files</span><span class="o">=</span><span class="n">labels_to_files</span><span class="p">,</span>
+            <span class="n">window_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">WINDOW_LENGTH</span><span class="p">,</span>
+            <span class="n">window_step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">WINDOW_STEP_SIZE</span><span class="p">,</span>
+            <span class="n">resampling_algo</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">resampling_algorithm</span><span class="p">,</span>
+            <span class="n">resampling_threshold</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">TARGET_SEQUENCE_LENGTH</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_WORKERS</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The number of labels and samples does not match.&#39;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Loaded and cleansed data.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_impute_nans</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;Final dataset has </span><span class="si">{}</span><span class="s1"> samples with shape </span><span class="si">{}</span><span class="s1">. Class distribution: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_labels</span><span class="p">(</span><span class="n">label_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the list of labels, class labels are mapped to integers.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            label_path: Path to label file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple with encoded target vector and list of files that contain data matching the encoded versions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">label_path</span><span class="p">)</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;FileName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;FileName&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;FileName&#39;</span><span class="p">])</span>
+
+        <span class="n">label_encoding</span> <span class="o">=</span> <span class="n">ShaoxingDataset</span><span class="o">.</span><span class="n">beat_types</span>
+        <span class="n">file_names</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;FileName&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">rhythm_names</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Rhythm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">file</span><span class="p">,</span> <span class="n">rhythm</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">file_names</span><span class="p">,</span> <span class="n">rhythm_names</span><span class="p">):</span>
+            <span class="n">rhythm_label</span> <span class="o">=</span> <span class="n">label_encoding</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rhythm</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rhythm_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="n">rhythm_label</span><span class="p">,</span>
+                        <span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_get_ecg_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">labels_to_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
+        <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">window_step_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">resampling_algo</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SamplingAlgorithm</span><span class="p">],</span>
+        <span class="n">resampling_threshold</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the data files to memory, resample and concatenate them.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            labels_to_files: List of files to load.</span>
+<span class="sd">            window_length: Length of the windows that will be cut from the original length series.</span>
+<span class="sd">            window_step_size: Number of steps the sliding window approach should progress on each slicing point.</span>
+<span class="sd">            resampling_algo: Resampling algorithm to be chosen.</span>
+<span class="sd">            resampling_threshold: Target size of resampling.</span>
+<span class="sd">            num_workers: Number of workers to process in parallel.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Data with shape :code:`(num_samples, seq_len, num_features)` and labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">files_in_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;ECGDataDenoised&#39;</span> <span class="ow">in</span> <span class="n">files_in_dir</span><span class="p">:</span>
+            <span class="n">file_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;ECGDataDenoised&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;ECGData&#39;</span> <span class="ow">in</span> <span class="n">files_in_dir</span><span class="p">:</span>
+            <span class="n">file_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;ECGData&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;Directory does not contain a valid data directory.&#39;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">num_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess_worker</span><span class="p">,</span>
+                <span class="n">file_dir</span><span class="p">,</span>
+                <span class="n">resampling_algo</span><span class="p">,</span>
+                <span class="n">resampling_threshold</span><span class="p">,</span>
+                <span class="n">window_length</span><span class="p">,</span>
+                <span class="n">window_step_size</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">tqdm</span><span class="p">(</span>
+                    <span class="n">pool</span><span class="o">.</span><span class="n">imap</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">func</span><span class="p">,</span> <span class="n">iterable</span><span class="o">=</span><span class="n">labels_to_files</span><span class="p">),</span>
+                    <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">labels_to_files</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span> <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">])</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span> <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Length mismatch: Number of samples and labels are not &#39;</span>
+                <span class="s1">&#39;the same: </span><span class="si">{}</span><span class="s1"> and </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+            <span class="p">)</span>
+
+        <span class="n">num_removed</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;removed_total&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">])</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> samples were removed during cleansing process.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_removed</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">labels</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_preprocess_worker</span><span class="p">(</span>
+        <span class="n">file_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">resampling_algo</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SamplingAlgorithm</span><span class="p">],</span>
+        <span class="n">resampling_target</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">window_step_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">file_index</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Worker method for loading and resampling time series files.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_dir: Directory containing the files.</span>
+<span class="sd">            file_index: Tuple containing (label, file_name).</span>
+<span class="sd">            window_length: Length of the windows that will be cut from the original length series.</span>
+<span class="sd">            window_step_size: Number of steps the sliding window approach should progress on each slicing point.</span>
+<span class="sd">            resampling_algo: Resampling algorithm to be chosen.</span>
+<span class="sd">            resampling_target: Target size of resampling.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict containing data of shape :code:`(num_samples, seq_len, num_features)`,</span>
+<span class="sd">            labels, the indices of the removed files and the total number of removed files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">has_removed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">cleanser</span> <span class="o">=</span> <span class="n">DataCleanser</span><span class="p">(</span>
+            <span class="n">target_shape</span><span class="o">=</span><span class="p">(</span><span class="n">window_length</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+            <span class="n">upper_fault_threshold</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+            <span class="n">lower_fault_threshold</span><span class="o">=-</span><span class="mi">10000</span><span class="p">,</span>
+            <span class="n">nan_threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># If one row in the data doesn&#39;t match column number then a</span>
+        <span class="c1"># conversion warning is triggered. This warning is pointless</span>
+        <span class="c1"># as the missing values will only be marked as NaNs, which</span>
+        <span class="c1"># will be anyway removed if certain criteria are met</span>
+        <span class="c1"># --&gt; Suppress Conversion Warning</span>
+        <span class="n">ecg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_dir</span><span class="p">,</span> <span class="n">file_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+            <span class="n">usecols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">),</span>
+            <span class="n">invalid_raise</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Applies windowing to whole sequence</span>
+        <span class="n">windowed_ecgs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">seq_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">seq_idx</span> <span class="o">&lt;</span> <span class="mi">5000</span> <span class="o">-</span> <span class="n">window_length</span><span class="p">:</span>
+            <span class="n">windowed_ecg</span> <span class="o">=</span> <span class="n">ecg</span><span class="p">[</span><span class="n">seq_idx</span> <span class="p">:</span> <span class="n">seq_idx</span> <span class="o">+</span> <span class="n">window_length</span><span class="p">]</span>
+            <span class="n">seq_idx</span> <span class="o">+=</span> <span class="n">window_step_size</span>
+
+            <span class="c1"># Checks loaded file for different criteria</span>
+            <span class="c1"># File is only appended to dataset if all checks succeed</span>
+            <span class="k">if</span> <span class="n">cleanser</span><span class="o">.</span><span class="n">should_cleanse</span><span class="p">(</span><span class="n">windowed_ecg</span><span class="p">):</span>
+                <span class="n">has_removed</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Resample the loaded ECG data if required</span>
+            <span class="k">if</span> <span class="n">resampling_algo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">windowed_ecg</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">windowed_ecg</span><span class="p">,</span>
+                    <span class="n">algorithm</span><span class="o">=</span><span class="n">resampling_algo</span><span class="p">,</span>
+                    <span class="n">target_rate</span><span class="o">=</span><span class="n">resampling_target</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="n">windowed_ecg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">windowed_ecg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">windowed_ecgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">windowed_ecg</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">windowed_ecgs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">windowed_ecgs</span><span class="p">)</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">file_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">windowed_ecgs</span><span class="p">))]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">windowed_ecgs</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Number of loaded labels and ECGs in list does not match.&#39;</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
+            <span class="s1">&#39;labels&#39;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span>
+            <span class="s1">&#39;removed&#39;</span><span class="p">:</span> <span class="n">has_removed</span><span class="p">,</span>
+            <span class="s1">&#39;removed_total&#39;</span><span class="p">:</span> <span class="n">cleanser</span><span class="o">.</span><span class="n">cleansed_total</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="PreprocessorFactory"><a class="viewcode-back" href="../../../api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.PreprocessorFactory">[docs]</a><span class="k">class</span> <span class="nc">PreprocessorFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Meta module for creating preprocessor instances.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">PreprocessingConfig</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BasePreprocessor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the preprocessor defined in the configuration file.</span>
+
+<span class="sd">        Every preprocessor is determined by the dataset name, each dataset has</span>
+<span class="sd">        exactly one preprocessor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cfg: Configuration for preprocessors.</span>
+<span class="sd">            dataset: Name of dataset.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Instance of a Preprocessor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="n">MitbihDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s1">&#39;We do not support preprocessing the raw MITBIH dataset. &#39;</span>
+                <span class="s1">&#39;It has been downloaded in data/mitbih/raw and can be processed manually &#39;</span>
+                <span class="s1">&#39;(save the data in data/mitbih/processed/data.pkl and the labels in &#39;</span>
+                <span class="s1">&#39;data/mitbih/processed/label.pkl). To use a processed version of MITBIH, &#39;</span>
+                <span class="s1">&#39;please select &quot;mitbih_beats&quot; or &quot;mitbih_beatgan&quot;.&#39;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="n">MitbihExtractedBeatsDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MitbihExtractedBeatsPreprocessor</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="n">ShaoxingDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ShaoxingPreprocessor</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="n">MitbihBeatganDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MitbihBeatganPreprocessor</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="n">PTBExtractedBeatsDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PtbExtractedBeatsPreprocessor</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Preprocessing mode </span><span class="si">{0}</span><span class="s1"> is unknown.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

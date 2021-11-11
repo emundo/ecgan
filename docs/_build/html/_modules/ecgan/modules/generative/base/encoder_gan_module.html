@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.modules.generative.base.encoder_gan_module &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.modules.generative.base.encoder_gan_module</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.modules.generative.base.encoder_gan_module</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Base class for encoder based GANs.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">argmax</span><span class="p">,</span> <span class="n">histogram</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.config</span> <span class="kn">import</span> <span class="n">EncoderGANConfig</span>
+<span class="kn">from</span> <span class="nn">ecgan.evaluation.optimization</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">optimize_metric</span><span class="p">,</span>
+    <span class="n">optimize_svm</span><span class="p">,</span>
+    <span class="n">optimize_tau_single_error</span><span class="p">,</span>
+    <span class="n">retrieve_labels_from_weights</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ecgan.modules.generative.base.gan_module</span> <span class="kn">import</span> <span class="n">BaseGANModule</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.artifacts</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">FileArtifact</span><span class="p">,</span> <span class="n">ImageArtifact</span><span class="p">,</span> <span class="n">ValueArtifact</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">LossMetricType</span><span class="p">,</span> <span class="n">MetricType</span><span class="p">,</span> <span class="n">SklearnSVMKernels</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.distances</span> <span class="kn">import</span> <span class="n">L2Distance</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.interpolation</span> <span class="kn">import</span> <span class="n">latent_walk</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.miscellaneous</span> <span class="kn">import</span> <span class="n">load_model</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.sampler</span> <span class="kn">import</span> <span class="n">EncoderBasedGeneratorSampler</span><span class="p">,</span> <span class="n">FeatureDiscriminatorSampler</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.transformation</span> <span class="kn">import</span> <span class="n">MinMaxTransformation</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BaseEncoderGANModule"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule">[docs]</a><span class="k">class</span> <span class="nc">BaseEncoderGANModule</span><span class="p">(</span><span class="n">BaseGANModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for GANs with an autoencoder as generator.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cfg</span><span class="p">:</span> <span class="n">EncoderGANConfig</span><span class="p">,</span>
+        <span class="n">seq_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">EncoderGANConfig</span><span class="p">,</span> <span class="n">cfg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_inverse_mapping</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">cfg</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span>
+            <span class="n">seq_len</span><span class="o">=</span><span class="n">seq_len</span><span class="p">,</span>
+            <span class="n">num_channels</span><span class="o">=</span><span class="n">num_channels</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_encoder</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="c1"># Have to be set after data sampler has been added. Not possible upon creation.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples_labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svm_mu</span><span class="p">:</span> <span class="n">SVC</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_mu</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_mode</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># not currently supported via saved grid search - use svm_mu for improved results</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">encoder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encoder</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">discriminator_sampler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FeatureDiscriminatorSampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">FeatureDiscriminatorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discriminator_sampler</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">generator_sampler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EncoderBasedGeneratorSampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">EncoderBasedGeneratorSampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator_sampler</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_init_inverse_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;EncoderGANModule needs to implement the `_init_inverse_mapping` method.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">watch_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return models that should be watched during training.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">]</span>
+
+<div class="viewcode-block" id="BaseEncoderGANModule.training_step"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">batch</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Declare what the model should do during a training step using a given batch.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            batch: The batch of real data.</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            A dict containing the optimization metrics which shall be logged.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">real_data</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_train_step</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">disc_metric_collection</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">gen_metric_collection</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1">#########################################</span>
+            <span class="c1"># Update discriminator</span>
+            <span class="c1">#########################################</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">DISCRIMINATOR_ROUNDS</span><span class="p">):</span>
+                <span class="c1"># Retrieve losses and update gradients</span>
+                <span class="n">disc_losses</span><span class="p">,</span> <span class="n">disc_metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">criterion_disc</span><span class="p">(</span><span class="n">real_data</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">optim_disc</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">disc_losses</span><span class="p">)</span>
+                <span class="n">disc_metric_collection</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">disc_metrics</span><span class="p">)</span>
+
+            <span class="c1">#########################################</span>
+            <span class="c1"># Update generator</span>
+            <span class="c1">#########################################</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">GENERATOR_ROUNDS</span><span class="p">):</span>
+                <span class="c1"># Retrieve losses and update gradients internally</span>
+                <span class="n">gen_losses</span><span class="p">,</span> <span class="n">gen_metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">criterion_gen</span><span class="p">(</span><span class="n">real_data</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">optim_gen</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">gen_losses</span><span class="p">)</span>
+                <span class="n">gen_metric_collection</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">gen_metrics</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_train_step</span><span class="p">(</span><span class="n">disc_metrics</span><span class="o">=</span><span class="n">disc_metric_collection</span><span class="p">,</span> <span class="n">gen_metrics</span><span class="o">=</span><span class="n">gen_metric_collection</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Error during training: Config parameter was not correctly set: </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">err</span></div>
+
+    <span class="k">def</span> <span class="nf">_prepare_train_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Can be used to set dynamic variables.&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_evaluate_train_step</span><span class="p">(</span>  <span class="c1"># pylint: disable=R0201</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">disc_metrics</span><span class="p">:</span> <span class="n">LossMetricType</span><span class="p">,</span> <span class="n">gen_metrics</span><span class="p">:</span> <span class="n">LossMetricType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Can be used to evaluate data without impacting the training.</span>
+
+<span class="sd">        If multiple gen/disc rounds are used, the behavior of the metric logging and</span>
+<span class="sd">        this method is not sufficient in the current state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">disc_metrics</span> <span class="o">+</span> <span class="n">gen_metrics</span><span class="p">}</span>
+
+<div class="viewcode-block" id="BaseEncoderGANModule.validation_step"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.validation_step">[docs]</a>    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a validation step.</span>
+
+<span class="sd">        This method states the validation or inference process for one given batch.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            batch: Dictionary containing training tensors.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary with metrics to log (e.g. loss).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="p">,</span> <span class="n">FeatureDiscriminatorSampler</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Encoder based GANs currently require a feature discrimination implementation.&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+        <span class="n">l2_distance</span> <span class="o">=</span> <span class="n">L2Distance</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_fixed_samples</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">x_hat</span><span class="p">,</span> <span class="n">latent_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample_generator_encoder</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">features_fake</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample_features</span><span class="p">(</span><span class="n">x_hat</span><span class="p">)</span>
+            <span class="n">features_real</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator_sampler</span><span class="o">.</span><span class="n">sample_features</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">rec_error</span> <span class="o">=</span> <span class="n">l2_distance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">x_hat</span><span class="p">)</span>
+            <span class="n">disc_error</span> <span class="o">=</span> <span class="n">l2_distance</span><span class="p">(</span><span class="n">features_real</span><span class="p">,</span> <span class="n">features_fake</span><span class="p">)</span>
+
+        <span class="c1"># concatenate tensors to form tensors for all batches in one epoch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span><span class="p">,</span> <span class="n">rec_error</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latent_vectors_vali</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_vectors_vali</span><span class="p">,</span> <span class="n">latent_vector</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span><span class="p">,</span> <span class="n">disc_error</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">label</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_validation_results</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_get_validation_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;GANEncoder models need to implement `_get_validation_results` which will be logged.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BaseEncoderGANModule.on_epoch_end"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.on_epoch_end">[docs]</a>    <span class="k">def</span> <span class="nf">on_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sample_interval</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Every `sample_interval`-th epoch.</span>
+
+<span class="sd">        1. Sample the reconstruction of previously set fixed samples from the generator.</span>
+<span class="sd">        2. Walk through latent space to check how data changes when walking through latent space.</span>
+
+<span class="sd">        Every tenth epoch and for the last 30 epochs:</span>
+<span class="sd">        Check metrics using the optimization procedure for the reconstruction and discrimination loss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Min-max normalize error:</span>
+        <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxTransformation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">sample_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reconstruct_fixed_samples</span><span class="p">())</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Fixed samples not set correctly.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Interpolate through latent space for normal and abnormal samples</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_interpolation_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Normal Class&#39;</span><span class="p">))</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_interpolation_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;Abnormal Class&#39;</span><span class="p">))</span>
+
+            <span class="c1"># Save the latent norms of the data</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">FileArtifact</span><span class="p">(</span>
+                    <span class="s1">&#39;Latent vector distribution&#39;</span><span class="p">,</span>
+                    <span class="p">{</span>
+                        <span class="s1">&#39;latent_train&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_vectors_train</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span>
+                        <span class="s1">&#39;latent_vali&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_vectors_vali</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span>
+                        <span class="s1">&#39;labels&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span>
+                    <span class="p">},</span>
+                    <span class="s1">&#39;latent_data_</span><span class="si">{}</span><span class="s1">.pkl&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Get distribution of latent norm</span>
+            <span class="n">latent_norm_train</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_vectors_train</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;latent norm train. Shape </span><span class="si">{}</span><span class="s2">, mean </span><span class="si">{}</span><span class="s2">, median </span><span class="si">{}</span><span class="s2">, std </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">latent_norm_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">latent_norm_train</span><span class="p">),</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">latent_norm_train</span><span class="p">),</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">latent_norm_train</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">latent_norm_vali_abnormal</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_vectors_vali</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;latent norm vali.Shape </span><span class="si">{}</span><span class="s2">, mean </span><span class="si">{}</span><span class="s2">, median </span><span class="si">{}</span><span class="s2">, std </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">latent_norm_vali_abnormal</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">latent_norm_vali_abnormal</span><span class="p">),</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">latent_norm_vali_abnormal</span><span class="p">),</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">latent_norm_vali_abnormal</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ImageArtifact</span><span class="p">(</span>
+                    <span class="s1">&#39;Norm of latent vectors (normal train)&#39;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">create_histogram</span><span class="p">(</span>
+                        <span class="n">latent_norm_train</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="s1">&#39;Norm of latent vectors (normal train)&#39;</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ImageArtifact</span><span class="p">(</span>
+                    <span class="s1">&#39;Norm of latent vectors (abnormal validation)&#39;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">create_histogram</span><span class="p">(</span>
+                        <span class="n">latent_norm_vali_abnormal</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="s1">&#39;Norm of latent vectors (abnormal vali)&#39;</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Get train statistics</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValueArtifact</span><span class="p">(</span><span class="s1">&#39;latent/z_mean_min&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_vectors_train</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()))</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValueArtifact</span><span class="p">(</span><span class="s1">&#39;latent/z_mean_max&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_vectors_train</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">z_mu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">latent_norm_train</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="c1"># Approximate mode (median can be used as a simple alternative given the distribution scatters a lot)</span>
+            <span class="n">mode_count</span><span class="p">,</span> <span class="n">mode_val</span> <span class="o">=</span> <span class="n">histogram</span><span class="p">(</span><span class="n">latent_norm_train</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">z_mode</span> <span class="o">=</span> <span class="n">mode_val</span><span class="p">[</span><span class="n">argmax</span><span class="p">(</span><span class="n">mode_count</span><span class="p">)]</span>
+            <span class="c1"># Get euclidean distance from origin</span>
+            <span class="n">latent_norm_vali</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_vectors_vali</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># For each scaled norm: subtract mode of mu to approximately shift to center of chi distribution.</span>
+            <span class="n">scaled_latent_norm</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">((</span><span class="n">latent_norm_vali</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_mode</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+            <span class="c1"># Get anomaly scores:</span>
+            <span class="c1"># 1. SVM on reconstruction error, discrimination error and latent norm</span>
+            <span class="n">pred_latent_scaled</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">svm_mu</span> <span class="o">=</span> <span class="n">optimize_svm</span><span class="p">(</span>
+                <span class="n">MetricType</span><span class="o">.</span><span class="n">FSCORE</span><span class="p">,</span>
+                <span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                    <span class="n">scaled_latent_norm</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span>
+                <span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span>
+            <span class="p">)</span>
+
+            <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_metrics</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">pred_latent_scaled</span><span class="p">,</span> <span class="s1">&#39;svm/scaled_latent&#39;</span><span class="p">,</span> <span class="n">log_fscore</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_auroc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_mcc</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># 2. SVM on reconsturction error and discrimination error</span>
+            <span class="n">pred_minmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">svm</span> <span class="o">=</span> <span class="n">optimize_svm</span><span class="p">(</span>
+                <span class="n">MetricType</span><span class="o">.</span><span class="n">FSCORE</span><span class="p">,</span>
+                <span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                <span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span>
+            <span class="p">)</span>
+
+            <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_metrics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">pred_minmax</span><span class="p">,</span> <span class="s1">&#39;svm/minmax&#39;</span><span class="p">,</span> <span class="n">log_fscore</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_auroc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_mcc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">pred_linear_svm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">optimize_svm</span><span class="p">(</span>
+                <span class="n">MetricType</span><span class="o">.</span><span class="n">FSCORE</span><span class="p">,</span>
+                <span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                <span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span>
+                <span class="n">kernel</span><span class="o">=</span><span class="n">SklearnSVMKernels</span><span class="o">.</span><span class="n">LINEAR</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_metrics</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">pred_linear_svm</span><span class="p">,</span> <span class="s1">&#39;svm/linear&#39;</span><span class="p">,</span> <span class="n">log_fscore</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_auroc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log_mcc</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">mmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mmd</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValueArtifact</span><span class="p">(</span><span class="s1">&#39;generative_metric/mmd&#39;</span><span class="p">,</span> <span class="n">mmd</span><span class="p">))</span>
+            <span class="n">tstr_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tstr</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValueArtifact</span><span class="p">(</span><span class="s1">&#39;generative_metric/tstr&#39;</span><span class="p">,</span> <span class="n">tstr_dict</span><span class="p">))</span>
+
+            <span class="c1"># Evaluate lambda = 0, lambda=1 for anogan and gamma=1 for vaegan</span>
+            <span class="n">tau_range</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ValueArtifact</span><span class="p">(</span>
+                    <span class="s1">&#39;only_reconstruction_error&#39;</span><span class="p">,</span>
+                    <span class="n">optimize_tau_single_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">tau_range</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ValueArtifact</span><span class="p">(</span>
+                    <span class="s1">&#39;only_disc_error&#39;</span><span class="p">,</span>
+                    <span class="n">optimize_tau_single_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">tau_range</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ValueArtifact</span><span class="p">(</span>
+                    <span class="s1">&#39;only_latent_error&#39;</span><span class="p">,</span>
+                    <span class="n">optimize_tau_single_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">scaled_latent_norm</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">tau_range</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Optimize F-score every 10 epochs</span>
+        <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># if False:</span>
+            <span class="n">lambda_search_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()]</span>
+            <span class="n">best_params</span> <span class="o">=</span> <span class="n">optimize_metric</span><span class="p">(</span>
+                <span class="n">MetricType</span><span class="o">.</span><span class="n">FSCORE</span><span class="p">,</span>
+                <span class="n">errors</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">()],</span>
+                <span class="n">taus</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="n">params</span><span class="o">=</span><span class="n">lambda_search_range</span><span class="p">,</span>
+                <span class="n">ground_truth_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Best params: </span><span class="si">{}</span><span class="s2"> for data </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">best_params</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">best_params</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span> <span class="o">=</span> <span class="n">best_params</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ValueArtifact</span><span class="p">(</span>
+                    <span class="s1">&#39;grid/lambda_tau&#39;</span><span class="p">,</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">ValueArtifact</span><span class="p">(</span>
+                    <span class="s1">&#39;grid/lambda&#39;</span><span class="p">,</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">predictions</span> <span class="o">=</span> <span class="n">retrieve_labels_from_weights</span><span class="p">(</span>
+                <span class="n">errors</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reconstruction_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">discrimination_error</span><span class="o">.</span><span class="n">cpu</span><span class="p">()],</span>
+                <span class="n">tau</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">,</span>
+                <span class="n">weighting_params</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_metrics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">predictions</span><span class="p">,</span> <span class="s1">&#39;grid/lambda&#39;</span><span class="p">,</span> <span class="n">log_fscore</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_auroc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_mcc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_on_epoch_end_addition</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">sample_interval</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_internal_tensors</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">_on_epoch_end_addition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sample_interval</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]:</span>  <span class="c1"># pylint: disable=R0201,W0613</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">_reconstruct_fixed_samples</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageArtifact</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Visualize real (fixed) samples and the faked_samples which aim to reconstruct them.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Artifact containing a comparison of the real and reconstructed fixed samples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Fixed samples not set correctly.&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">faked_samples</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_sampler</span><span class="o">.</span><span class="n">sample_generator_encoder</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples</span><span class="p">)</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_fixed_samples</span><span class="p">,</span>
+                <span class="n">faked_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">faked_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_fixed_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_fixed_samples</span><span class="p">):</span>
+            <span class="n">samples</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">samples</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">faked_samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">labels</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">labels</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ImageArtifact</span><span class="p">(</span>
+            <span class="s1">&#39;Fixed Generator Samples&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">get_sampling_grid</span><span class="p">(</span>
+                <span class="n">samples</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="BaseEncoderGANModule.save_checkpoint"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.save_checkpoint">[docs]</a>    <span class="k">def</span> <span class="nf">save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return current model parameters.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;GEN&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+            <span class="s1">&#39;DIS&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+            <span class="s1">&#39;ENC&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+            <span class="s1">&#39;GEN_OPT&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">optim_gen</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+            <span class="s1">&#39;DIS_OPT&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">optim_disc</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+            <span class="s1">&#39;ANOMALY_DETECTION&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;SVM&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">svm</span><span class="p">,</span>
+                <span class="s1">&#39;LAMBDA&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">,</span>
+                <span class="s1">&#39;GAMMA&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">,</span>
+                <span class="s1">&#39;TAU&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">,</span>
+                <span class="s1">&#39;Z_MU&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_mu</span><span class="p">,</span>
+                <span class="s1">&#39;Z_MODE&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_mode</span><span class="p">,</span>
+                <span class="s1">&#39;SVM_MU&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">svm_mu</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="BaseEncoderGANModule.load"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_reference</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">load_optim</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a trained module from disk (file path) or wand reference.&quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="n">model_reference</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;GEN&#39;</span><span class="p">],</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;DIS&#39;</span><span class="p">],</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;ENC&#39;</span><span class="p">],</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">load_optim</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optim_gen</span><span class="o">.</span><span class="n">load_existing_optim</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;GEN_OPT&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optim_disc</span><span class="o">.</span><span class="n">load_existing_optim</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;DIS_OPT&#39;</span><span class="p">])</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Loading existing </span><span class="si">{0}</span><span class="s1"> model completed.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svm</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;ANOMALY_DETECTION&#39;</span><span class="p">][</span><span class="s1">&#39;SVM&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;ANOMALY_DETECTION&#39;</span><span class="p">][</span><span class="s1">&#39;TAU&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;ANOMALY_DETECTION&#39;</span><span class="p">][</span><span class="s1">&#39;LAMBDA&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;ANOMALY_DETECTION&#39;</span><span class="p">][</span><span class="s1">&#39;GAMMA&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_mu</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;ANOMALY_DETECTION&#39;</span><span class="p">][</span><span class="s1">&#39;Z_MU&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_mode</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;ANOMALY_DETECTION&#39;</span><span class="p">][</span><span class="s1">&#39;Z_MODE&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svm_mu</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;ANOMALY_DETECTION&#39;</span><span class="p">][</span><span class="s1">&#39;SVM_MU&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="BaseEncoderGANModule.set_fixed_samples"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.set_fixed_samples">[docs]</a>    <span class="k">def</span> <span class="nf">set_fixed_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the fixed samples of the module.</span>
+
+<span class="sd">        Utilized in validation_step or on_epoch_end to have comparable samples across epochs.</span>
+<span class="sd">        It is made sure that approximately the same amount of samples belong to</span>
+<span class="sd">        class 0 and 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fixed_samples_normal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vali_dataset_sampler</span><span class="o">.</span><span class="n">sample_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_fixed_samples</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">fixed_samples_anormal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vali_dataset_sampler</span><span class="o">.</span><span class="n">sample_class</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_fixed_samples</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_fixed_samples</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">fixed_samples_normal</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">fixed_samples_anormal</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_samples_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">fixed_samples_normal</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">fixed_samples_anormal</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_interpolation_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_sample</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageArtifact</span><span class="p">:</span>
+        <span class="n">interpolated_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_interpolated_samples</span><span class="p">(</span><span class="n">base_sample</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ImageArtifact</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> Interpolation Grid&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">class_name</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">get_sampling_grid</span><span class="p">(</span>
+                <span class="n">interpolated_samples</span><span class="p">,</span>
+                <span class="n">row_width</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+                <span class="n">scale_per_batch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">max_num_series</span><span class="o">=</span><span class="n">interpolated_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="BaseEncoderGANModule.get_interpolated_samples"><a class="viewcode-back" href="../../../../../api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.get_interpolated_samples">[docs]</a>    <span class="k">def</span> <span class="nf">get_interpolated_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Interpolate through latent space based on fixed samples.&quot;&quot;&quot;</span>
+        <span class="c1"># Investigate the latent space using one of the fixed samples and performing a latent walk.</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">_x_hat</span><span class="p">,</span> <span class="n">inverse_mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sample</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">sample</span><span class="p">)</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">inverse_mapping</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Standard error of latent space is </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">std</span><span class="p">))</span>
+            <span class="n">walk_space</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">std</span><span class="p">,</span> <span class="n">std</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+            <span class="n">interpolated_samples</span> <span class="o">=</span> <span class="n">latent_walk</span><span class="p">(</span>
+                <span class="n">inverse_mapping</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">,</span>
+                <span class="n">walk_range</span><span class="o">=</span><span class="n">walk_space</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">latent_dims</span><span class="o">=</span><span class="n">inverse_mapping</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">interpolated_samples</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

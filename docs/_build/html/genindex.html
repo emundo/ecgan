@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Index &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Index</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ | <a href="#Z"><strong>Z</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/anomaly_detection/detector/detector_factory.html#ecgan.anomaly_detection.detector.detector_factory.AnomalyDetectorFactory.__call__">__call__() (ecgan.anomaly_detection.detector.detector_factory.AnomalyDetectorFactory method)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/base_detector.html#ecgan.anomaly_detection.detector.base_detector.AnomalyDetector.__init__">__init__() (ecgan.anomaly_detection.detector.base_detector.AnomalyDetector method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/classification_detector.html#ecgan.anomaly_detection.detector.classification_detector.ArgmaxClassifierDetector.__init__">(ecgan.anomaly_detection.detector.classification_detector.ArgmaxClassifierDetector method)</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/classification_detector.html#ecgan.anomaly_detection.detector.classification_detector.ClassificationDetector.__init__">(ecgan.anomaly_detection.detector.classification_detector.ClassificationDetector method)</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.__init__">(ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector method)</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector.__init__">(ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector method)</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector.__init__">(ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/anomaly_detection/detector/detector_factory.html#ecgan.anomaly_detection.detector.detector_factory.AnomalyDetectorFactory.__weakref__">__weakref__ (ecgan.anomaly_detection.detector.detector_factory.AnomalyDetectorFactory attribute)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/base_detector.html#ecgan.anomaly_detection.detector.base_detector.AnomalyDetector._detect">_detect() (ecgan.anomaly_detection.detector.base_detector.AnomalyDetector method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/classification_detector.html#ecgan.anomaly_detection.detector.classification_detector.ArgmaxClassifierDetector._detect">(ecgan.anomaly_detection.detector.classification_detector.ArgmaxClassifierDetector method)</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._detect">(ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector method)</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector._detect">(ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/anomaly_detection/detector/base_detector.html#ecgan.anomaly_detection.detector.base_detector.AnomalyDetector._get_data_to_save">_get_data_to_save() (ecgan.anomaly_detection.detector.base_detector.AnomalyDetector method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/classification_detector.html#ecgan.anomaly_detection.detector.classification_detector.ClassificationDetector._get_data_to_save">(ecgan.anomaly_detection.detector.classification_detector.ClassificationDetector method)</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._get_data_to_save">(ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._optimize_metric">_optimize_metric() (ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector method)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector._reconstruct">_reconstruct() (ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector._reconstruct">(ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.AdaBelief">AdaBelief (class in ecgan.utils.optimizer)</a>
+</li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.Adam">Adam (class in ecgan.utils.optimizer)</a>
+</li>
+      <li><a href="api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InterpolationReconstructor.adapt_learning_rate">adapt_learning_rate() (ecgan.anomaly_detection.reconstruction.InterpolationReconstructor method)</a>
+</li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.advance_fold">advance_fold() (ecgan.evaluation.tracker.base_tracker.BaseTracker method)</a>
+</li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.advance_step">advance_step() (ecgan.evaluation.tracker.base_tracker.BaseTracker method)</a>
+</li>
+      <li><a href="api/modules/generative/beatgan.html#ecgan.modules.generative.aegan.AEGAN">AEGAN (class in ecgan.modules.generative.aegan)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.AEGANDiscriminatorLoss">AEGANDiscriminatorLoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.AEGANGeneratorLoss">AEGANGeneratorLoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.configs.AnomalyDetectionConfig">AnomalyDetectionConfig (class in ecgan.config.configs)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.AnomalyDetectionStrategies">AnomalyDetectionStrategies (class in ecgan.utils.custom_types)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/anomaly_detection/detector/base_detector.html#ecgan.anomaly_detection.detector.base_detector.AnomalyDetector">AnomalyDetector (class in ecgan.anomaly_detection.detector.base_detector)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/detector_factory.html#ecgan.anomaly_detection.detector.detector_factory.AnomalyDetectorFactory">AnomalyDetectorFactory (class in ecgan.anomaly_detection.detector.detector_factory)</a>
+</li>
+      <li><a href="api/anomaly_detection/anomaly_manager.html#ecgan.anomaly_detection.anomaly_manager.AnomalyManager">AnomalyManager (class in ecgan.anomaly_detection.anomaly_manager)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss.apply_gp">apply_gp() (ecgan.utils.losses.WassersteinDiscriminatorLoss static method)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.helpers.apply_input_normalization">apply_input_normalization() (in module ecgan.networks.helpers)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/classification_detector.html#ecgan.anomaly_detection.detector.classification_detector.ArgmaxClassifierDetector">ArgmaxClassifierDetector (class in ecgan.anomaly_detection.detector.classification_detector)</a>
+</li>
+      <li><a href="api/utils/artifacts.html#ecgan.utils.artifacts.Artifact">Artifact (class in ecgan.utils.artifacts)</a>
+</li>
+      <li><a href="api/utils/embeddings.html#ecgan.utils.embeddings.assert_and_reshape_dim">assert_and_reshape_dim() (in module ecgan.utils.embeddings)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.configs.InverseConfig.Attribs">Attribs (ecgan.config.configs.InverseConfig attribute)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.classification.AUROCMetric">AUROCMetric (class in ecgan.evaluation.metrics.classification)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/modules/classifiers/base.html#ecgan.modules.classifiers.base.BaseClassifier">BaseClassifier (class in ecgan.modules.classifiers.base)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.BaseCNNConfig">BaseCNNConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/training/datasets.html#ecgan.training.datasets.BaseDataset">BaseDataset (class in ecgan.training.datasets)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule">BaseEncoderGANModule (class in ecgan.modules.generative.base.encoder_gan_module)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule">BaseGANModule (class in ecgan.modules.generative.base.gan_module)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.generative_module.BaseGenerativeModule">BaseGenerativeModule (class in ecgan.modules.generative.base.generative_module)</a>
+</li>
+      <li><a href="api/modules/basemodule.html#ecgan.modules.base.BaseModule">BaseModule (class in ecgan.modules.base)</a>
+</li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer">BaseOptimizer (class in ecgan.utils.optimizer)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter">BasePlotter (class in ecgan.visualization.plotter)</a>
+</li>
+      <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.BasePreprocessor">BasePreprocessor (class in ecgan.preprocessing.preprocessor)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.BaseRNNConfig">BaseRNNConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.BaseSampler">BaseSampler (class in ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker">BaseTracker (class in ecgan.evaluation.tracker.base_tracker)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.BceDiscriminatorLoss">BceDiscriminatorLoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.BceGeneratorLoss">BceGeneratorLoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.BCELoss">BCELoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.beatgan.BeatganDiscriminator">BeatganDiscriminator (class in ecgan.networks.beatgan)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.beatgan.BeatganGenerator">BeatganGenerator (class in ecgan.networks.beatgan)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.beatgan.BeatganInverseEncoder">BeatganInverseEncoder (class in ecgan.networks.beatgan)</a>
+</li>
+      <li><a href="api/visualization/evaluation.html#ecgan.visualization.evaluation.boxplot">boxplot() (in module ecgan.visualization.evaluation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.calc_conv_output">calc_conv_output() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.calc_pool_output">calc_pool_output() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.classification.AUROCMetric.calculate">calculate() (ecgan.evaluation.metrics.classification.AUROCMetric method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.classification.ClassificationMetric.calculate">(ecgan.evaluation.metrics.classification.ClassificationMetric method)</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.classification.FScoreMetric.calculate">(ecgan.evaluation.metrics.classification.FScoreMetric method)</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.classification.MCCMetric.calculate">(ecgan.evaluation.metrics.classification.MCCMetric method)</a>
+</li>
+        <li><a href="api/utils/distances.html#ecgan.utils.distances.DistanceMetric.calculate">(ecgan.utils.distances.DistanceMetric method)</a>
+</li>
+        <li><a href="api/utils/distances.html#ecgan.utils.distances.L1Distance.calculate">(ecgan.utils.distances.L1Distance method)</a>
+</li>
+        <li><a href="api/utils/distances.html#ecgan.utils.distances.L2Distance.calculate">(ecgan.utils.distances.L2Distance method)</a>
+</li>
+        <li><a href="api/utils/distances.html#ecgan.utils.distances.MinkowskiDistance.calculate">(ecgan.utils.distances.MinkowskiDistance method)</a>
+</li>
+        <li><a href="api/utils/distances.html#ecgan.utils.distances.RGANMedianPairwiseDistance.calculate">(ecgan.utils.distances.RGANMedianPairwiseDistance method)</a>
+</li>
+        <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.CosineSimilarityCriterion.calculate">(ecgan.utils.reconstruction_criteria.CosineSimilarityCriterion method)</a>
+</li>
+        <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.RBFSimilarityCriterion.calculate">(ecgan.utils.reconstruction_criteria.RBFSimilarityCriterion method)</a>
+</li>
+        <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.RganMmdCriterion.calculate">(ecgan.utils.reconstruction_criteria.RganMmdCriterion method)</a>
+</li>
+        <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.SimilarityCriterions.calculate">(ecgan.utils.reconstruction_criteria.SimilarityCriterions method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/embeddings.html#ecgan.utils.embeddings.calculate_pca">calculate_pca() (in module ecgan.utils.embeddings)</a>
+</li>
+      <li><a href="api/utils/embeddings.html#ecgan.utils.embeddings.calculate_tsne">calculate_tsne() (in module ecgan.utils.embeddings)</a>
+</li>
+      <li><a href="api/utils/embeddings.html#ecgan.utils.embeddings.calculate_umap">calculate_umap() (in module ecgan.utils.embeddings)</a>
+</li>
+      <li><a href="api/preprocessing/cleansing.html#ecgan.preprocessing.cleansing.DataCleanser.check_for_dead_sensor">check_for_dead_sensor() (ecgan.preprocessing.cleansing.DataCleanser static method)</a>
+</li>
+      <li><a href="api/preprocessing/cleansing.html#ecgan.preprocessing.cleansing.DataCleanser.check_for_faulty_sensor">check_for_faulty_sensor() (ecgan.preprocessing.cleansing.DataCleanser method)</a>
+</li>
+      <li><a href="api/preprocessing/cleansing.html#ecgan.preprocessing.cleansing.DataCleanser.check_for_nan">check_for_nan() (ecgan.preprocessing.cleansing.DataCleanser method)</a>
+</li>
+      <li><a href="api/preprocessing/cleansing.html#ecgan.preprocessing.cleansing.DataCleanser.check_shape">check_shape() (ecgan.preprocessing.cleansing.DataCleanser method)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/detector_factory.html#ecgan.anomaly_detection.detector.detector_factory.AnomalyDetectorFactory.choose_class">choose_class() (ecgan.anomaly_detection.detector.detector_factory.AnomalyDetectorFactory static method)</a>
+
+      <ul>
+        <li><a href="api/config/index.html#ecgan.config.configs.DetectionConfigFactory.choose_class">(ecgan.config.configs.DetectionConfigFactory static method)</a>
+</li>
+        <li><a href="api/config/index.html#ecgan.config.configs.ModuleConfigFactory.choose_class">(ecgan.config.configs.ModuleConfigFactory static method)</a>
+</li>
+        <li><a href="api/config/index.html#ecgan.config.configs.PreprocessingConfigFactory.choose_class">(ecgan.config.configs.PreprocessingConfigFactory static method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetrieverFactory.choose_class">(ecgan.preprocessing.data_retrieval.DataRetrieverFactory static method)</a>
+</li>
+        <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.PlotterFactory.choose_class">(ecgan.visualization.plotter.PlotterFactory static method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/anomaly_detection/detector/classification_detector.html#ecgan.anomaly_detection.detector.classification_detector.ClassificationDetector">ClassificationDetector (class in ecgan.anomaly_detection.detector.classification_detector)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.classification.ClassificationMetric">ClassificationMetric (class in ecgan.evaluation.metrics.classification)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.classification.ClassificationMetricFactory">ClassificationMetricFactory (class in ecgan.evaluation.metrics.classification)</a>
+</li>
+      <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.classifier">classifier (ecgan.modules.classifiers.nn_classifier.NNClassifier property)</a>
+</li>
+      <li><a href="api/modules/classifiers/base.html#ecgan.modules.classifiers.base.BaseClassifier.classify">classify() (ecgan.modules.classifiers.base.BaseClassifier method)</a>
+
+      <ul>
+        <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.classify">(ecgan.modules.classifiers.nn_classifier.NNClassifier method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.close">close() (ecgan.evaluation.tracker.base_tracker.BaseTracker method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.close">(ecgan.evaluation.tracker.local_tracker.LocalTracker method)</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.close">(ecgan.evaluation.tracker.wb_tracker.WBTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.CNNClassifier">CNNClassifier (class in ecgan.modules.classifiers.nn_classifier)</a>
+</li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.collate_metrics">collate_metrics() (ecgan.evaluation.tracker.base_tracker.BaseTracker static method)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.configs.Config">Config (class in ecgan.config.configs)</a>
+</li>
+      <li><a href="api/utils/parser.html#ecgan.utils.parser.config_parser">config_parser() (in module ecgan.utils.parser)</a>
+</li>
+      <li><a href="api/utils/configurable.html#ecgan.utils.configurable.Configurable">Configurable (class in ecgan.utils.configurable)</a>
+</li>
+      <li><a href="api/utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule">ConfigurableTorchModule (class in ecgan.utils.configurable)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/classification_detector.html#ecgan.anomaly_detection.detector.classification_detector.ArgmaxClassifierDetector.configure">configure() (ecgan.anomaly_detection.detector.classification_detector.ArgmaxClassifierDetector static method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.configure">(ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector static method)</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector.configure">(ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector static method)</a>
+</li>
+        <li><a href="api/config/index.html#ecgan.config.configs.AnomalyDetectionConfig.configure">(ecgan.config.configs.AnomalyDetectionConfig static method)</a>
+</li>
+        <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.PreprocessingConfig.configure">(ecgan.config.dataclasses.PreprocessingConfig static method)</a>
+</li>
+        <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.SinePreprocessingConfig.configure">(ecgan.config.dataclasses.SinePreprocessingConfig static method)</a>
+</li>
+        <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.SyntheticPreprocessingConfig.configure">(ecgan.config.dataclasses.SyntheticPreprocessingConfig static method)</a>
+</li>
+        <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.TrainerConfig.configure">(ecgan.config.dataclasses.TrainerConfig static method)</a>
+</li>
+        <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.CNNClassifier.configure">(ecgan.modules.classifiers.nn_classifier.CNNClassifier static method)</a>
+</li>
+        <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.RNNClassifier.configure">(ecgan.modules.classifiers.nn_classifier.RNNClassifier static method)</a>
+</li>
+        <li><a href="api/modules/generative/beatgan.html#ecgan.modules.generative.aegan.AEGAN.configure">(ecgan.modules.generative.aegan.AEGAN static method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.configure">(ecgan.modules.generative.base.gan_module.BaseGANModule static method)</a>
+</li>
+        <li><a href="api/modules/generative/dcgan.html#ecgan.modules.generative.dcgan.DCGAN.configure">(ecgan.modules.generative.dcgan.DCGAN static method)</a>
+</li>
+        <li><a href="api/modules/generative/ecgan.html#ecgan.modules.generative.rdcgan.RDCGAN.configure">(ecgan.modules.generative.rdcgan.RDCGAN static method)</a>
+</li>
+        <li><a href="api/modules/generative/rgan.html#ecgan.modules.generative.rgan.RGAN.configure">(ecgan.modules.generative.rgan.RGAN static method)</a>
+</li>
+        <li><a href="api/modules/generative/vaegan.html#ecgan.modules.generative.vaegan.VAEGAN.configure">(ecgan.modules.generative.vaegan.VAEGAN static method)</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/vanilla_inverse_mapping.html#ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping.configure">(ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.beatgan.BeatganDiscriminator.configure">(ecgan.networks.beatgan.BeatganDiscriminator static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.beatgan.BeatganGenerator.configure">(ecgan.networks.beatgan.BeatganGenerator static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.beatgan.BeatganInverseEncoder.configure">(ecgan.networks.beatgan.BeatganInverseEncoder static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.cnn.ConvolutionalNeuralNetwork.configure">(ecgan.networks.cnn.ConvolutionalNeuralNetwork static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.cnn.DownsampleCNN.configure">(ecgan.networks.cnn.DownsampleCNN static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.dcgan.DCGANDiscriminator.configure">(ecgan.networks.dcgan.DCGANDiscriminator static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.dcgan.DCGANGenerator.configure">(ecgan.networks.dcgan.DCGANGenerator static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.rgan.RGANDiscriminator.configure">(ecgan.networks.rgan.RGANDiscriminator static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.rgan.RGANGenerator.configure">(ecgan.networks.rgan.RGANGenerator static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.rnn.RecurrentNeuralNetwork.configure">(ecgan.networks.rnn.RecurrentNeuralNetwork static method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.vaegan.VAEEncoder.configure">(ecgan.networks.vaegan.VAEEncoder static method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetriever.configure">(ecgan.preprocessing.data_retrieval.DataRetriever static method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever.configure">(ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever static method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihDataRetriever.configure">(ecgan.preprocessing.data_retrieval.MitbihDataRetriever static method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihExtractedBeatsDataRetriever.configure">(ecgan.preprocessing.data_retrieval.MitbihExtractedBeatsDataRetriever static method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.PtbExtractedBeatsDataRetriever.configure">(ecgan.preprocessing.data_retrieval.PtbExtractedBeatsDataRetriever static method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever.configure">(ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever static method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.SineDataRetriever.configure">(ecgan.preprocessing.data_retrieval.SineDataRetriever static method)</a>
+</li>
+        <li><a href="api/utils/configurable.html#ecgan.utils.configurable.Configurable.configure">(ecgan.utils.configurable.Configurable static method)</a>
+</li>
+        <li><a href="api/utils/configurable.html#ecgan.utils.configurable.ConfigurableTorchModule.configure">(ecgan.utils.configurable.ConfigurableTorchModule static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.AEGANDiscriminatorLoss.configure">(ecgan.utils.losses.AEGANDiscriminatorLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.AEGANGeneratorLoss.configure">(ecgan.utils.losses.AEGANGeneratorLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.BceDiscriminatorLoss.configure">(ecgan.utils.losses.BceDiscriminatorLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.BceGeneratorLoss.configure">(ecgan.utils.losses.BceGeneratorLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.BCELoss.configure">(ecgan.utils.losses.BCELoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.CrossEntropyLoss.configure">(ecgan.utils.losses.CrossEntropyLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.GANBaseLoss.configure">(ecgan.utils.losses.GANBaseLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.KLLoss.configure">(ecgan.utils.losses.KLLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.L2Loss.configure">(ecgan.utils.losses.L2Loss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.SupervisedLoss.configure">(ecgan.utils.losses.SupervisedLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.VAEGANGeneratorLoss.configure">(ecgan.utils.losses.VAEGANGeneratorLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss.configure">(ecgan.utils.losses.WassersteinDiscriminatorLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.WassersteinGeneratorLoss.configure">(ecgan.utils.losses.WassersteinGeneratorLoss static method)</a>
+</li>
+        <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.AdaBelief.configure">(ecgan.utils.optimizer.AdaBelief static method)</a>
+</li>
+        <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.Adam.configure">(ecgan.utils.optimizer.Adam static method)</a>
+</li>
+        <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer.configure">(ecgan.utils.optimizer.BaseOptimizer static method)</a>
+</li>
+        <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.Momentum.configure">(ecgan.utils.optimizer.Momentum static method)</a>
+</li>
+        <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.RMSprop.configure">(ecgan.utils.optimizer.RMSprop static method)</a>
+</li>
+        <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.StochasticGradientDescent.configure">(ecgan.utils.optimizer.StochasticGradientDescent static method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/networks/index.html#ecgan.networks.helpers.conv1d_block">conv1d_block() (in module ecgan.networks.helpers)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.helpers.conv1d_trans_block">conv1d_trans_block() (in module ecgan.networks.helpers)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.helpers.conv_norm_relu">conv_norm_relu() (in module ecgan.networks.helpers)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.convert_wandb_config">convert_wandb_config() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.cnn.ConvolutionalNeuralNetwork">ConvolutionalNeuralNetwork (class in ecgan.networks.cnn)</a>
+</li>
+      <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.CosineSimilarityCriterion">CosineSimilarityCriterion (class in ecgan.utils.reconstruction_criteria)</a>
+</li>
+      <li><a href="api/utils/label.html#ecgan.utils.label.count_nonzero">count_nonzero() (in module ecgan.utils.label)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.helpers.create_5_hidden_layer_convnet">create_5_hidden_layer_convnet() (in module ecgan.networks.helpers)</a>
+</li>
+      <li><a href="api/anomaly_detection/anomaly_manager.html#ecgan.anomaly_detection.anomaly_manager.AnomalyManager.create_embedding">create_embedding() (ecgan.anomaly_detection.anomaly_manager.AnomalyManager method)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.create_error_plot">create_error_plot() (ecgan.visualization.plotter.BasePlotter static method)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.create_histogram">create_histogram() (ecgan.visualization.plotter.BasePlotter static method)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.create_plot">create_plot() (ecgan.visualization.plotter.BasePlotter method)</a>
+
+      <ul>
+        <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.FourierPlotter.create_plot">(ecgan.visualization.plotter.FourierPlotter method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/splitting.html#ecgan.utils.splitting.create_splits">create_splits() (in module ecgan.utils.splitting)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.helpers.create_transpose_conv_net">create_transpose_conv_net() (in module ecgan.networks.helpers)</a>
+</li>
+      <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.criterion">criterion (ecgan.modules.classifiers.nn_classifier.NNClassifier property)</a>
+</li>
+      <li><a href="api/modules/generative/beatgan.html#ecgan.modules.generative.aegan.AEGAN.criterion_disc">criterion_disc (ecgan.modules.generative.aegan.AEGAN property)</a>
+
+      <ul>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.criterion_disc">(ecgan.modules.generative.base.gan_module.BaseGANModule property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/modules/generative/beatgan.html#ecgan.modules.generative.aegan.AEGAN.criterion_gen">criterion_gen (ecgan.modules.generative.aegan.AEGAN property)</a>
+
+      <ul>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.criterion_gen">(ecgan.modules.generative.base.gan_module.BaseGANModule property)</a>
+</li>
+        <li><a href="api/modules/generative/vaegan.html#ecgan.modules.generative.vaegan.VAEGAN.criterion_gen">(ecgan.modules.generative.vaegan.VAEGAN property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.CrossEntropyLoss">CrossEntropyLoss (class in ecgan.utils.losses)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/preprocessing/cleansing.html#ecgan.preprocessing.cleansing.DataCleanser">DataCleanser (class in ecgan.preprocessing.cleansing)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetriever">DataRetriever (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetrieverFactory">DataRetrieverFactory (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.DataSampler">DataSampler (class in ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/utils/datasets.html#ecgan.utils.datasets.Dataset">Dataset (class in ecgan.utils.datasets)</a>
+</li>
+      <li><a href="api/utils/datasets.html#ecgan.utils.datasets.DatasetFactory">DatasetFactory (class in ecgan.utils.datasets)</a>
+</li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.DataTransformation">DataTransformation (class in ecgan.utils.transformation)</a>
+</li>
+      <li><a href="api/modules/generative/dcgan.html#ecgan.modules.generative.dcgan.DCGAN">DCGAN (class in ecgan.modules.generative.dcgan)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.dcgan.DCGANDiscriminator">DCGANDiscriminator (class in ecgan.networks.dcgan)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.dcgan.DCGANGenerator">DCGANGenerator (class in ecgan.networks.dcgan)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/base_detector.html#ecgan.anomaly_detection.detector.base_detector.AnomalyDetector.detect">detect() (ecgan.anomaly_detection.detector.base_detector.AnomalyDetector method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.detect">(ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector method)</a>
+</li>
+        <li><a href="api/manager.html#ecgan.manager.detect">(in module ecgan.manager)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/parser.html#ecgan.utils.parser.detection_parser">detection_parser() (in module ecgan.utils.parser)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.DetectionConfig">DetectionConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.configs.DetectionConfigFactory">DetectionConfigFactory (class in ecgan.config.configs)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.FeatureMatchingInferenceDiscriminator.discriminate">discriminate() (ecgan.anomaly_detection.anomaly_assessment.FeatureMatchingInferenceDiscriminator method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.InferenceDiscriminator.discriminate">(ecgan.anomaly_detection.anomaly_assessment.InferenceDiscriminator method)</a>
+</li>
+        <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.LogInferenceDiscriminator.discriminate">(ecgan.anomaly_detection.anomaly_assessment.LogInferenceDiscriminator method)</a>
+</li>
+        <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.RawInferenceDiscriminator.discriminate">(ecgan.anomaly_detection.anomaly_assessment.RawInferenceDiscriminator method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.DiscriminationStrategy">DiscriminationStrategy (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.discriminator">discriminator (ecgan.modules.generative.base.gan_module.BaseGANModule property)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.discriminator_sampler">discriminator_sampler (ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule property)</a>
+
+      <ul>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.discriminator_sampler">(ecgan.modules.generative.base.gan_module.BaseGANModule property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.DiscriminatorFactory">DiscriminatorFactory (class in ecgan.anomaly_detection.anomaly_assessment)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.DiscriminatorSampler">DiscriminatorSampler (class in ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/utils/distances.html#ecgan.utils.distances.DistanceMetric">DistanceMetric (class in ecgan.utils.distances)</a>
+</li>
+      <li><a href="api/preprocessing/sampling.html#ecgan.preprocessing.sampling.downsample_largest_triangle_three_buckets">downsample_largest_triangle_three_buckets() (in module ecgan.preprocessing.sampling)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.cnn.DownsampleCNN">DownsampleCNN (class in ecgan.networks.cnn)</a>
+</li>
+      <li><a href="api/preprocessing/sampling.html#ecgan.preprocessing.sampling.downsampling_fixed_sample_rate">downsampling_fixed_sample_rate() (in module ecgan.preprocessing.sampling)</a>
+</li>
+      <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.Embedder.draw_interpolation_path">draw_interpolation_path() (ecgan.anomaly_detection.embedder.Embedder method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.UMAPEmbedder.draw_interpolation_path">(ecgan.anomaly_detection.embedder.UMAPEmbedder method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    ecgan.anomaly_detection.anomaly_assessment
+
+      <ul>
+        <li><a href="api/anomaly_detection/anomaly_assessment.html#module-ecgan.anomaly_detection.anomaly_assessment">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.anomaly_detection.anomaly_manager
+
+      <ul>
+        <li><a href="api/anomaly_detection/anomaly_manager.html#module-ecgan.anomaly_detection.anomaly_manager">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.anomaly_detection.detector
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/index.html#module-ecgan.anomaly_detection.detector">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.anomaly_detection.detector.base_detector
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/base_detector.html#module-ecgan.anomaly_detection.detector.base_detector">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.anomaly_detection.detector.classification_detector
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/classification_detector.html#module-ecgan.anomaly_detection.detector.classification_detector">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.anomaly_detection.detector.detector_factory
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/detector_factory.html#module-ecgan.anomaly_detection.detector.detector_factory">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.anomaly_detection.detector.reconstruction_detector
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#module-ecgan.anomaly_detection.detector.reconstruction_detector">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.anomaly_detection.embedder
+
+      <ul>
+        <li><a href="api/anomaly_detection/embedder.html#module-ecgan.anomaly_detection.embedder">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.anomaly_detection.reconstruction
+
+      <ul>
+        <li><a href="api/anomaly_detection/reconstruction.html#module-ecgan.anomaly_detection.reconstruction">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.cli
+
+      <ul>
+        <li><a href="api/cli.html#module-ecgan.cli">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.config
+
+      <ul>
+        <li><a href="api/config/index.html#module-ecgan.config">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.config.configs
+
+      <ul>
+        <li><a href="api/config/index.html#module-ecgan.config.configs">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.config.dataclasses
+
+      <ul>
+        <li><a href="api/config/dataclasses.html#module-ecgan.config.dataclasses">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.config.global_cfg
+
+      <ul>
+        <li><a href="api/config/global_configs.html#module-ecgan.config.global_cfg">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.config.helpers
+
+      <ul>
+        <li><a href="api/config/index.html#module-ecgan.config.helpers">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.config.initialization
+
+      <ul>
+        <li><a href="api/config/initialization.html#module-ecgan.config.initialization">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.config.nested_dataclass
+
+      <ul>
+        <li><a href="api/config/nested_dataclasses.html#module-ecgan.config.nested_dataclass">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.metrics
+
+      <ul>
+        <li><a href="api/evaluation/metrics.html#module-ecgan.evaluation.metrics">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.metrics.classification
+
+      <ul>
+        <li><a href="api/evaluation/metrics.html#module-ecgan.evaluation.metrics.classification">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.metrics.mmd
+
+      <ul>
+        <li><a href="api/evaluation/metrics.html#module-ecgan.evaluation.metrics.mmd">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.metrics.tstr
+
+      <ul>
+        <li><a href="api/evaluation/metrics.html#module-ecgan.evaluation.metrics.tstr">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.optimization
+
+      <ul>
+        <li><a href="api/evaluation/optimization.html#module-ecgan.evaluation.optimization">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.tracker
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.tracker.base_tracker
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker.base_tracker">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.tracker.local_tracker
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker.local_tracker">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.tracker.tracker_factory
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker.tracker_factory">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.evaluation.tracker.wb_tracker
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker.wb_tracker">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.manager
+
+      <ul>
+        <li><a href="api/manager.html#module-ecgan.manager">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.base
+
+      <ul>
+        <li><a href="api/modules/basemodule.html#module-ecgan.modules.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.classifiers.base
+
+      <ul>
+        <li><a href="api/modules/classifiers/base.html#module-ecgan.modules.classifiers.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.classifiers.nn_classifier
+
+      <ul>
+        <li><a href="api/modules/classifiers/nn_classifier.html#module-ecgan.modules.classifiers.nn_classifier">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.generative.aegan
+
+      <ul>
+        <li><a href="api/modules/generative/beatgan.html#module-ecgan.modules.generative.aegan">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.generative.base.encoder_gan_module
+
+      <ul>
+        <li><a href="api/modules/generative/base.html#module-ecgan.modules.generative.base.encoder_gan_module">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.generative.base.gan_module
+
+      <ul>
+        <li><a href="api/modules/generative/base.html#module-ecgan.modules.generative.base.gan_module">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.generative.base.generative_module
+
+      <ul>
+        <li><a href="api/modules/generative/base.html#module-ecgan.modules.generative.base.generative_module">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.generative.dcgan
+
+      <ul>
+        <li><a href="api/modules/generative/dcgan.html#module-ecgan.modules.generative.dcgan">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.generative.rdcgan
+
+      <ul>
+        <li><a href="api/modules/generative/ecgan.html#module-ecgan.modules.generative.rdcgan">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.generative.rgan
+
+      <ul>
+        <li><a href="api/modules/generative/rgan.html#module-ecgan.modules.generative.rgan">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.generative.vaegan
+
+      <ul>
+        <li><a href="api/modules/generative/vaegan.html#module-ecgan.modules.generative.vaegan">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.inverse_mapping.inverse_mapping
+
+      <ul>
+        <li><a href="api/modules/inverse_mapping/inverse_mapping.html#module-ecgan.modules.inverse_mapping.inverse_mapping">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.inverse_mapping.inversion
+
+      <ul>
+        <li><a href="api/modules/inverse_mapping/inversion.html#module-ecgan.modules.inverse_mapping.inversion">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.modules.inverse_mapping.vanilla_inverse_mapping
+
+      <ul>
+        <li><a href="api/modules/inverse_mapping/vanilla_inverse_mapping.html#module-ecgan.modules.inverse_mapping.vanilla_inverse_mapping">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.networks
+
+      <ul>
+        <li><a href="api/networks/index.html#module-ecgan.networks">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.networks.beatgan
+
+      <ul>
+        <li><a href="api/networks/index.html#module-ecgan.networks.beatgan">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    ecgan.networks.cnn
+
+      <ul>
+        <li><a href="api/networks/index.html#module-ecgan.networks.cnn">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.networks.dcgan
+
+      <ul>
+        <li><a href="api/networks/index.html#module-ecgan.networks.dcgan">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.networks.helpers
+
+      <ul>
+        <li><a href="api/networks/index.html#module-ecgan.networks.helpers">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.networks.rgan
+
+      <ul>
+        <li><a href="api/networks/index.html#module-ecgan.networks.rgan">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.networks.rnn
+
+      <ul>
+        <li><a href="api/networks/index.html#module-ecgan.networks.rnn">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.networks.vaegan
+
+      <ul>
+        <li><a href="api/networks/index.html#module-ecgan.networks.vaegan">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.preprocessing
+
+      <ul>
+        <li><a href="api/preprocessing/index.html#module-ecgan.preprocessing">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.preprocessing.cleansing
+
+      <ul>
+        <li><a href="api/preprocessing/cleansing.html#module-ecgan.preprocessing.cleansing">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.preprocessing.data_retrieval
+
+      <ul>
+        <li><a href="api/preprocessing/data_retrieval.html#module-ecgan.preprocessing.data_retrieval">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.preprocessing.preprocessor
+
+      <ul>
+        <li><a href="api/preprocessing/preprocessor.html#module-ecgan.preprocessing.preprocessor">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.preprocessing.sampling
+
+      <ul>
+        <li><a href="api/preprocessing/sampling.html#module-ecgan.preprocessing.sampling">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.training
+
+      <ul>
+        <li><a href="api/training/index.html#module-ecgan.training">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.training.datasets
+
+      <ul>
+        <li><a href="api/training/datasets.html#module-ecgan.training.datasets">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.training.trainer
+
+      <ul>
+        <li><a href="api/training/trainer.html#module-ecgan.training.trainer">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.artifacts
+
+      <ul>
+        <li><a href="api/utils/artifacts.html#module-ecgan.utils.artifacts">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.configurable
+
+      <ul>
+        <li><a href="api/utils/configurable.html#module-ecgan.utils.configurable">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.custom_types
+
+      <ul>
+        <li><a href="api/utils/custom_types.html#module-ecgan.utils.custom_types">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.datasets
+
+      <ul>
+        <li><a href="api/utils/datasets.html#module-ecgan.utils.datasets">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.distances
+
+      <ul>
+        <li><a href="api/utils/distances.html#module-ecgan.utils.distances">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.distributions
+
+      <ul>
+        <li><a href="api/utils/distributions.html#module-ecgan.utils.distributions">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.embeddings
+
+      <ul>
+        <li><a href="api/utils/embeddings.html#module-ecgan.utils.embeddings">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.interpolation
+
+      <ul>
+        <li><a href="api/utils/interpolation.html#module-ecgan.utils.interpolation">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.label
+
+      <ul>
+        <li><a href="api/utils/label.html#module-ecgan.utils.label">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.layers
+
+      <ul>
+        <li><a href="api/utils/layers.html#module-ecgan.utils.layers">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.log
+
+      <ul>
+        <li><a href="api/utils/log.html#module-ecgan.utils.log">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.losses
+
+      <ul>
+        <li><a href="api/utils/losses.html#module-ecgan.utils.losses">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.miscellaneous
+
+      <ul>
+        <li><a href="api/utils/miscellaneous.html#module-ecgan.utils.miscellaneous">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.optimizer
+
+      <ul>
+        <li><a href="api/utils/optimizer.html#module-ecgan.utils.optimizer">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.parser
+
+      <ul>
+        <li><a href="api/utils/parser.html#module-ecgan.utils.parser">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.plotting
+
+      <ul>
+        <li><a href="api/utils/plotting.html#module-ecgan.utils.plotting">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.reconstruction_criteria
+
+      <ul>
+        <li><a href="api/utils/reconstruction_criteria.html#module-ecgan.utils.reconstruction_criteria">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.sampler
+
+      <ul>
+        <li><a href="api/utils/sampler.html#module-ecgan.utils.sampler">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.splitting
+
+      <ul>
+        <li><a href="api/utils/splitting.html#module-ecgan.utils.splitting">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.timer
+
+      <ul>
+        <li><a href="api/utils/timer.html#module-ecgan.utils.timer">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.utils.transformation
+
+      <ul>
+        <li><a href="api/utils/transformation.html#module-ecgan.utils.transformation">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.visualization
+
+      <ul>
+        <li><a href="api/visualization/index.html#module-ecgan.visualization">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.visualization.evaluation
+
+      <ul>
+        <li><a href="api/visualization/evaluation.html#module-ecgan.visualization.evaluation">module</a>
+</li>
+      </ul></li>
+      <li>
+    ecgan.visualization.plotter
+
+      <ul>
+        <li><a href="api/visualization/plotter.html#module-ecgan.visualization.plotter">module</a>
+</li>
+      </ul></li>
+      <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.Embedder.embed">embed() (ecgan.anomaly_detection.embedder.Embedder method)</a>
+</li>
+      <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.Embedder.embed_test">embed_test() (ecgan.anomaly_detection.embedder.Embedder method)</a>
+</li>
+      <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.Embedder">Embedder (class in ecgan.anomaly_detection.embedder)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.EncoderBasedGeneratorSampler">EncoderBasedGeneratorSampler (class in ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.EncoderDecoderSampler">EncoderDecoderSampler (class in ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/anomaly_detection/anomaly_manager.html#ecgan.anomaly_detection.anomaly_manager.AnomalyManager.evaluate_performance">evaluate_performance() (ecgan.anomaly_detection.anomaly_manager.AnomalyManager method)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever.extract_data">extract_data() (ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever method)</a>
+
+      <ul>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever.extract_data">(ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.UrlDataRetriever.extract_data">(ecgan.preprocessing.data_retrieval.UrlDataRetriever method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor">ExtractedBeatsPreprocessor (class in ecgan.preprocessing.preprocessor)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.FeatureDiscriminatorSampler">FeatureDiscriminatorSampler (class in ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.FeatureMatchingInferenceDiscriminator">FeatureMatchingInferenceDiscriminator (class in ecgan.anomaly_detection.anomaly_assessment)</a>
+</li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.FFTTransformation">FFTTransformation (class in ecgan.utils.transformation)</a>
+</li>
+      <li><a href="api/utils/artifacts.html#ecgan.utils.artifacts.FileArtifact">FileArtifact (class in ecgan.utils.artifacts)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRClassifier.fit">fit() (ecgan.evaluation.metrics.tstr.TSTRClassifier method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRCNN.fit">(ecgan.evaluation.metrics.tstr.TSTRCNN method)</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRRandomForest.fit">(ecgan.evaluation.metrics.tstr.TSTRRandomForest method)</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRSVM.fit">(ecgan.evaluation.metrics.tstr.TSTRSVM method)</a>
+</li>
+        <li><a href="api/training/trainer.html#ecgan.training.trainer.Trainer.fit">(ecgan.training.trainer.Trainer method)</a>
+</li>
+        <li><a href="api/utils/transformation.html#ecgan.utils.transformation.DataTransformation.fit">(ecgan.utils.transformation.DataTransformation method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.DataTransformation.fit_transform">fit_transform() (ecgan.utils.transformation.DataTransformation method)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.beatgan.BeatganDiscriminator.forward">forward() (ecgan.networks.beatgan.BeatganDiscriminator method)</a>
+
+      <ul>
+        <li><a href="api/networks/index.html#ecgan.networks.beatgan.BeatganGenerator.forward">(ecgan.networks.beatgan.BeatganGenerator method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.beatgan.BeatganInverseEncoder.forward">(ecgan.networks.beatgan.BeatganInverseEncoder method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.cnn.ConvolutionalNeuralNetwork.forward">(ecgan.networks.cnn.ConvolutionalNeuralNetwork method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.cnn.DownsampleCNN.forward">(ecgan.networks.cnn.DownsampleCNN method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.dcgan.DCGANDiscriminator.forward">(ecgan.networks.dcgan.DCGANDiscriminator method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.dcgan.DCGANGenerator.forward">(ecgan.networks.dcgan.DCGANGenerator method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.rgan.RGANDiscriminator.forward">(ecgan.networks.rgan.RGANDiscriminator method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.rgan.RGANGenerator.forward">(ecgan.networks.rgan.RGANGenerator method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.rnn.RecurrentNeuralNetwork.forward">(ecgan.networks.rnn.RecurrentNeuralNetwork method)</a>
+</li>
+        <li><a href="api/networks/index.html#ecgan.networks.vaegan.VAEEncoder.forward">(ecgan.networks.vaegan.VAEEncoder method)</a>
+</li>
+        <li><a href="api/utils/layers.html#ecgan.utils.layers.MinibatchDiscrimination.forward">(ecgan.utils.layers.MinibatchDiscrimination method)</a>
+</li>
+        <li><a href="api/utils/layers.html#ecgan.utils.layers.MinibatchDiscriminationSimple.forward">(ecgan.utils.layers.MinibatchDiscriminationSimple static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.AEGANDiscriminatorLoss.forward">(ecgan.utils.losses.AEGANDiscriminatorLoss method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.AEGANGeneratorLoss.forward">(ecgan.utils.losses.AEGANGeneratorLoss method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.BceDiscriminatorLoss.forward">(ecgan.utils.losses.BceDiscriminatorLoss method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.BceGeneratorLoss.forward">(ecgan.utils.losses.BceGeneratorLoss method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.GANBaseLoss.forward">(ecgan.utils.losses.GANBaseLoss method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.KLLoss.forward">(ecgan.utils.losses.KLLoss static method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.SupervisedLoss.forward">(ecgan.utils.losses.SupervisedLoss method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.VAEGANGeneratorLoss.forward">(ecgan.utils.losses.VAEGANGeneratorLoss method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss.forward">(ecgan.utils.losses.WassersteinDiscriminatorLoss method)</a>
+</li>
+        <li><a href="api/utils/losses.html#ecgan.utils.losses.WassersteinGeneratorLoss.forward">(ecgan.utils.losses.WassersteinGeneratorLoss method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.FourierPlotter">FourierPlotter (class in ecgan.visualization.plotter)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.PlotterFactory.from_config">from_config() (ecgan.visualization.plotter.PlotterFactory static method)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.classification.FScoreMetric">FScoreMetric (class in ecgan.evaluation.metrics.classification)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector">GANAnomalyDetector (class in ecgan.anomaly_detection.detector.reconstruction_detector)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.GANBaseLoss">GANBaseLoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANInverseAnomalyDetector">GANInverseAnomalyDetector (class in ecgan.anomaly_detection.detector.reconstruction_detector)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.GANLossFactory">GANLossFactory (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.mmd.MaxMeanDiscrepancy.gaussian_kernel">gaussian_kernel() (ecgan.evaluation.metrics.mmd.MaxMeanDiscrepancy method)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.configs.Config.generate_config_file">generate_config_file() (ecgan.config.configs.Config method)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.generate_seed">generate_seed() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.generator">generator (ecgan.modules.generative.base.gan_module.BaseGANModule property)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.generator_sampler">generator_sampler (ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule property)</a>
+
+      <ul>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.generator_sampler">(ecgan.modules.generative.base.gan_module.BaseGANModule property)</a>
+</li>
+        <li><a href="api/modules/generative/vaegan.html#ecgan.modules.generative.vaegan.VAEGAN.generator_sampler">(ecgan.modules.generative.vaegan.VAEGAN property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.GeneratorSampler">GeneratorSampler (class in ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.helpers.get_">get_() (in module ecgan.config.helpers)</a>
+</li>
+      <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.get_anomaly_score">get_anomaly_score() (in module ecgan.anomaly_detection.anomaly_assessment)</a>
+</li>
+      <li><a href="api/modules/classifiers/base.html#ecgan.modules.classifiers.base.BaseClassifier.get_classification_metrics">get_classification_metrics() (ecgan.modules.classifiers.base.BaseClassifier static method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.DataSampler.get_dataset_size">get_dataset_size() (ecgan.utils.sampler.DataSampler method)</a>
+</li>
+      <li><a href="api/config/global_configs.html#ecgan.config.global_cfg.get_global_ad_config">get_global_ad_config() (in module ecgan.config.global_cfg)</a>
+</li>
+      <li><a href="api/config/global_configs.html#ecgan.config.global_cfg.get_global_config">get_global_config() (in module ecgan.config.global_cfg)</a>
+</li>
+      <li><a href="api/config/global_configs.html#ecgan.config.global_cfg.get_global_inv_config">get_global_inv_config() (in module ecgan.config.global_cfg)</a>
+</li>
+      <li><a href="api/config/global_configs.html#ecgan.config.global_cfg.get_global_inv_config_attribs">get_global_inv_config_attribs() (in module ecgan.config.global_cfg)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss.get_gradient_penalty">get_gradient_penalty() (ecgan.utils.losses.WassersteinDiscriminatorLoss method)</a>
+</li>
+      <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.Embedder.get_initial_embedding">get_initial_embedding() (ecgan.anomaly_detection.embedder.Embedder method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.UMAPEmbedder.get_initial_embedding">(ecgan.anomaly_detection.embedder.UMAPEmbedder method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.get_interpolated_samples">get_interpolated_samples() (ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule method)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.helpers.get_inv_run_config">get_inv_run_config() (in module ecgan.config.helpers)</a>
+</li>
+      <li><a href="api/modules/generative/vaegan.html#ecgan.modules.generative.vaegan.VAEGAN.get_kl_weight">get_kl_weight() (ecgan.modules.generative.vaegan.VAEGAN method)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever.get_meta">get_meta() (ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever method)</a>
+
+      <ul>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever.get_meta">(ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.UrlDataRetriever.get_meta">(ecgan.preprocessing.data_retrieval.UrlDataRetriever method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.generative_module.BaseGenerativeModule.get_mmd">get_mmd() (ecgan.modules.generative.base.generative_module.BaseGenerativeModule method)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.helpers.get_model_path">get_model_path() (in module ecgan.config.helpers)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.get_num_workers">get_num_workers() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.Embedder.get_plot">get_plot() (ecgan.anomaly_detection.embedder.Embedder method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.UMAPEmbedder.get_plot">(ecgan.anomaly_detection.embedder.UMAPEmbedder method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.get_pointwise_anomaly_score_anogan">get_pointwise_anomaly_score_anogan() (in module ecgan.anomaly_detection.anomaly_assessment)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector.get_reconstructed_data">get_reconstructed_data() (ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector method)</a>
+</li>
+      <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.get_reconstruction_criterion">get_reconstruction_criterion() (in module ecgan.utils.reconstruction_criteria)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.helpers.get_run_config">get_run_config() (in module ecgan.config.helpers)</a>
+</li>
+      <li><a href="api/modules/generative/beatgan.html#ecgan.modules.generative.aegan.AEGAN.get_sample">get_sample() (ecgan.modules.generative.aegan.AEGAN method)</a>
+
+      <ul>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.get_sample">(ecgan.modules.generative.base.gan_module.BaseGANModule method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.generative_module.BaseGenerativeModule.get_sample">(ecgan.modules.generative.base.generative_module.BaseGenerativeModule method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.get_sampling_grid">get_sampling_grid() (ecgan.visualization.plotter.BasePlotter method)</a>
+
+      <ul>
+        <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.FourierPlotter.get_sampling_grid">(ecgan.visualization.plotter.FourierPlotter method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/training/trainer.html#ecgan.training.trainer.Trainer.get_split">get_split() (ecgan.training.trainer.Trainer method)</a>
+</li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.get_transformation">get_transformation() (in module ecgan.utils.transformation)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.generative_module.BaseGenerativeModule.get_tstr">get_tstr() (ecgan.modules.generative.base.generative_module.BaseGenerativeModule method)</a>
+</li>
+      <li><a href="api/evaluation/optimization.html#ecgan.evaluation.optimization.get_weighted_error">get_weighted_error() (in module ecgan.evaluation.optimization)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/artifacts.html#ecgan.utils.artifacts.ImageArtifact">ImageArtifact (class in ecgan.utils.artifacts)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.mmd.MaxMeanDiscrepancy.infer_sigma">infer_sigma() (ecgan.evaluation.metrics.mmd.MaxMeanDiscrepancy method)</a>
+</li>
+      <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.InferenceDiscriminator">InferenceDiscriminator (class in ecgan.anomaly_detection.anomaly_assessment)</a>
+</li>
+      <li><a href="api/manager.html#ecgan.manager.init">init() (in module ecgan.manager)</a>
+</li>
+      <li><a href="api/utils/parser.html#ecgan.utils.parser.init_parser">init_parser() (in module ecgan.utils.parser)</a>
+</li>
+      <li><a href="api/utils/layers.html#ecgan.utils.layers.initialize_batchnorm">initialize_batchnorm() (in module ecgan.utils.layers)</a>
+</li>
+      <li><a href="api/utils/layers.html#ecgan.utils.layers.initialize_weights">initialize_weights() (in module ecgan.utils.layers)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.InputNormalization">InputNormalization (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/preprocessing/sampling.html#ecgan.preprocessing.sampling.interpolate">interpolate() (in module ecgan.preprocessing.sampling)</a>
+</li>
+      <li><a href="api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InterpolationReconstructor">InterpolationReconstructor (class in ecgan.anomaly_detection.reconstruction)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/manager.html#ecgan.manager.inverse">inverse() (in module ecgan.manager)</a>
+</li>
+      <li><a href="api/utils/parser.html#ecgan.utils.parser.inverse_parser">inverse_parser() (in module ecgan.utils.parser)</a>
+</li>
+      <li><a href="api/modules/inverse_mapping/inversion.html#ecgan.modules.inverse_mapping.inversion.inverse_train">inverse_train() (in module ecgan.modules.inverse_mapping.inversion)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.configs.InverseConfig">InverseConfig (class in ecgan.config.configs)</a>
+</li>
+      <li><a href="api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InverseMappingReconstructor">InverseMappingReconstructor (class in ecgan.anomaly_detection.reconstruction)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.InverseMappingType">InverseMappingType (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/modules/inverse_mapping/inverse_mapping.html#ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule.invert">invert() (ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule method)</a>
+
+      <ul>
+        <li><a href="api/modules/inverse_mapping/vanilla_inverse_mapping.html#ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping.invert">(ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/modules/inverse_mapping/inverse_mapping.html#ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule">InvertibleBaseModule (class in ecgan.modules.inverse_mapping.inverse_mapping)</a>
+</li>
+      <li><a href="api/utils/layers.html#ecgan.utils.layers.is_normalization_layer">is_normalization_layer() (in module ecgan.utils.layers)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.is_wandb_model_link">is_wandb_model_link() (in module ecgan.utils.miscellaneous)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.KaggleDataRetriever">KaggleDataRetriever (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.KLLoss">KLLoss (class in ecgan.utils.losses)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/distances.html#ecgan.utils.distances.L1Distance">L1Distance (class in ecgan.utils.distances)</a>
+</li>
+      <li><a href="api/utils/distances.html#ecgan.utils.distances.L2Distance">L2Distance (class in ecgan.utils.distances)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.L2Loss">L2Loss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/utils/label.html#ecgan.utils.label.label">label() (in module ecgan.utils.label)</a>
+</li>
+      <li><a href="api/utils/label.html#ecgan.utils.label.label_absolute">label_absolute() (in module ecgan.utils.label)</a>
+</li>
+      <li><a href="api/utils/label.html#ecgan.utils.label.label_data_by_summation">label_data_by_summation() (in module ecgan.utils.label)</a>
+</li>
+      <li><a href="api/utils/label.html#ecgan.utils.label.label_data_by_variance">label_data_by_variance() (in module ecgan.utils.label)</a>
+</li>
+      <li><a href="api/utils/label.html#ecgan.utils.label.label_generated_data_pointwise">label_generated_data_pointwise() (in module ecgan.utils.label)</a>
+</li>
+      <li><a href="api/evaluation/optimization.html#ecgan.evaluation.optimization.label_score_get_best">label_score_get_best() (in module ecgan.evaluation.optimization)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.LabelingStrategy">LabelingStrategy (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/utils/interpolation.html#ecgan.utils.interpolation.latent_walk">latent_walk() (in module ecgan.utils.interpolation)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.LatentDistribution">LatentDistribution (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.LatentDistributionFactory">LatentDistributionFactory (class in ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.list_from_tuple_list">list_from_tuple_list() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/base_detector.html#ecgan.anomaly_detection.detector.base_detector.AnomalyDetector.load">load() (ecgan.anomaly_detection.detector.base_detector.AnomalyDetector method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/detector/classification_detector.html#ecgan.anomaly_detection.detector.classification_detector.ClassificationDetector.load">(ecgan.anomaly_detection.detector.classification_detector.ClassificationDetector method)</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.load">(ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector method)</a>
+</li>
+        <li><a href="api/modules/basemodule.html#ecgan.modules.base.BaseModule.load">(ecgan.modules.base.BaseModule method)</a>
+</li>
+        <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.load">(ecgan.modules.classifiers.nn_classifier.NNClassifier method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.load">(ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.load">(ecgan.modules.generative.base.gan_module.BaseGANModule method)</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/inverse_mapping.html#ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule.load">(ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetriever.load">(ecgan.preprocessing.data_retrieval.DataRetriever method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.KaggleDataRetriever.load">(ecgan.preprocessing.data_retrieval.KaggleDataRetriever method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.SineDataRetriever.load">(ecgan.preprocessing.data_retrieval.SineDataRetriever method)</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.UrlDataRetriever.load">(ecgan.preprocessing.data_retrieval.UrlDataRetriever method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.load_config">load_config() (ecgan.evaluation.tracker.base_tracker.BaseTracker method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.load_config">(ecgan.evaluation.tracker.local_tracker.LocalTracker method)</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.load_config">(ecgan.evaluation.tracker.wb_tracker.WBTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer.load_existing_optim">load_existing_optim() (ecgan.utils.optimizer.BaseOptimizer method)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_model">load_model() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_pickle">load_pickle() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_pickle_numpy">load_pickle_numpy() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/splitting.html#ecgan.utils.splitting.load_split">load_split() (in module ecgan.utils.splitting)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_wandb_config">load_wandb_config() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.load_yml">load_yml() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker">LocalTracker (class in ecgan.evaluation.tracker.local_tracker)</a>
+</li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.log_artifacts">log_artifacts() (ecgan.evaluation.tracker.base_tracker.BaseTracker method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_artifacts">(ecgan.evaluation.tracker.local_tracker.LocalTracker method)</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_artifacts">(ecgan.evaluation.tracker.wb_tracker.WBTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.log_checkpoint">log_checkpoint() (ecgan.evaluation.tracker.base_tracker.BaseTracker method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_checkpoint">(ecgan.evaluation.tracker.local_tracker.LocalTracker method)</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_checkpoint">(ecgan.evaluation.tracker.wb_tracker.WBTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.log_config">log_config() (ecgan.evaluation.tracker.base_tracker.BaseTracker method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_config">(ecgan.evaluation.tracker.local_tracker.LocalTracker method)</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_config">(ecgan.evaluation.tracker.wb_tracker.WBTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.log_metrics">log_metrics() (ecgan.evaluation.tracker.base_tracker.BaseTracker method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_metrics">(ecgan.evaluation.tracker.local_tracker.LocalTracker method)</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_metrics">(ecgan.evaluation.tracker.wb_tracker.WBTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.LogInferenceDiscriminator">LogInferenceDiscriminator (class in ecgan.anomaly_detection.anomaly_assessment)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.LossConfig">LossConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.Losses">Losses (class in ecgan.utils.custom_types)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.matplotlib_prep">matplotlib_prep() (in module ecgan.visualization.plotter)</a>
+</li>
+      <li><a href="api/utils/plotting.html#ecgan.utils.plotting.matplotlib_render_to_array">matplotlib_render_to_array() (in module ecgan.utils.plotting)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.mmd.MaxMeanDiscrepancy">MaxMeanDiscrepancy (class in ecgan.evaluation.metrics.mmd)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.classification.MCCMetric">MCCMetric (class in ecgan.evaluation.metrics.classification)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.merge_dicts">merge_dicts() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.MetricOptimization">MetricOptimization (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.MetricType">MetricType (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/utils/layers.html#ecgan.utils.layers.MinibatchDiscrimination">MinibatchDiscrimination (class in ecgan.utils.layers)</a>
+</li>
+      <li><a href="api/utils/layers.html#ecgan.utils.layers.MinibatchDiscriminationSimple">MinibatchDiscriminationSimple (class in ecgan.utils.layers)</a>
+</li>
+      <li><a href="api/utils/distances.html#ecgan.utils.distances.MinkowskiDistance">MinkowskiDistance (class in ecgan.utils.distances)</a>
+</li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.MinMaxTransformation">MinMaxTransformation (class in ecgan.utils.transformation)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever">MitbihBeatganDataRetriever (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+      <li><a href="api/utils/datasets.html#ecgan.utils.datasets.MitbihBeatganDataset">MitbihBeatganDataset (class in ecgan.utils.datasets)</a>
+</li>
+      <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.MitbihBeatganPreprocessor">MitbihBeatganPreprocessor (class in ecgan.preprocessing.preprocessor)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihDataRetriever">MitbihDataRetriever (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+      <li><a href="api/utils/datasets.html#ecgan.utils.datasets.MitbihDataset">MitbihDataset (class in ecgan.utils.datasets)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihExtractedBeatsDataRetriever">MitbihExtractedBeatsDataRetriever (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+      <li><a href="api/utils/datasets.html#ecgan.utils.datasets.MitbihExtractedBeatsDataset">MitbihExtractedBeatsDataset (class in ecgan.utils.datasets)</a>
+</li>
+      <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.MitbihExtractedBeatsPreprocessor">MitbihExtractedBeatsPreprocessor (class in ecgan.preprocessing.preprocessor)</a>
+</li>
+      <li><a href="api/utils/splitting.html#ecgan.utils.splitting.mixed_split">mixed_split() (in module ecgan.utils.splitting)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="api/anomaly_detection/anomaly_assessment.html#module-ecgan.anomaly_detection.anomaly_assessment">ecgan.anomaly_detection.anomaly_assessment</a>
+</li>
+        <li><a href="api/anomaly_detection/anomaly_manager.html#module-ecgan.anomaly_detection.anomaly_manager">ecgan.anomaly_detection.anomaly_manager</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/index.html#module-ecgan.anomaly_detection.detector">ecgan.anomaly_detection.detector</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/base_detector.html#module-ecgan.anomaly_detection.detector.base_detector">ecgan.anomaly_detection.detector.base_detector</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/classification_detector.html#module-ecgan.anomaly_detection.detector.classification_detector">ecgan.anomaly_detection.detector.classification_detector</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/detector_factory.html#module-ecgan.anomaly_detection.detector.detector_factory">ecgan.anomaly_detection.detector.detector_factory</a>
+</li>
+        <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#module-ecgan.anomaly_detection.detector.reconstruction_detector">ecgan.anomaly_detection.detector.reconstruction_detector</a>
+</li>
+        <li><a href="api/anomaly_detection/embedder.html#module-ecgan.anomaly_detection.embedder">ecgan.anomaly_detection.embedder</a>
+</li>
+        <li><a href="api/anomaly_detection/reconstruction.html#module-ecgan.anomaly_detection.reconstruction">ecgan.anomaly_detection.reconstruction</a>
+</li>
+        <li><a href="api/cli.html#module-ecgan.cli">ecgan.cli</a>
+</li>
+        <li><a href="api/config/index.html#module-ecgan.config">ecgan.config</a>
+</li>
+        <li><a href="api/config/index.html#module-ecgan.config.configs">ecgan.config.configs</a>
+</li>
+        <li><a href="api/config/dataclasses.html#module-ecgan.config.dataclasses">ecgan.config.dataclasses</a>
+</li>
+        <li><a href="api/config/global_configs.html#module-ecgan.config.global_cfg">ecgan.config.global_cfg</a>
+</li>
+        <li><a href="api/config/index.html#module-ecgan.config.helpers">ecgan.config.helpers</a>
+</li>
+        <li><a href="api/config/initialization.html#module-ecgan.config.initialization">ecgan.config.initialization</a>
+</li>
+        <li><a href="api/config/nested_dataclasses.html#module-ecgan.config.nested_dataclass">ecgan.config.nested_dataclass</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#module-ecgan.evaluation.metrics">ecgan.evaluation.metrics</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#module-ecgan.evaluation.metrics.classification">ecgan.evaluation.metrics.classification</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#module-ecgan.evaluation.metrics.mmd">ecgan.evaluation.metrics.mmd</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#module-ecgan.evaluation.metrics.tstr">ecgan.evaluation.metrics.tstr</a>
+</li>
+        <li><a href="api/evaluation/optimization.html#module-ecgan.evaluation.optimization">ecgan.evaluation.optimization</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker">ecgan.evaluation.tracker</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker.base_tracker">ecgan.evaluation.tracker.base_tracker</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker.local_tracker">ecgan.evaluation.tracker.local_tracker</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker.tracker_factory">ecgan.evaluation.tracker.tracker_factory</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#module-ecgan.evaluation.tracker.wb_tracker">ecgan.evaluation.tracker.wb_tracker</a>
+</li>
+        <li><a href="api/manager.html#module-ecgan.manager">ecgan.manager</a>
+</li>
+        <li><a href="api/modules/basemodule.html#module-ecgan.modules.base">ecgan.modules.base</a>
+</li>
+        <li><a href="api/modules/classifiers/base.html#module-ecgan.modules.classifiers.base">ecgan.modules.classifiers.base</a>
+</li>
+        <li><a href="api/modules/classifiers/nn_classifier.html#module-ecgan.modules.classifiers.nn_classifier">ecgan.modules.classifiers.nn_classifier</a>
+</li>
+        <li><a href="api/modules/generative/beatgan.html#module-ecgan.modules.generative.aegan">ecgan.modules.generative.aegan</a>
+</li>
+        <li><a href="api/modules/generative/base.html#module-ecgan.modules.generative.base.encoder_gan_module">ecgan.modules.generative.base.encoder_gan_module</a>
+</li>
+        <li><a href="api/modules/generative/base.html#module-ecgan.modules.generative.base.gan_module">ecgan.modules.generative.base.gan_module</a>
+</li>
+        <li><a href="api/modules/generative/base.html#module-ecgan.modules.generative.base.generative_module">ecgan.modules.generative.base.generative_module</a>
+</li>
+        <li><a href="api/modules/generative/dcgan.html#module-ecgan.modules.generative.dcgan">ecgan.modules.generative.dcgan</a>
+</li>
+        <li><a href="api/modules/generative/ecgan.html#module-ecgan.modules.generative.rdcgan">ecgan.modules.generative.rdcgan</a>
+</li>
+        <li><a href="api/modules/generative/rgan.html#module-ecgan.modules.generative.rgan">ecgan.modules.generative.rgan</a>
+</li>
+        <li><a href="api/modules/generative/vaegan.html#module-ecgan.modules.generative.vaegan">ecgan.modules.generative.vaegan</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/inverse_mapping.html#module-ecgan.modules.inverse_mapping.inverse_mapping">ecgan.modules.inverse_mapping.inverse_mapping</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/inversion.html#module-ecgan.modules.inverse_mapping.inversion">ecgan.modules.inverse_mapping.inversion</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/vanilla_inverse_mapping.html#module-ecgan.modules.inverse_mapping.vanilla_inverse_mapping">ecgan.modules.inverse_mapping.vanilla_inverse_mapping</a>
+</li>
+        <li><a href="api/networks/index.html#module-ecgan.networks">ecgan.networks</a>
+</li>
+        <li><a href="api/networks/index.html#module-ecgan.networks.beatgan">ecgan.networks.beatgan</a>
+</li>
+        <li><a href="api/networks/index.html#module-ecgan.networks.cnn">ecgan.networks.cnn</a>
+</li>
+        <li><a href="api/networks/index.html#module-ecgan.networks.dcgan">ecgan.networks.dcgan</a>
+</li>
+        <li><a href="api/networks/index.html#module-ecgan.networks.helpers">ecgan.networks.helpers</a>
+</li>
+        <li><a href="api/networks/index.html#module-ecgan.networks.rgan">ecgan.networks.rgan</a>
+</li>
+        <li><a href="api/networks/index.html#module-ecgan.networks.rnn">ecgan.networks.rnn</a>
+</li>
+        <li><a href="api/networks/index.html#module-ecgan.networks.vaegan">ecgan.networks.vaegan</a>
+</li>
+        <li><a href="api/preprocessing/index.html#module-ecgan.preprocessing">ecgan.preprocessing</a>
+</li>
+        <li><a href="api/preprocessing/cleansing.html#module-ecgan.preprocessing.cleansing">ecgan.preprocessing.cleansing</a>
+</li>
+        <li><a href="api/preprocessing/data_retrieval.html#module-ecgan.preprocessing.data_retrieval">ecgan.preprocessing.data_retrieval</a>
+</li>
+        <li><a href="api/preprocessing/preprocessor.html#module-ecgan.preprocessing.preprocessor">ecgan.preprocessing.preprocessor</a>
+</li>
+        <li><a href="api/preprocessing/sampling.html#module-ecgan.preprocessing.sampling">ecgan.preprocessing.sampling</a>
+</li>
+        <li><a href="api/training/index.html#module-ecgan.training">ecgan.training</a>
+</li>
+        <li><a href="api/training/datasets.html#module-ecgan.training.datasets">ecgan.training.datasets</a>
+</li>
+        <li><a href="api/training/trainer.html#module-ecgan.training.trainer">ecgan.training.trainer</a>
+</li>
+        <li><a href="api/utils/artifacts.html#module-ecgan.utils.artifacts">ecgan.utils.artifacts</a>
+</li>
+        <li><a href="api/utils/configurable.html#module-ecgan.utils.configurable">ecgan.utils.configurable</a>
+</li>
+        <li><a href="api/utils/custom_types.html#module-ecgan.utils.custom_types">ecgan.utils.custom_types</a>
+</li>
+        <li><a href="api/utils/datasets.html#module-ecgan.utils.datasets">ecgan.utils.datasets</a>
+</li>
+        <li><a href="api/utils/distances.html#module-ecgan.utils.distances">ecgan.utils.distances</a>
+</li>
+        <li><a href="api/utils/distributions.html#module-ecgan.utils.distributions">ecgan.utils.distributions</a>
+</li>
+        <li><a href="api/utils/embeddings.html#module-ecgan.utils.embeddings">ecgan.utils.embeddings</a>
+</li>
+        <li><a href="api/utils/interpolation.html#module-ecgan.utils.interpolation">ecgan.utils.interpolation</a>
+</li>
+        <li><a href="api/utils/label.html#module-ecgan.utils.label">ecgan.utils.label</a>
+</li>
+        <li><a href="api/utils/layers.html#module-ecgan.utils.layers">ecgan.utils.layers</a>
+</li>
+        <li><a href="api/utils/log.html#module-ecgan.utils.log">ecgan.utils.log</a>
+</li>
+        <li><a href="api/utils/losses.html#module-ecgan.utils.losses">ecgan.utils.losses</a>
+</li>
+        <li><a href="api/utils/miscellaneous.html#module-ecgan.utils.miscellaneous">ecgan.utils.miscellaneous</a>
+</li>
+        <li><a href="api/utils/optimizer.html#module-ecgan.utils.optimizer">ecgan.utils.optimizer</a>
+</li>
+        <li><a href="api/utils/parser.html#module-ecgan.utils.parser">ecgan.utils.parser</a>
+</li>
+        <li><a href="api/utils/plotting.html#module-ecgan.utils.plotting">ecgan.utils.plotting</a>
+</li>
+        <li><a href="api/utils/reconstruction_criteria.html#module-ecgan.utils.reconstruction_criteria">ecgan.utils.reconstruction_criteria</a>
+</li>
+        <li><a href="api/utils/sampler.html#module-ecgan.utils.sampler">ecgan.utils.sampler</a>
+</li>
+        <li><a href="api/utils/splitting.html#module-ecgan.utils.splitting">ecgan.utils.splitting</a>
+</li>
+        <li><a href="api/utils/timer.html#module-ecgan.utils.timer">ecgan.utils.timer</a>
+</li>
+        <li><a href="api/utils/transformation.html#module-ecgan.utils.transformation">ecgan.utils.transformation</a>
+</li>
+        <li><a href="api/visualization/index.html#module-ecgan.visualization">ecgan.visualization</a>
+</li>
+        <li><a href="api/visualization/evaluation.html#module-ecgan.visualization.evaluation">ecgan.visualization.evaluation</a>
+</li>
+        <li><a href="api/visualization/plotter.html#module-ecgan.visualization.plotter">ecgan.visualization.plotter</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/config/index.html#ecgan.config.configs.ModuleConfigFactory">ModuleConfigFactory (class in ecgan.config.configs)</a>
+</li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.Momentum">Momentum (class in ecgan.utils.optimizer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/config/nested_dataclasses.html#ecgan.config.nested_dataclass.nested_dataclass">nested_dataclass() (in module ecgan.config.nested_dataclass)</a>
+</li>
+      <li><a href="api/config/nested_dataclasses.html#ecgan.config.nested_dataclass.nested_dataclass_asdict">nested_dataclass_asdict() (in module ecgan.config.nested_dataclass)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.nested_list_from_dict_list">nested_list_from_dict_list() (in module ecgan.utils.miscellaneous)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier">NNClassifier (class in ecgan.modules.classifiers.nn_classifier)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.NormalInitializationConfig">NormalInitializationConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.NoTransformation">NoTransformation (class in ecgan.utils.transformation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/modules/basemodule.html#ecgan.modules.base.BaseModule.on_epoch_end">on_epoch_end() (ecgan.modules.base.BaseModule method)</a>
+
+      <ul>
+        <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.on_epoch_end">(ecgan.modules.classifiers.nn_classifier.NNClassifier method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.on_epoch_end">(ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.on_epoch_end">(ecgan.modules.generative.base.gan_module.BaseGANModule method)</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/vanilla_inverse_mapping.html#ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping.on_epoch_end">(ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.ones">ones() (in module ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.optim_disc">optim_disc (ecgan.modules.generative.base.gan_module.BaseGANModule property)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.optim_gen">optim_gen (ecgan.modules.generative.base.gan_module.BaseGANModule property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer.optimize">optimize() (ecgan.utils.optimizer.BaseOptimizer method)</a>
+</li>
+      <li><a href="api/evaluation/optimization.html#ecgan.evaluation.optimization.optimize_grid_search">optimize_grid_search() (in module ecgan.evaluation.optimization)</a>
+</li>
+      <li><a href="api/evaluation/optimization.html#ecgan.evaluation.optimization.optimize_metric">optimize_metric() (in module ecgan.evaluation.optimization)</a>
+</li>
+      <li><a href="api/evaluation/optimization.html#ecgan.evaluation.optimization.optimize_svm">optimize_svm() (in module ecgan.evaluation.optimization)</a>
+</li>
+      <li><a href="api/evaluation/optimization.html#ecgan.evaluation.optimization.optimize_tau_single_error">optimize_tau_single_error() (in module ecgan.evaluation.optimization)</a>
+</li>
+      <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.optimizer">optimizer (ecgan.modules.classifiers.nn_classifier.NNClassifier property)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.OptimizerConfig">OptimizerConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.OptimizerFactory">OptimizerFactory (class in ecgan.utils.optimizer)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.Optimizers">Optimizers (class in ecgan.utils.custom_types)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.ScatterPlotter.plot_interpolation_path">plot_interpolation_path() (ecgan.visualization.plotter.ScatterPlotter static method)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.ScatterPlotter.plot_scatter">plot_scatter() (ecgan.visualization.plotter.ScatterPlotter static method)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.PlotterFactory">PlotterFactory (class in ecgan.visualization.plotter)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.PlotterType">PlotterType (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRClassifier.predict">predict() (ecgan.evaluation.metrics.tstr.TSTRClassifier method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRCNN.predict">(ecgan.evaluation.metrics.tstr.TSTRCNN method)</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRRandomForest.predict">(ecgan.evaluation.metrics.tstr.TSTRRandomForest method)</a>
+</li>
+        <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRSVM.predict">(ecgan.evaluation.metrics.tstr.TSTRSVM method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/training/trainer.html#ecgan.training.trainer.Trainer.prepare_data">prepare_data() (ecgan.training.trainer.Trainer static method)</a>
+</li>
+      <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.BasePreprocessor.preprocess">preprocess() (ecgan.preprocessing.preprocessor.BasePreprocessor method)</a>
+
+      <ul>
+        <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor.preprocess">(ecgan.preprocessing.preprocessor.ExtractedBeatsPreprocessor method)</a>
+</li>
+        <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.MitbihBeatganPreprocessor.preprocess">(ecgan.preprocessing.preprocessor.MitbihBeatganPreprocessor method)</a>
+</li>
+        <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.ShaoxingPreprocessor.preprocess">(ecgan.preprocessing.preprocessor.ShaoxingPreprocessor method)</a>
+</li>
+        <li><a href="api/manager.html#ecgan.manager.preprocess">(in module ecgan.manager)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.PreprocessingConfig">PreprocessingConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.configs.PreprocessingConfigFactory">PreprocessingConfigFactory (class in ecgan.config.configs)</a>
+</li>
+      <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.PreprocessorFactory">PreprocessorFactory (class in ecgan.preprocessing.preprocessor)</a>
+</li>
+      <li><a href="api/modules/basemodule.html#ecgan.modules.base.BaseModule.print_metric">print_metric() (ecgan.modules.base.BaseModule class method)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.PtbExtractedBeatsDataRetriever">PtbExtractedBeatsDataRetriever (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+      <li><a href="api/utils/datasets.html#ecgan.utils.datasets.PTBExtractedBeatsDataset">PTBExtractedBeatsDataset (class in ecgan.utils.datasets)</a>
+</li>
+      <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.PtbExtractedBeatsPreprocessor">PtbExtractedBeatsPreprocessor (class in ecgan.preprocessing.preprocessor)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/evaluation/optimization.html#ecgan.evaluation.optimization.query_svm">query_svm() (in module ecgan.evaluation.optimization)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/anomaly_detection/anomaly_assessment.html#ecgan.anomaly_detection.anomaly_assessment.RawInferenceDiscriminator">RawInferenceDiscriminator (class in ecgan.anomaly_detection.anomaly_assessment)</a>
+</li>
+      <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.rbf_kernel">rbf_kernel() (in module ecgan.utils.reconstruction_criteria)</a>
+</li>
+      <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.RBFSimilarityCriterion">RBFSimilarityCriterion (class in ecgan.utils.reconstruction_criteria)</a>
+</li>
+      <li><a href="api/modules/generative/ecgan.html#ecgan.modules.generative.rdcgan.RDCGAN">RDCGAN (class in ecgan.modules.generative.rdcgan)</a>
+</li>
+      <li><a href="api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InterpolationReconstructor.reconstruct">reconstruct() (ecgan.anomaly_detection.reconstruction.InterpolationReconstructor method)</a>
+
+      <ul>
+        <li><a href="api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.InverseMappingReconstructor.reconstruct">(ecgan.anomaly_detection.reconstruction.InverseMappingReconstructor method)</a>
+</li>
+        <li><a href="api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.Reconstructor.reconstruct">(ecgan.anomaly_detection.reconstruction.Reconstructor method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.ReconstructionDetector">ReconstructionDetector (class in ecgan.anomaly_detection.detector.reconstruction_detector)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.ReconstructionType">ReconstructionType (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.Reconstructor">Reconstructor (class in ecgan.anomaly_detection.reconstruction)</a>
+</li>
+      <li><a href="api/anomaly_detection/reconstruction.html#ecgan.anomaly_detection.reconstruction.ReconstructorFactory">ReconstructorFactory (class in ecgan.anomaly_detection.reconstruction)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.rnn.RecurrentNeuralNetwork">RecurrentNeuralNetwork (class in ecgan.networks.rnn)</a>
+</li>
+      <li><a href="api/preprocessing/sampling.html#ecgan.preprocessing.sampling.resample">resample() (in module ecgan.preprocessing.sampling)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.retrieve_fold_from_existing_split">retrieve_fold_from_existing_split() (in module ecgan.preprocessing.data_retrieval)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/evaluation/optimization.html#ecgan.evaluation.optimization.retrieve_labels_from_weights">retrieve_labels_from_weights() (in module ecgan.evaluation.optimization)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.retrieve_model_specification">retrieve_model_specification() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/modules/generative/rgan.html#ecgan.modules.generative.rgan.RGAN">RGAN (class in ecgan.modules.generative.rgan)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.rgan.RGANDiscriminator">RGANDiscriminator (class in ecgan.networks.rgan)</a>
+</li>
+      <li><a href="api/networks/index.html#ecgan.networks.rgan.RGANGenerator">RGANGenerator (class in ecgan.networks.rgan)</a>
+</li>
+      <li><a href="api/utils/distances.html#ecgan.utils.distances.RGANMedianPairwiseDistance">RGANMedianPairwiseDistance (class in ecgan.utils.distances)</a>
+</li>
+      <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.RganMmdCriterion">RganMmdCriterion (class in ecgan.utils.reconstruction_criteria)</a>
+</li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.RMSprop">RMSprop (class in ecgan.utils.optimizer)</a>
+</li>
+      <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.RNNClassifier">RNNClassifier (class in ecgan.modules.classifiers.nn_classifier)</a>
+</li>
+      <li><a href="api/cli.html#ecgan.cli.run_detection">run_detection() (in module ecgan.cli)</a>
+</li>
+      <li><a href="api/cli.html#ecgan.cli.run_init">run_init() (in module ecgan.cli)</a>
+</li>
+      <li><a href="api/cli.html#ecgan.cli.run_inverse">run_inverse() (in module ecgan.cli)</a>
+</li>
+      <li><a href="api/cli.html#ecgan.cli.run_preprocessing">run_preprocessing() (in module ecgan.cli)</a>
+</li>
+      <li><a href="api/cli.html#ecgan.cli.run_training">run_training() (in module ecgan.cli)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/training/datasets.html#ecgan.training.datasets.BaseDataset.sample">sample() (ecgan.training.datasets.BaseDataset method)</a>
+
+      <ul>
+        <li><a href="api/utils/distributions.html#ecgan.utils.distributions.TruncatedNormal.sample">(ecgan.utils.distributions.TruncatedNormal method)</a>
+</li>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.BaseSampler.sample">(ecgan.utils.sampler.BaseSampler method)</a>
+</li>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.DataSampler.sample">(ecgan.utils.sampler.DataSampler method)</a>
+</li>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.DiscriminatorSampler.sample">(ecgan.utils.sampler.DiscriminatorSampler method)</a>
+</li>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.EncoderDecoderSampler.sample">(ecgan.utils.sampler.EncoderDecoderSampler method)</a>
+</li>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.FeatureDiscriminatorSampler.sample">(ecgan.utils.sampler.FeatureDiscriminatorSampler method)</a>
+</li>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.GeneratorSampler.sample">(ecgan.utils.sampler.GeneratorSampler method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.DataSampler.sample_class">sample_class() (ecgan.utils.sampler.DataSampler method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.EncoderBasedGeneratorSampler.sample_encoder">sample_encoder() (ecgan.utils.sampler.EncoderBasedGeneratorSampler method)</a>
+
+      <ul>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_encoder">(ecgan.utils.sampler.VAEGANGeneratorSampler method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_eps">sample_eps() (ecgan.utils.sampler.VAEGANGeneratorSampler method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.FeatureDiscriminatorSampler.sample_features">sample_features() (ecgan.utils.sampler.FeatureDiscriminatorSampler method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.EncoderBasedGeneratorSampler.sample_generator_encoder">sample_generator_encoder() (ecgan.utils.sampler.EncoderBasedGeneratorSampler method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.BaseSampler.sample_label_ones">sample_label_ones() (ecgan.utils.sampler.BaseSampler method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.BaseSampler.sample_label_zeros">sample_label_zeros() (ecgan.utils.sampler.BaseSampler method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_mu_logvar">sample_mu_logvar() (ecgan.utils.sampler.VAEGANGeneratorSampler method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_pre_computed">sample_pre_computed() (ecgan.utils.sampler.VAEGANGeneratorSampler method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.FeatureDiscriminatorSampler.sample_score_features">sample_score_features() (ecgan.utils.sampler.FeatureDiscriminatorSampler method)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.EncoderBasedGeneratorSampler.sample_z">sample_z() (ecgan.utils.sampler.EncoderBasedGeneratorSampler method)</a>
+
+      <ul>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.EncoderDecoderSampler.sample_z">(ecgan.utils.sampler.EncoderDecoderSampler method)</a>
+</li>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.GeneratorSampler.sample_z">(ecgan.utils.sampler.GeneratorSampler method)</a>
+</li>
+        <li><a href="api/utils/sampler.html#ecgan.utils.sampler.VAEGANGeneratorSampler.sample_z">(ecgan.utils.sampler.VAEGANGeneratorSampler method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.SampleDataset">SampleDataset (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.SamplewiseMinmaxTransformation">SamplewiseMinmaxTransformation (class in ecgan.utils.transformation)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.SamplingAlgorithm">SamplingAlgorithm (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/base_detector.html#ecgan.anomaly_detection.detector.base_detector.AnomalyDetector.save">save() (ecgan.anomaly_detection.detector.base_detector.AnomalyDetector method)</a>
+
+      <ul>
+        <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.BasePreprocessor.save">(ecgan.preprocessing.preprocessor.BasePreprocessor method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/modules/basemodule.html#ecgan.modules.base.BaseModule.save_checkpoint">save_checkpoint() (ecgan.modules.base.BaseModule method)</a>
+
+      <ul>
+        <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.save_checkpoint">(ecgan.modules.classifiers.nn_classifier.NNClassifier method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.save_checkpoint">(ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.save_checkpoint">(ecgan.modules.generative.base.gan_module.BaseGANModule method)</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/inverse_mapping.html#ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule.save_checkpoint">(ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.save_epoch">save_epoch() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.save_pickle">save_pickle() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.save_plot">save_plot() (ecgan.visualization.plotter.BasePlotter static method)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.BasePlotter.save_sampling_grid">save_sampling_grid() (ecgan.visualization.plotter.BasePlotter method)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.save_tensor">save_tensor() (in module ecgan.utils.miscellaneous)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.scale_to_unit_circle">scale_to_unit_circle() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.scale_weights">scale_weights() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.ScatterPlotter">ScatterPlotter (class in ecgan.visualization.plotter)</a>
+</li>
+      <li><a href="api/utils/splitting.html#ecgan.utils.splitting.select_channels">select_channels() (in module ecgan.utils.splitting)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.select_device">select_device() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/training/datasets.html#ecgan.training.datasets.SeriesDataset">SeriesDataset (class in ecgan.training.datasets)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.DataSampler.set_dataset">set_dataset() (ecgan.utils.sampler.DataSampler method)</a>
+</li>
+      <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.set_fixed_samples">set_fixed_samples() (ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule method)</a>
+</li>
+      <li><a href="api/config/global_configs.html#ecgan.config.global_cfg.set_global_ad_config">set_global_ad_config() (in module ecgan.config.global_cfg)</a>
+</li>
+      <li><a href="api/config/global_configs.html#ecgan.config.global_cfg.set_global_config">set_global_config() (in module ecgan.config.global_cfg)</a>
+</li>
+      <li><a href="api/config/global_configs.html#ecgan.config.global_cfg.set_global_inv_config">set_global_inv_config() (in module ecgan.config.global_cfg)</a>
+</li>
+      <li><a href="api/utils/log.html#ecgan.utils.log.set_log_level">set_log_level() (in module ecgan.utils.log)</a>
+</li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer.set_param_group">set_param_group() (ecgan.utils.optimizer.BaseOptimizer method)</a>
+</li>
+      <li><a href="api/utils/log.html#ecgan.utils.log.setup_logger">setup_logger() (in module ecgan.utils.log)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever">ShaoxingDataRetriever (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+      <li><a href="api/utils/datasets.html#ecgan.utils.datasets.ShaoxingDataset">ShaoxingDataset (class in ecgan.utils.datasets)</a>
+</li>
+      <li><a href="api/preprocessing/preprocessor.html#ecgan.preprocessing.preprocessor.ShaoxingPreprocessor">ShaoxingPreprocessor (class in ecgan.preprocessing.preprocessor)</a>
+</li>
+      <li><a href="api/preprocessing/cleansing.html#ecgan.preprocessing.cleansing.DataCleanser.should_cleanse">should_cleanse() (ecgan.preprocessing.cleansing.DataCleanser method)</a>
+</li>
+      <li><a href="api/utils/reconstruction_criteria.html#ecgan.utils.reconstruction_criteria.SimilarityCriterions">SimilarityCriterions (class in ecgan.utils.reconstruction_criteria)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.SimilarityMeasures">SimilarityMeasures (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/modules/inverse_mapping/vanilla_inverse_mapping.html#ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping">SimpleGANInverseMapping (class in ecgan.modules.inverse_mapping.vanilla_inverse_mapping)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.SineDataRetriever">SineDataRetriever (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+      <li><a href="api/utils/datasets.html#ecgan.utils.datasets.SineDataset">SineDataset (class in ecgan.utils.datasets)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.SinePreprocessingConfig">SinePreprocessingConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.SklearnAveragingOptions">SklearnAveragingOptions (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.SklearnSVMKernels">SklearnSVMKernels (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/utils/interpolation.html#ecgan.utils.interpolation.slerp">slerp() (in module ecgan.utils.interpolation)</a>
+</li>
+      <li><a href="api/utils/interpolation.html#ecgan.utils.interpolation.spherical_interpolation">spherical_interpolation() (in module ecgan.utils.interpolation)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.SplitMethods">SplitMethods (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.StandardizationTransformation">StandardizationTransformation (class in ecgan.utils.transformation)</a>
+</li>
+      <li><a href="api/anomaly_detection/anomaly_manager.html#ecgan.anomaly_detection.anomaly_manager.AnomalyManager.start_detection">start_detection() (ecgan.anomaly_detection.anomaly_manager.AnomalyManager method)</a>
+</li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer.state_dict">state_dict() (ecgan.utils.optimizer.BaseOptimizer method)</a>
+</li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer.step">step() (ecgan.utils.optimizer.BaseOptimizer method)</a>
+</li>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.StochasticGradientDescent">StochasticGradientDescent (class in ecgan.utils.optimizer)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.SupervisedLoss">SupervisedLoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.SupervisedLossFactory">SupervisedLossFactory (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.SupportedModules">SupportedModules (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.SyntheticPreprocessingConfig">SyntheticPreprocessingConfig (class in ecgan.config.dataclasses)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/timer.html#ecgan.utils.timer.Timer">Timer (class in ecgan.utils.timer)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.to_numpy">to_numpy() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.to_torch">to_torch() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/anomaly_detection/detector/reconstruction_detector.html#ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector.track_batch">track_batch() (ecgan.anomaly_detection.detector.reconstruction_detector.GANAnomalyDetector method)</a>
+</li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.tracker_factory.TrackerFactory">TrackerFactory (class in ecgan.evaluation.tracker.tracker_factory)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.TrackerType">TrackerType (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.TrackingConfig">TrackingConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/modules/inverse_mapping/inverse_mapping.html#ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule.train">train() (ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule method)</a>
+
+      <ul>
+        <li><a href="api/manager.html#ecgan.manager.train">(in module ecgan.manager)</a>
+</li>
+      </ul></li>
+      <li><a href="api/utils/splitting.html#ecgan.utils.splitting.train_only_normal_split">train_only_normal_split() (in module ecgan.utils.splitting)</a>
+</li>
+      <li><a href="api/config/index.html#ecgan.config.configs.TrainConfig">TrainConfig (class in ecgan.config.configs)</a>
+</li>
+      <li><a href="api/training/trainer.html#ecgan.training.trainer.Trainer">Trainer (class in ecgan.training.trainer)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.TrainerConfig">TrainerConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/modules/basemodule.html#ecgan.modules.base.BaseModule.training_step">training_step() (ecgan.modules.base.BaseModule method)</a>
+
+      <ul>
+        <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.training_step">(ecgan.modules.classifiers.nn_classifier.NNClassifier method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.training_step">(ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.training_step">(ecgan.modules.generative.base.gan_module.BaseGANModule method)</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/inverse_mapping.html#ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule.training_step">(ecgan.modules.inverse_mapping.inverse_mapping.InvertibleBaseModule method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.DataTransformation.transform">transform() (ecgan.utils.transformation.DataTransformation method)</a>
+</li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.SamplewiseMinmaxTransformation.transform_1d">transform_1d() (ecgan.utils.transformation.SamplewiseMinmaxTransformation static method)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.Transformation">Transformation (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.TrainerConfig.transformation">transformation (ecgan.config.dataclasses.TrainerConfig property)</a>
+</li>
+      <li><a href="api/preprocessing/sampling.html#ecgan.preprocessing.sampling.transpose">transpose() (in module ecgan.preprocessing.sampling)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.ScatterPlotter.truncate_colormap">truncate_colormap() (ecgan.visualization.plotter.ScatterPlotter static method)</a>
+</li>
+      <li><a href="api/utils/distributions.html#ecgan.utils.distributions.TruncatedNormal">TruncatedNormal (class in ecgan.utils.distributions)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTR">TSTR (class in ecgan.evaluation.metrics.tstr)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRClassifier">TSTRClassifier (class in ecgan.evaluation.metrics.tstr)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRClassifierFactory">TSTRClassifierFactory (class in ecgan.evaluation.metrics.tstr)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRCNN">TSTRCNN (class in ecgan.evaluation.metrics.tstr)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRRandomForest">TSTRRandomForest (class in ecgan.evaluation.metrics.tstr)</a>
+</li>
+      <li><a href="api/evaluation/metrics.html#ecgan.evaluation.metrics.tstr.TSTRSVM">TSTRSVM (class in ecgan.evaluation.metrics.tstr)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/anomaly_detection/embedder.html#ecgan.anomaly_detection.embedder.UMAPEmbedder">UMAPEmbedder (class in ecgan.anomaly_detection.embedder)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.UniformInitializationConfig">UniformInitializationConfig (class in ecgan.config.dataclasses)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.update_dicts">update_dicts() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/utils/miscellaneous.html#ecgan.utils.miscellaneous.update_highest_metrics">update_highest_metrics() (in module ecgan.utils.miscellaneous)</a>
+</li>
+      <li><a href="api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.UrlDataRetriever">UrlDataRetriever (class in ecgan.preprocessing.data_retrieval)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/networks/index.html#ecgan.networks.vaegan.VAEEncoder">VAEEncoder (class in ecgan.networks.vaegan)</a>
+</li>
+      <li><a href="api/modules/generative/vaegan.html#ecgan.modules.generative.vaegan.VAEGAN">VAEGAN (class in ecgan.modules.generative.vaegan)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.VAEGANGeneratorLoss">VAEGANGeneratorLoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/utils/sampler.html#ecgan.utils.sampler.VAEGANGeneratorSampler">VAEGANGeneratorSampler (class in ecgan.utils.sampler)</a>
+</li>
+      <li><a href="api/modules/basemodule.html#ecgan.modules.base.BaseModule.validation_step">validation_step() (ecgan.modules.base.BaseModule method)</a>
+
+      <ul>
+        <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.validation_step">(ecgan.modules.classifiers.nn_classifier.NNClassifier method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.validation_step">(ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule method)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.validation_step">(ecgan.modules.generative.base.gan_module.BaseGANModule method)</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/vanilla_inverse_mapping.html#ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping.validation_step">(ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/artifacts.html#ecgan.utils.artifacts.ValueArtifact">ValueArtifact (class in ecgan.utils.artifacts)</a>
+</li>
+      <li><a href="api/utils/splitting.html#ecgan.utils.splitting.verbose_channel_selection">verbose_channel_selection() (in module ecgan.utils.splitting)</a>
+</li>
+      <li><a href="api/visualization/plotter.html#ecgan.visualization.plotter.visualize_reconstruction">visualize_reconstruction() (in module ecgan.visualization.plotter)</a>
+</li>
+      <li><a href="api/visualization/evaluation.html#ecgan.visualization.evaluation.visualize_roc">visualize_roc() (in module ecgan.visualization.evaluation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.WassersteinDiscriminatorLoss">WassersteinDiscriminatorLoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/utils/losses.html#ecgan.utils.losses.WassersteinGeneratorLoss">WassersteinGeneratorLoss (class in ecgan.utils.losses)</a>
+</li>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.base_tracker.BaseTracker.watch">watch() (ecgan.evaluation.tracker.base_tracker.BaseTracker method)</a>
+
+      <ul>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.local_tracker.LocalTracker.watch">(ecgan.evaluation.tracker.local_tracker.LocalTracker method)</a>
+</li>
+        <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker.watch">(ecgan.evaluation.tracker.wb_tracker.WBTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/modules/basemodule.html#ecgan.modules.base.BaseModule.watch_list">watch_list (ecgan.modules.base.BaseModule property)</a>
+
+      <ul>
+        <li><a href="api/modules/classifiers/nn_classifier.html#ecgan.modules.classifiers.nn_classifier.NNClassifier.watch_list">(ecgan.modules.classifiers.nn_classifier.NNClassifier property)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule.watch_list">(ecgan.modules.generative.base.encoder_gan_module.BaseEncoderGANModule property)</a>
+</li>
+        <li><a href="api/modules/generative/base.html#ecgan.modules.generative.base.gan_module.BaseGANModule.watch_list">(ecgan.modules.generative.base.gan_module.BaseGANModule property)</a>
+</li>
+        <li><a href="api/modules/inverse_mapping/vanilla_inverse_mapping.html#ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping.watch_list">(ecgan.modules.inverse_mapping.vanilla_inverse_mapping.SimpleGANInverseMapping property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/evaluation/tracker.html#ecgan.evaluation.tracker.wb_tracker.WBTracker">WBTracker (class in ecgan.evaluation.tracker.wb_tracker)</a>
+</li>
+      <li><a href="api/utils/custom_types.html#ecgan.utils.custom_types.WeightInitialization">WeightInitialization (class in ecgan.utils.custom_types)</a>
+</li>
+      <li><a href="api/config/dataclasses.html#ecgan.config.dataclasses.WeightInitializationConfig">WeightInitializationConfig (class in ecgan.config.dataclasses)</a>
+</li>
+      <li><a href="api/utils/transformation.html#ecgan.utils.transformation.WhiteningTransformation">WhiteningTransformation (class in ecgan.utils.transformation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/optimizer.html#ecgan.utils.optimizer.BaseOptimizer.zero_grad">zero_grad() (ecgan.utils.optimizer.BaseOptimizer method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

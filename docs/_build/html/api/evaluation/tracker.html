@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tracker &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Visualization" href="../visualization/index.html" />
+    <link rel="prev" title="Optimization" href="optimization.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Evaluation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="optimization.html">Optimization</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">ECGAN Python API</a> &raquo;</li>
+          <li><a href="index.html">Evaluation</a> &raquo;</li>
+      <li>Tracker</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/evaluation/tracker.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ecgan.evaluation.tracker">
+<span id="tracker"></span><h1>Tracker<a class="headerlink" href="#module-ecgan.evaluation.tracker" title="Permalink to this headline"></a></h1>
+<p>Custom trackers to log data and files during experiments.</p>
+<span class="target" id="module-ecgan.evaluation.tracker.base_tracker"></span><p>Base class for trackers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.tracker.base_tracker.</span></span><span class="sig-name descname"><span class="pre">BaseTracker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Base class for trackers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.advance_step">
+<span class="sig-name descname"><span class="pre">advance_step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.advance_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.advance_step" title="Permalink to this definition"></a></dt>
+<dd><p>Advance by one step.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.advance_fold">
+<span class="sig-name descname"><span class="pre">advance_fold</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.advance_fold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.advance_fold" title="Permalink to this definition"></a></dt>
+<dd><p>Advance by one fold.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.close">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.close" title="Permalink to this definition"></a></dt>
+<dd><p>Close training run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.collate_metrics">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collate_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.collate_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.collate_metrics" title="Permalink to this definition"></a></dt>
+<dd><p>Transform a list with dictionaries to a single dictionary.</p>
+<p>All values are collated in their respective keys and are then averaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metrics</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>]) -- A list of metrics.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with the collated metrics.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.watch">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">watch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.watch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.watch" title="Permalink to this definition"></a></dt>
+<dd><p>Pass a module that should be watched during training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.log_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.log_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.log_config" title="Permalink to this definition"></a></dt>
+<dd><p>Log parameters for training setup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.log_metrics">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.log_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.log_metrics" title="Permalink to this definition"></a></dt>
+<dd><p>Take a dictionary with metrics and log content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metrics</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>) -- Dict in shape {metric: val, ...}</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.log_checkpoint">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_checkpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.log_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.log_checkpoint" title="Permalink to this definition"></a></dt>
+<dd><p>Save a module checkpoint.</p>
+<p>The checkpoint is a dictionary containing its state dict and
+optimizer parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module_checkpoint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>) -- Dictionary with model weights.</p></li>
+<li><p><strong>fold</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Current fold. Should be extracted before beginning to upload to avoid concurrency.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.log_artifacts">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_artifacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">artifacts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.log_artifacts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.log_artifacts" title="Permalink to this definition"></a></dt>
+<dd><p>Log dictionary with artifacts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>artifacts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../utils/artifacts.html#ecgan.utils.artifacts.Artifact" title="ecgan.utils.artifacts.Artifact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Artifact</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../utils/artifacts.html#ecgan.utils.artifacts.Artifact" title="ecgan.utils.artifacts.Artifact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Artifact</span></code></a>]]) -- Dictionary containing artifacts to log.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.base_tracker.BaseTracker.load_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_uri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/base_tracker.html#BaseTracker.load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker.load_config" title="Permalink to this definition"></a></dt>
+<dd><p>Load config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>run_uri</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) -- Path pointing to project root.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ecgan.evaluation.tracker.local_tracker"></span><p>Tracker storing data locally.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.local_tracker.LocalTracker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.tracker.local_tracker.</span></span><span class="sig-name descname"><span class="pre">LocalTracker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'results'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/local_tracker.html#LocalTracker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.local_tracker.LocalTracker" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker" title="ecgan.evaluation.tracker.base_tracker.BaseTracker"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.evaluation.tracker.base_tracker.BaseTracker</span></code></a></p>
+<p>Class to manage calculating metrics and logging them on the local file system.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.local_tracker.LocalTracker.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/local_tracker.html#LocalTracker.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.local_tracker.LocalTracker.close" title="Permalink to this definition"></a></dt>
+<dd><p>Close training run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.local_tracker.LocalTracker.watch">
+<span class="sig-name descname"><span class="pre">watch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/local_tracker.html#LocalTracker.watch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.local_tracker.LocalTracker.watch" title="Permalink to this definition"></a></dt>
+<dd><p>Watch models during training - not supported in LocalTracker.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.local_tracker.LocalTracker.log_config">
+<span class="sig-name descname"><span class="pre">log_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/local_tracker.html#LocalTracker.log_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_config" title="Permalink to this definition"></a></dt>
+<dd><p>Log parameters for training setup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.local_tracker.LocalTracker.log_metrics">
+<span class="sig-name descname"><span class="pre">log_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/local_tracker.html#LocalTracker.log_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_metrics" title="Permalink to this definition"></a></dt>
+<dd><p>Take a dictionary with metrics and log content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metrics</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>) -- Dict in shape {metric: val, ...}.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.local_tracker.LocalTracker.log_checkpoint">
+<span class="sig-name descname"><span class="pre">log_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_checkpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/local_tracker.html#LocalTracker.log_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_checkpoint" title="Permalink to this definition"></a></dt>
+<dd><p>Save a module checkpoint.</p>
+<p>The checkpoint is a dictionary containing its state dict and optimizer parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module_checkpoint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>) -- Dictionary with model weights.</p></li>
+<li><p><strong>fold</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Current fold. Should be extracted before beginning to upload to avoid concurrency.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.local_tracker.LocalTracker.log_artifacts">
+<span class="sig-name descname"><span class="pre">log_artifacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">artifacts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/local_tracker.html#LocalTracker.log_artifacts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.local_tracker.LocalTracker.log_artifacts" title="Permalink to this definition"></a></dt>
+<dd><p>Log dictionary with artifacts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>artifacts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../utils/artifacts.html#ecgan.utils.artifacts.Artifact" title="ecgan.utils.artifacts.Artifact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Artifact</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../utils/artifacts.html#ecgan.utils.artifacts.Artifact" title="ecgan.utils.artifacts.Artifact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Artifact</span></code></a>]]) -- Dictionary containing artifacts to log.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.local_tracker.LocalTracker.load_config">
+<span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_uri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/local_tracker.html#LocalTracker.load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.local_tracker.LocalTracker.load_config" title="Permalink to this definition"></a></dt>
+<dd><p>Load config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>run_uri</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) -- Path pointing to project root.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Loaded yml config as dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ecgan.evaluation.tracker.wb_tracker"></span><p>Tracker storing data using weights and biases.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.wb_tracker.WBTracker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.tracker.wb_tracker.</span></span><span class="sig-name descname"><span class="pre">WBTracker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_locally</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_checkpoint_s3</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/wb_tracker.html#WBTracker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.wb_tracker.WBTracker" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ecgan.evaluation.tracker.base_tracker.BaseTracker" title="ecgan.evaluation.tracker.base_tracker.BaseTracker"><code class="xref py py-class docutils literal notranslate"><span class="pre">ecgan.evaluation.tracker.base_tracker.BaseTracker</span></code></a></p>
+<p>Class to manage calculating metrics and logging them with Weights &amp; Biases (W&amp;B).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) -- Weights and Biases entity name (given by W&amp;B).</p></li>
+<li><p><strong>project</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) -- Weights and Biases project name (chosen by user).</p></li>
+<li><p><strong>run_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) -- Weights and Biases run name (chosen by user).</p></li>
+<li><p><strong>save_pdf</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) -- Flag to save data as pdf <strong>ADDITIONALLY</strong> to normal plots.</p></li>
+<li><p><strong>save_locally</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) -- Flag to retain local storage of data.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.wb_tracker.WBTracker.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/wb_tracker.html#WBTracker.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.wb_tracker.WBTracker.close" title="Permalink to this definition"></a></dt>
+<dd><p>Close training run.</p>
+<p>The uploading might require some time. The run is interrupted if the upload did not complete after 90 seconds.
+You can manually upload the data afterwards with a local sync.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.wb_tracker.WBTracker.watch">
+<span class="sig-name descname"><span class="pre">watch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/wb_tracker.html#WBTracker.watch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.wb_tracker.WBTracker.watch" title="Permalink to this definition"></a></dt>
+<dd><p>Pass a module that should be watched during training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.wb_tracker.WBTracker.log_config">
+<span class="sig-name descname"><span class="pre">log_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/wb_tracker.html#WBTracker.log_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_config" title="Permalink to this definition"></a></dt>
+<dd><p>Log parameters for training setup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.wb_tracker.WBTracker.log_metrics">
+<span class="sig-name descname"><span class="pre">log_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/wb_tracker.html#WBTracker.log_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_metrics" title="Permalink to this definition"></a></dt>
+<dd><p>Take a dictionary with metrics and log content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>metrics</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>) -- Dict in shape {metric: val, ...}.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.wb_tracker.WBTracker.log_checkpoint">
+<span class="sig-name descname"><span class="pre">log_checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_checkpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/wb_tracker.html#WBTracker.log_checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_checkpoint" title="Permalink to this definition"></a></dt>
+<dd><p>Save a module checkpoint.</p>
+<p>The checkpoint is a dictionary containing its state dict and
+optimizer parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module_checkpoint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>) -- Dictionary with model weights.</p></li>
+<li><p><strong>fold</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) -- Current fold. Should be extracted before beginning to upload to avoid concurrency.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.wb_tracker.WBTracker.log_artifacts">
+<span class="sig-name descname"><span class="pre">log_artifacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">artifacts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/wb_tracker.html#WBTracker.log_artifacts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.wb_tracker.WBTracker.log_artifacts" title="Permalink to this definition"></a></dt>
+<dd><p>Log dictionary with artifacts to W&amp;B.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>artifacts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../utils/artifacts.html#ecgan.utils.artifacts.Artifact" title="ecgan.utils.artifacts.Artifact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Artifact</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../utils/artifacts.html#ecgan.utils.artifacts.Artifact" title="ecgan.utils.artifacts.Artifact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Artifact</span></code></a>]]) -- Dictionary containing artifacts to log.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.wb_tracker.WBTracker.load_config">
+<span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_uri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/wb_tracker.html#WBTracker.load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.wb_tracker.WBTracker.load_config" title="Permalink to this definition"></a></dt>
+<dd><p>Load config as dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-ecgan.evaluation.tracker.tracker_factory"></span><p>Tracker factory to retrieve the instance of a tracker defined in the configuration file.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecgan.evaluation.tracker.tracker_factory.TrackerFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ecgan.evaluation.tracker.tracker_factory.</span></span><span class="sig-name descname"><span class="pre">TrackerFactory</span></span><a class="reference internal" href="../../_modules/ecgan/evaluation/tracker/tracker_factory.html#TrackerFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecgan.evaluation.tracker.tracker_factory.TrackerFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Create desired tracker.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="optimization.html" class="btn btn-neutral float-left" title="Optimization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../visualization/index.html" class="btn btn-neutral float-right" title="Visualization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

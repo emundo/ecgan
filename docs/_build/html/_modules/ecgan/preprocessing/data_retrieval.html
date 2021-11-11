@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecgan.preprocessing.data_retrieval &mdash; ECGAN 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> ECGAN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setup-and-first-steps">Setup and first steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-tracking-w-b">Setting up tracking (W&amp;B)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-kaggle-optional">Setting up kaggle [Optional]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../get_started.html#setting-up-s3-boto">Setting up S3/BOTO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html">Framework Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#general-overview">General overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#run-models-using-the-cli">Run models using the CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#managing-the-workflow">Managing the workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../structure.html#implement-your-own-usecase">Implement Your Own Usecase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../supported.html">Supported Methods and Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-datasets">Supported Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-preprocessing">Supported Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-training">Supported Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-models">Supported Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#supported-trackers">Supported trackers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../supported.html#further-downstream-tasks">Further downstream tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preprocessing.html">Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../synthesis.html">Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anomaly_detection.html">Anomaly Detection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../anomaly_detection.html#anogan">AnoGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/cli.html">CLI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/manager.html">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/config/index.html">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/dataclasses.html">Custom Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/global_configs.html">Global configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/initialization.html">Config initializations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/config/nested_dataclasses.html">Nested Dataclasses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/preprocessing/index.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/cleansing.html">Cleansing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/data_retrieval.html">Data Retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/preprocessor.html">Preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/preprocessing/sampling.html">Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/training/index.html">Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/datasets.html">Dataset Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/training/trainer.html">Trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/modules/index.html">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/basemodule.html">Base Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/generative/index.html">Generative Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/base.html">Generative Base Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/beatgan.html">Autoencoder GAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/dcgan.html">DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/ecgan.html">Recurrent DCGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/rgan.html">RGAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/generative/vaegan.html">VAEGAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/classifiers/index.html">Classification Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/base.html">Base classifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/classifiers/nn_classifier.html">NN Classifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/modules/inverse_mapping/index.html">Inverse Mappings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inverse_mapping.html">Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/inversion.html">Base Inverse Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/modules/inverse_mapping/vanilla_inverse_mapping.html">Simple Inverse Mapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/networks/index.html">Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/anomaly_detection/index.html">Anomaly Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_assessment.html">Anomaly Assessment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/anomaly_manager.html">Anomaly Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/embedder.html">Embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/reconstruction.html">Reconstruction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/anomaly_detection/detector/index.html">Detectors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/base_detector.html">Base Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/classification_detector.html">Classification Detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/detector_factory.html">Detector Factory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/anomaly_detection/detector/reconstruction_detector.html">Reconstruction Detector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/evaluation/index.html">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/metrics.html">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/optimization.html">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/evaluation/tracker.html">Tracker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/visualization/index.html">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/evaluation.html">Evaluation visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/visualization/plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/artifacts.html">Tracking artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/configurable.html">Configurable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/custom_types.html">Custom Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/datasets.html">Datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#role-in-the-ecgan-pipeline">Role in the ECGAN Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utils/datasets.html#adding-new-datasets">Adding new Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distances.html">Distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/distributions.html">Custom distributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/embeddings.html">Embeddings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/interpolation.html">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/label.html">Label</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/log.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/losses.html">Loss functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/optimizer.html">Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/parser.html">Parser options for the CLI commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/plotting.html">Plotting helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/reconstruction_criteria.html">Reconstruction Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/splitting.html">Splitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/timer.html">Timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/transformation.html">Transformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../references.html#related-work">Related Work</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../references.html#related-modules">Related Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#goal">Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#get-started-with-the-development">Get started with the development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#improving-baselines">Improving Baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../about.html#adding-modules">Adding Modules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ECGAN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ecgan.preprocessing.data_retrieval</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecgan.preprocessing.data_retrieval</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Classes specifying the retrieval/creation of datasets.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">floor</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">wandb</span>
+
+<span class="kn">from</span> <span class="nn">ecgan.config</span> <span class="kn">import</span> <span class="n">PreprocessingConfig</span><span class="p">,</span> <span class="n">SinePreprocessingConfig</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.configurable</span> <span class="kn">import</span> <span class="n">Configurable</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.custom_types</span> <span class="kn">import</span> <span class="n">TrackerType</span><span class="p">,</span> <span class="n">Transformation</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.datasets</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DatasetFactory</span><span class="p">,</span>
+    <span class="n">MitbihBeatganDataset</span><span class="p">,</span>
+    <span class="n">MitbihDataset</span><span class="p">,</span>
+    <span class="n">MitbihExtractedBeatsDataset</span><span class="p">,</span>
+    <span class="n">PTBExtractedBeatsDataset</span><span class="p">,</span>
+    <span class="n">ShaoxingDataset</span><span class="p">,</span>
+    <span class="n">SineDataset</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.miscellaneous</span> <span class="kn">import</span> <span class="n">get_num_workers</span><span class="p">,</span> <span class="n">load_pickle</span><span class="p">,</span> <span class="n">load_pickle_numpy</span><span class="p">,</span> <span class="n">save_pickle</span>
+<span class="kn">from</span> <span class="nn">ecgan.utils.splitting</span> <span class="kn">import</span> <span class="n">load_split</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DataRetriever"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetriever">[docs]</a><span class="k">class</span> <span class="nc">DataRetriever</span><span class="p">(</span><span class="n">Configurable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :code:`DataRetriever` base class for retrieval of datasets.</span>
+
+<span class="sd">    Objects of this class are used to download a given dataset and additional information on the dataset from a given</span>
+<span class="sd">    source. More information on implemented datasets and how to add new datasets can be found in :ref:`Datasets`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: Name of the dataset which has to be supported by :class:`ecgan.utils.datasets.DatasetFactory`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">PreprocessingConfig</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetFactory</span><span class="p">()(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+
+<div class="viewcode-block" id="DataRetriever.configure"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetriever.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default preprocessing configuration for a data retriever object.&quot;&quot;&quot;</span>
+        <span class="n">num_workers</span> <span class="o">=</span> <span class="n">get_num_workers</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">PreprocessingConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+            <span class="n">loading_src</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+            <span class="n">target_sequence_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">config</span></div>
+
+<div class="viewcode-block" id="DataRetriever.load"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetriever.load">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Download the dataset to disk.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;DataRetriever needs to implement data downloading using `load` method.&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="KaggleDataRetriever"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.KaggleDataRetriever">[docs]</a><span class="k">class</span> <span class="nc">KaggleDataRetriever</span><span class="p">(</span><span class="n">DataRetriever</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A base class for downloading datasets from Kaggle.</span>
+
+<span class="sd">    Since there is no rigid format for the datasets on Kaggle, the raw dataset from disk needs to be implemented and</span>
+<span class="sd">    preprocessed by a custom :ref:`Preprocessor`.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        Install the pip kaggle module if you want to download the data. It is included in the :code:`requirements.txt`</span>
+<span class="sd">        or can be installed via :code:`pip install kaggle`. Create a file with your authentication information at</span>
+<span class="sd">        :code:`~/.kaggle/kaggle.json.` or export the tokens using your command line (see `Kaggle on Github</span>
+<span class="sd">        &lt;https://github.com/Kaggle/kaggle-api&gt;`_ for more information). If you cannot or do not want to use the kaggle</span>
+<span class="sd">        API, download the data from the individual kaggle repositories and unzip them to</span>
+<span class="sd">        :code:`&lt;data_location&gt;/&lt;dataset_name&gt;/raw`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="KaggleDataRetriever.load"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.KaggleDataRetriever.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load a dataset from Kaggle.</span>
+
+<span class="sd">        The source url has to be given in the config as :code:`cfg.LOADING_SRC`.</span>
+<span class="sd">        The target directory has to be given as :code:`cfg.LOADING_DIR`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_SRC</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;cfg.LOADING_SRC cannot be None. Need to supply Kaggle source repository.&#39;</span><span class="p">)</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">target</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">target</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s1">&#39;Directory is not empty and download will be skipped.&#39;</span>
+                <span class="s1">&#39;Make sure to point to an empty directory if you want to download &#39;</span>
+                <span class="s1">&#39;the data once again. &#39;</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Downloading dataset </span><span class="si">{0}</span><span class="s1"> from kaggle...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_SRC</span><span class="p">))</span>
+
+            <span class="kn">import</span> <span class="nn">kaggle</span>
+
+            <span class="n">kaggle</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">authenticate</span><span class="p">()</span>
+            <span class="n">kaggle</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">dataset_download_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_SRC</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Could not download data to </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Download successful. Data has been saved to </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="MitbihDataRetriever"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihDataRetriever">[docs]</a><span class="k">class</span> <span class="nc">MitbihDataRetriever</span><span class="p">(</span><span class="n">KaggleDataRetriever</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The MITBIH dataset is downloaded via the regular :class:`ecgan.preprocessing.data_retrieval.KaggleDataLoader`.</span>
+
+<span class="sd">    This class exists to configure the KaggleDataLoader correctly and supply relevant parameters required for further</span>
+<span class="sd">    preprocessing. The given configuration is used only during initialization and can be changed if desired.</span>
+
+<span class="sd">    The dataset is the raw original dataset and cannot be used for classification by default, requiring manual</span>
+<span class="sd">    preprocessing steps. To use the MITBIH data you can either preprocess the downloaded data arbitrarily by yourself</span>
+<span class="sd">    or use the supported preprocessed datasets :code:`mitbih_beats` or :code:`mitbih_beatgan` during initialization.</span>
+
+<span class="sd">    | **Paper**:</span>
+<span class="sd">    | `Moody and Mark 2001 &lt;https://ieeexplore.ieee.org/abstract/document/932724&gt;`_.</span>
+<span class="sd">    | **Information on source**:</span>
+<span class="sd">    | Original data can be found at `PhysioNet &lt;https://physionet.org/content/mitdb/1.0.0/&gt;`_.</span>
+<span class="sd">      This framework **does not** use the original data source but an unofficial</span>
+<span class="sd">      `kaggle mirror &lt;https://www.kaggle.com/mondejar/mitbih-database/&gt;`_. The data remains unchanged but</span>
+<span class="sd">      is saved as csv for easier preprocessing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MitbihDataRetriever.configure"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihDataRetriever.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the default MITBIH dataset.&quot;&quot;&quot;</span>
+        <span class="n">num_workers</span> <span class="o">=</span> <span class="n">get_num_workers</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">PreprocessingConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+            <span class="n">loading_src</span><span class="o">=</span><span class="n">MitbihDataset</span><span class="o">.</span><span class="n">loading_src</span><span class="p">,</span>
+            <span class="n">target_sequence_length</span><span class="o">=</span><span class="n">MitbihDataset</span><span class="o">.</span><span class="n">default_seq_len</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="MitbihExtractedBeatsDataRetriever"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihExtractedBeatsDataRetriever">[docs]</a><span class="k">class</span> <span class="nc">MitbihExtractedBeatsDataRetriever</span><span class="p">(</span><span class="n">KaggleDataRetriever</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download the (beat-wise) segmented MITBIH dataset.</span>
+
+<span class="sd">    The segmented MITBIH dataset is downloaded via the regular KaggleDataLoader.</span>
+
+<span class="sd">    | **Paper**:</span>
+<span class="sd">    | `Kachuee et al. 2018 &lt;https://arxiv.org/abs/1805.00794&gt;`_.</span>
+<span class="sd">    | **Information on source**:</span>
+<span class="sd">    | Data is downloaded from the authors `official kaggle repository &lt;https://www.kaggle.com/shayanfazeli/heartbeat&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MitbihExtractedBeatsDataRetriever.configure"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihExtractedBeatsDataRetriever.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the MITBIH dataset with extracted beats.&quot;&quot;&quot;</span>
+        <span class="n">num_workers</span> <span class="o">=</span> <span class="n">get_num_workers</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">PreprocessingConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+            <span class="n">loading_src</span><span class="o">=</span><span class="n">MitbihExtractedBeatsDataset</span><span class="o">.</span><span class="n">loading_src</span><span class="p">,</span>
+            <span class="n">target_sequence_length</span><span class="o">=</span><span class="n">MitbihExtractedBeatsDataset</span><span class="o">.</span><span class="n">default_seq_len</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="PtbExtractedBeatsDataRetriever"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.PtbExtractedBeatsDataRetriever">[docs]</a><span class="k">class</span> <span class="nc">PtbExtractedBeatsDataRetriever</span><span class="p">(</span><span class="n">KaggleDataRetriever</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download the (beat-wise) segmented PTB dataset.</span>
+
+<span class="sd">    The segmented PTB dataset is downloaded via the regular KaggleDataLoader.</span>
+
+<span class="sd">    | Paper: `Kachuee et al. 2018 &lt;https://arxiv.org/abs/1805.00794&gt;`_.</span>
+<span class="sd">    | Information on source: Data is downloaded from the authors</span>
+<span class="sd">      `official kaggle repository &lt;https://www.kaggle.com/shayanfazeli/heartbeat&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PtbExtractedBeatsDataRetriever.configure"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.PtbExtractedBeatsDataRetriever.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the MITBIH dataset with extracted beats.&quot;&quot;&quot;</span>
+        <span class="n">num_workers</span> <span class="o">=</span> <span class="n">get_num_workers</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">PreprocessingConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+            <span class="n">loading_src</span><span class="o">=</span><span class="n">PTBExtractedBeatsDataset</span><span class="o">.</span><span class="n">loading_src</span><span class="p">,</span>
+            <span class="n">target_sequence_length</span><span class="o">=</span><span class="n">PTBExtractedBeatsDataset</span><span class="o">.</span><span class="n">default_seq_len</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="SineDataRetriever"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.SineDataRetriever">[docs]</a><span class="k">class</span> <span class="nc">SineDataRetriever</span><span class="p">(</span><span class="n">DataRetriever</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class to generate a synthetic dataset containing sine waves.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">PreprocessingConfig</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cfg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span> <span class="n">SinePreprocessingConfig</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Config needs to be SinePreprocessingConfig for sine dataset.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">:</span> <span class="n">SinePreprocessingConfig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span>
+
+<div class="viewcode-block" id="SineDataRetriever.load"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.SineDataRetriever.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a synthetic dataset with sine waves and save it.</span>
+
+<span class="sd">        Configuration is currently limited to the amount of samples you want to create and the target sequence length.</span>
+
+<span class="sd">        By default, the domain of sines will be between 0 and 25 which can lead to imperfect generated sine waves. This</span>
+<span class="sd">        is intended behavior to have more variety in the FFT of generated sine waves and can be changed manually. The</span>
+<span class="sd">        amplitude, frequency, phase and vertical translation will be chosen randomly. Furthermore, the dataset will be</span>
+<span class="sd">        imbalanced: only 20% of the data will be anomalous. Half of the anomalous data consists of noisy sine waves</span>
+<span class="sd">        (added gaussian noise) and the other half consists of superimposed sine waves. The resulting dataset can be used</span>
+<span class="sd">        to asses the classification or generative capabilities of a given model.</span>
+
+<span class="sd">        Since the resulting dataset will already in the target shape, no further preprocessing is currently supported</span>
+<span class="sd">        and the data is saved as an already preprocessed dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sine_lower_range</span><span class="p">,</span> <span class="n">sine_upper_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">RANGE</span>
+        <span class="n">anomaly_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">ANOMALY_PERCENTAGE</span>
+
+        <span class="n">num_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_SAMPLES</span>
+        <span class="k">if</span> <span class="n">num_samples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;num_samples has to be defined in config.&quot;</span><span class="p">)</span>
+        <span class="n">num_channels</span> <span class="o">=</span> <span class="n">SineDataset</span><span class="o">.</span><span class="n">num_channels</span>
+        <span class="n">seq_len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">TARGET_SEQUENCE_LENGTH</span>
+
+        <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">SYNTHESIS_SEED</span><span class="p">)</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+
+        <span class="n">amount_normal_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">anomaly_percentage</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_samples</span><span class="p">)</span>
+        <span class="n">amount_abnormal_samples</span> <span class="o">=</span> <span class="n">num_samples</span> <span class="o">-</span> <span class="n">amount_normal_samples</span>
+        <span class="c1"># func_in is the time dependency component of the sine wave.</span>
+        <span class="n">func_in</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">sine_lower_range</span><span class="p">,</span> <span class="n">sine_upper_range</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">amount_normal_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;Generating sine dataset with shape (</span><span class="si">{0}</span><span class="s1">, </span><span class="si">{1}</span><span class="s1">, </span><span class="si">{2}</span><span class="s1">) and </span><span class="si">{3}% a</span><span class="s1">nomalous series.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NUM_SAMPLES</span><span class="p">,</span>
+                <span class="n">seq_len</span><span class="p">,</span>
+                <span class="n">num_channels</span><span class="p">,</span>
+                <span class="n">anomaly_percentage</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">amplitude_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">AMPLITUDE</span>
+        <span class="n">frequency_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">FREQUENCY</span>
+        <span class="n">phase_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">PHASE</span>
+        <span class="n">v_translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">VERTICAL_TRANSLATION</span>
+        <span class="c1"># Generate normal (non-anomalous) sine waves</span>
+        <span class="n">amplitude</span> <span class="o">=</span> <span class="p">(</span><span class="n">amplitude_range</span> <span class="o">-</span> <span class="o">-</span><span class="n">amplitude_range</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
+            <span class="n">amount_normal_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="o">-</span><span class="n">amplitude_range</span>
+        <span class="n">frequency</span> <span class="o">=</span> <span class="p">(</span><span class="n">frequency_range</span> <span class="o">-</span> <span class="o">-</span><span class="n">frequency_range</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
+            <span class="n">amount_normal_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">)</span> <span class="o">+</span> <span class="o">-</span><span class="n">frequency_range</span>
+        <span class="n">phase</span> <span class="o">=</span> <span class="p">(</span><span class="n">phase_range</span> <span class="o">-</span> <span class="o">-</span><span class="n">phase_range</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">amount_normal_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">num_channels</span>
+        <span class="p">)</span> <span class="o">+</span> <span class="o">-</span><span class="n">phase_range</span>
+        <span class="n">vertical_translation</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_translation</span> <span class="o">-</span> <span class="o">-</span><span class="n">v_translation</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
+            <span class="n">amount_normal_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="o">-</span><span class="n">v_translation</span>
+
+        <span class="n">series</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">frequency</span> <span class="o">*</span> <span class="n">func_in</span> <span class="o">+</span> <span class="n">phase</span><span class="p">)</span> <span class="o">+</span> <span class="n">vertical_translation</span>
+
+        <span class="c1"># Generate anomalous sine waves:</span>
+        <span class="c1"># noise_percentage % are superimposed sine waves, (1-noise_percentage)% is random noise.</span>
+        <span class="n">noise_percentage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">NOISE_PERCENTAGE</span>
+
+        <span class="n">noise_series</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
+            <span class="n">ceil</span><span class="p">(</span><span class="n">noise_percentage</span> <span class="o">*</span> <span class="n">amount_abnormal_samples</span><span class="p">),</span>
+            <span class="n">seq_len</span><span class="p">,</span>
+            <span class="n">num_channels</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">superimposed_sine</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">series</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">series</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)]</span>
+                <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">series</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">series</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)]</span>
+                <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">series</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">series</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)]</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">floor</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">noise_percentage</span><span class="p">)</span> <span class="o">*</span> <span class="n">amount_abnormal_samples</span><span class="p">))</span>
+            <span class="p">]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">anomalous_series</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">noise_series</span><span class="p">,</span> <span class="n">superimposed_sine</span><span class="p">))</span>
+
+        <span class="n">data_array</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">series</span><span class="p">,</span> <span class="n">anomalous_series</span><span class="p">))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="c1"># Labels: Normal sine waves: 0; Noise: 1; Superimposed: 2</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">amount_normal_samples</span><span class="p">),</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="n">amount_abnormal_samples</span> <span class="o">*</span> <span class="n">noise_percentage</span><span class="p">)),</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">floor</span><span class="p">(</span><span class="n">amount_abnormal_samples</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">noise_percentage</span><span class="p">)),),</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+
+        <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">,</span> <span class="n">SineDataset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;processed&#39;</span><span class="p">)</span>
+
+        <span class="n">save_pickle</span><span class="p">(</span><span class="n">data_array</span><span class="p">,</span> <span class="n">full_path</span><span class="p">,</span> <span class="s1">&#39;data.pkl&#39;</span><span class="p">)</span>
+        <span class="n">save_pickle</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">full_path</span><span class="p">,</span> <span class="s1">&#39;label.pkl&#39;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;Successfully saved dataset to disc. Shape: </span><span class="si">{}</span><span class="s1">, Distribution: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">data_array</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SineDataRetriever.configure"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.SineDataRetriever.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for an artificial sine dataset.&quot;&quot;&quot;</span>
+        <span class="n">num_workers</span> <span class="o">=</span> <span class="n">get_num_workers</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">SinePreprocessingConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+            <span class="n">loading_src</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">target_sequence_length</span><span class="o">=</span><span class="n">SineDataset</span><span class="o">.</span><span class="n">default_seq_len</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;NUM_SAMPLES&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30000</span>
+
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="UrlDataRetriever"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.UrlDataRetriever">[docs]</a><span class="k">class</span> <span class="nc">UrlDataRetriever</span><span class="p">(</span><span class="n">DataRetriever</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class to download and extract zipped datasets from URLs.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">PreprocessingConfig</span><span class="p">,</span> <span class="n">delete_zip</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">cfg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_zip</span> <span class="o">=</span> <span class="n">delete_zip</span>
+
+<div class="viewcode-block" id="UrlDataRetriever.load"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.UrlDataRetriever.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load publicly available datasets which are saved as zips and extract them.</span>
+
+<span class="sd">        The URLDataRetriever does not support additional authentication. If errors occur please check if the dataset is</span>
+<span class="sd">        still available at the specified URL in the configuration file and please open an issue if this is not the case.</span>
+
+<span class="sd">        Subclasses need to implement the abstract methods to define meta data and determine how to unzip the data.</span>
+
+<span class="sd">        ..warning:</span>
+<span class="sd">            The `urllib` request might require the installation of a Python certificate for Mac.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_SRC</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Dataset cannot be None using the UrlDataLoader.&#39;</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">))</span>
+
+        <span class="n">save_location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">_raw.zip&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">save_location</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">save_location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">_raw.zip&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Downloading </span><span class="si">{0}</span><span class="s1"> ECG data into </span><span class="si">{1}</span><span class="s1"> ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">save_location</span><span class="p">))</span>
+                <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_SRC</span><span class="p">,</span> <span class="n">save_location</span><span class="p">)</span>
+
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">meta_file</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+                    <span class="n">meta_location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">,</span> <span class="n">meta_file</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Downloading meta data into </span><span class="si">{0}</span><span class="s1"> ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">meta_location</span><span class="p">))</span>
+                    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">meta_file</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">meta_location</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Could not download data to </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Download successful. Data has been saved in </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">save_location</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Skipping download, data has already been downloaded in </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">save_location</span><span class="p">))</span>
+
+        <span class="n">unzip_location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Unzipping data in </span><span class="si">{0}</span><span class="s1"> ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">extract_data</span><span class="p">(</span><span class="n">save_location</span><span class="p">,</span> <span class="n">unzip_location</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Data has been successfully unzipped in </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unzip_location</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete_zip</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">save_location</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Cleaning interrupted download </span><span class="si">{0}</span><span class="s1">, deleting&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unzip_location</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">unzip_location</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Could not download data to </span><span class="si">{0}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">LOADING_DIR</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+<div class="viewcode-block" id="UrlDataRetriever.get_meta"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.UrlDataRetriever.get_meta">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get meta information on the downloaded files if required.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UrlDataRetriever.extract_data"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.UrlDataRetriever.extract_data">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">extract_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_location</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">unzip_location</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract data from zip file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            save_location: Reference to local directory where the zip is stored.</span>
+<span class="sd">            unzip_location: Reference to local directory where the data shall be extracted to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="ShaoxingDataRetriever"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever">[docs]</a><span class="k">class</span> <span class="nc">ShaoxingDataRetriever</span><span class="p">(</span><span class="n">UrlDataRetriever</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download and extract the zipped Shaoxing dataset.</span>
+
+<span class="sd">    | **Paper**:</span>
+<span class="sd">    | `Zheng et al. 2020 &lt;https://pubmed.ncbi.nlm.nih.gov/32051412/&gt;`_.</span>
+<span class="sd">    | **Information on source**:</span>
+<span class="sd">    | Data is downloaded from their `official figshare mirror &lt;https://figshare.com/collections/ChapmanECG/4560497/2&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ShaoxingDataRetriever.get_meta"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get meta information on the downloaded files.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;RhythmNames.xlsx&#39;</span><span class="p">,</span> <span class="s1">&#39;https://ndownloader.figshare.com/files/15651296&#39;</span><span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;ConditionNames.xlsx&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;https://ndownloader.figshare.com/files/15651293&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;AttributesDictionary.xlsx&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;https://ndownloader.figshare.com/files/15653123&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;Diagnostics.xlsx&#39;</span><span class="p">,</span> <span class="s1">&#39;https://ndownloader.figshare.com/files/15651299&#39;</span><span class="p">),</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="ShaoxingDataRetriever.extract_data"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever.extract_data">[docs]</a>    <span class="k">def</span> <span class="nf">extract_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_location</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">unzip_location</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract data from zip file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            save_location: Reference to local directory where the zip is stored.</span>
+<span class="sd">            unzip_location: Reference to local directory where the data shall be extracted to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">save_location</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_ref</span><span class="p">:</span>
+            <span class="n">zip_ref</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">unzip_location</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ShaoxingDataRetriever.configure"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.ShaoxingDataRetriever.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the default configuration for the Shaoxing dataset.</span>
+
+<span class="sd">        The window_length, step size and target sequence length can be configured manually after initialization of the</span>
+<span class="sd">        config file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_workers</span> <span class="o">=</span> <span class="n">get_num_workers</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">PreprocessingConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+            <span class="n">loading_src</span><span class="o">=</span><span class="n">ShaoxingDataset</span><span class="o">.</span><span class="n">loading_src</span><span class="p">,</span>
+            <span class="n">target_sequence_length</span><span class="o">=</span><span class="n">ShaoxingDataset</span><span class="o">.</span><span class="n">default_seq_len</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+            <span class="n">window_length</span><span class="o">=</span><span class="mi">1250</span><span class="p">,</span>
+            <span class="n">window_step_size</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="MitbihBeatganDataRetriever"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever">[docs]</a><span class="k">class</span> <span class="nc">MitbihBeatganDataRetriever</span><span class="p">(</span><span class="n">UrlDataRetriever</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download and extract the zipped MITBIH dataset based on the BeatGAN preprocessing.</span>
+
+<span class="sd">    | **Paper**:</span>
+<span class="sd">    | See `Zhou et al. 2019 &lt;https://www.ijcai.org/Proceedings/2019/0616.pdf&gt;`_.</span>
+<span class="sd">    | **Information on source**:</span>
+<span class="sd">    | Data is downloaded from the</span>
+<span class="sd">      `official Dropbox mirror &lt;https://www.dropbox.com/sh/b17k2pb83obbrkn/</span>
+<span class="sd">      AABF9mUNVdaYwce9fnwXsg1ta/ano0?dl=0&amp;subfolder_nav_tracking=1&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MitbihBeatganDataRetriever.get_meta"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;No metadata required.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="MitbihBeatganDataRetriever.extract_data"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever.extract_data">[docs]</a>    <span class="k">def</span> <span class="nf">extract_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_location</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">unzip_location</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract data from zip file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            save_location: Reference to local directory where the zip is stored.</span>
+<span class="sd">            unzip_location: Reference to local directory where the data shall be extracted to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">save_location</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_ref</span><span class="p">:</span>
+            <span class="c1"># extract content into folder but remove toplevel dir.</span>
+            <span class="n">namelist</span> <span class="o">=</span> <span class="n">zip_ref</span><span class="o">.</span><span class="n">namelist</span><span class="p">()</span>
+            <span class="n">top_dir</span> <span class="o">=</span> <span class="n">namelist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">zip_ref</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">unzip_location</span><span class="p">,</span> <span class="n">members</span><span class="o">=</span><span class="n">namelist</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">namelist</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+                <span class="n">rename_args</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">unzip_location</span><span class="p">,</span> <span class="n">item</span><span class="p">),</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">unzip_location</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">item</span><span class="p">)),</span>
+                <span class="p">]</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="o">*</span><span class="n">rename_args</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">unzip_location</span><span class="p">,</span> <span class="n">top_dir</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="MitbihBeatganDataRetriever.configure"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.MitbihBeatganDataRetriever.configure">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">configure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the default configuration for the MITBIH dataset based on the BeatGAN preprocessing.&quot;&quot;&quot;</span>
+        <span class="n">num_workers</span> <span class="o">=</span> <span class="n">get_num_workers</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">PreprocessingConfig</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+            <span class="n">loading_src</span><span class="o">=</span><span class="n">MitbihBeatganDataset</span><span class="o">.</span><span class="n">loading_src</span><span class="p">,</span>
+            <span class="n">target_sequence_length</span><span class="o">=</span><span class="n">MitbihBeatganDataset</span><span class="o">.</span><span class="n">default_seq_len</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Default transformation from the original paper is beat wise minmax normalization</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;update&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;trainer&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;TRANSFORMATION&#39;</span><span class="p">:</span> <span class="n">Transformation</span><span class="o">.</span><span class="n">INDIVIDUAL</span><span class="o">.</span><span class="n">value</span><span class="p">}}</span>
+
+        <span class="k">return</span> <span class="n">config</span></div></div>
+
+
+<div class="viewcode-block" id="DataRetrieverFactory"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetrieverFactory">[docs]</a><span class="k">class</span> <span class="nc">DataRetrieverFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Meta module for creating data retriever instances.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">PreprocessingConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataRetriever</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve a specified dataset and save it to disc.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: String specifying the dataset to be downloaded.</span>
+<span class="sd">            cfg: Configuration for preprocessing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">datasets</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">MitbihDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">MitbihDataRetriever</span><span class="p">,</span>
+            <span class="n">MitbihExtractedBeatsDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">MitbihExtractedBeatsDataRetriever</span><span class="p">,</span>
+            <span class="n">ShaoxingDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">ShaoxingDataRetriever</span><span class="p">,</span>
+            <span class="n">SineDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">SineDataRetriever</span><span class="p">,</span>
+            <span class="n">MitbihBeatganDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">MitbihBeatganDataRetriever</span><span class="p">,</span>
+            <span class="n">PTBExtractedBeatsDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">PtbExtractedBeatsDataRetriever</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">datasets</span><span class="p">[</span><span class="n">dataset</span><span class="p">](</span><span class="n">dataset</span><span class="p">,</span> <span class="n">cfg</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Dataset </span><span class="si">{}</span><span class="s1"> is unknown.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">err</span>
+
+<div class="viewcode-block" id="DataRetrieverFactory.choose_class"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.DataRetrieverFactory.choose_class">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">choose_class</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataRetriever</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve a specified dataset and save it to disc.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: String specifying the dataset to be downloaded.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            DataRetriever class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">datasets</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">MitbihDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">MitbihDataRetriever</span><span class="p">,</span>
+            <span class="n">MitbihExtractedBeatsDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">MitbihExtractedBeatsDataRetriever</span><span class="p">,</span>
+            <span class="n">ShaoxingDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">ShaoxingDataRetriever</span><span class="p">,</span>
+            <span class="n">SineDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">SineDataRetriever</span><span class="p">,</span>
+            <span class="n">MitbihBeatganDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">MitbihBeatganDataRetriever</span><span class="p">,</span>
+            <span class="n">PTBExtractedBeatsDataset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">PtbExtractedBeatsDataRetriever</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">DataRetriever</span><span class="p">,</span> <span class="n">datasets</span><span class="p">[</span><span class="n">dataset</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Dataset </span><span class="si">{0}</span><span class="s1"> is unknown.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">err</span></div></div>
+
+
+<div class="viewcode-block" id="retrieve_fold_from_existing_split"><a class="viewcode-back" href="../../../api/preprocessing/data_retrieval.html#ecgan.preprocessing.data_retrieval.retrieve_fold_from_existing_split">[docs]</a><span class="k">def</span> <span class="nf">retrieve_fold_from_existing_split</span><span class="p">(</span>
+    <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">split_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">split_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">fold</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">target_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">location</span><span class="p">:</span> <span class="n">TrackerType</span> <span class="o">=</span> <span class="n">TrackerType</span><span class="o">.</span><span class="n">WEIGHTS_AND_BIASES</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load and split data given an **existing** split file.</span>
+
+<span class="sd">    The split file has to be previously saved by an instance of :class:`ecgan.evaluation.tracker.BaseTracker`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_dir: Directory containing the data/label pkl files (should be loaded from config used to create the split).</span>
+<span class="sd">        split_path: Pointing to the run from which the split shall be loaded from.</span>
+<span class="sd">            Format is usually &lt;entity&gt;/&lt;project&gt;/&lt;run_id&gt;.</span>
+<span class="sd">        split_file: Pointing to the file inside :code:`split_path` containing the split indices.</span>
+<span class="sd">        fold: The fold used during the training run that shall be evaluated.</span>
+<span class="sd">        location: Tracker location of split file.</span>
+<span class="sd">        target_dir: Directory the split file is saved to if it is retrieved from remote host.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tensors containing the train_x, test_x, vali_x, train_y, test_y, vali_y data from the given split.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">load_pickle_numpy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;data.pkl&#39;</span><span class="p">)))</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">load_pickle_numpy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;label.pkl&#39;</span><span class="p">)))</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Retrieving data split from run </span><span class="si">{0}</span><span class="s1"> in file </span><span class="si">{1}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_path</span><span class="p">,</span> <span class="n">split_file</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">location</span> <span class="o">==</span> <span class="n">TrackerType</span><span class="o">.</span><span class="n">WEIGHTS_AND_BIASES</span><span class="p">:</span>
+        <span class="n">api</span> <span class="o">=</span> <span class="n">wandb</span><span class="o">.</span><span class="n">Api</span><span class="p">()</span>
+
+        <span class="n">run</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">split_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">split_file</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="s1">&#39;artifacts/&#39;</span><span class="p">):</span>
+            <span class="n">split_file</span> <span class="o">=</span> <span class="n">split_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;artifacts/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">file</span><span class="p">(</span><span class="n">split_file</span><span class="p">)</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">split_file</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_path</span><span class="p">,</span> <span class="n">split_file</span><span class="p">)</span>
+    <span class="n">split_location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">split_file</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data split retrieved. Stored in </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_location</span><span class="p">))</span>
+    <span class="n">split</span> <span class="o">=</span> <span class="n">load_pickle</span><span class="p">(</span><span class="n">split_location</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">load_split</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">index_dict</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="n">fold</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Fiete Lüer, Tobias Weber, Maxim Dolgich.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
