@@ -135,7 +135,7 @@ class ExperimentConfig:
         experiment_name: str,
         module: str,
         dataset: str,
-        tracker: str = 'wb',
+        tracker: str = TrackerType.LOCAL.value,
         local_save: bool = False,
         save_pdf: bool = False,
         loading_dir: str = 'data',
