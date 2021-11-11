@@ -1,0 +1,47 @@
+exclude: docs
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+    -   id: detect-private-key
+    -   id: end-of-file-fixer
+    -   id: name-tests-test
+    -   id: pretty-format-json
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v0.910'
+    hooks:
+    -   id: mypy
+        additional_dependencies: [types-all]
+-   repo: https://github.com/PyCQA/pylint
+    rev: 'v2.11.1'
+    hooks:
+    -   id: pylint
+        args:
+            - --rcfile=.pylintrc
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.9.0
+    hooks:
+    -   id: isort
+        args:
+            - --line-length=120
+            - --multi-line=3  # Bit of a magic number https://pycqa.github.io/isort/docs/configuration/options/#multi-line-output
+            - --ensure-newline-before-comments
+            - --trailing-comma
+-   repo: https://github.com/psf/black
+    rev: 21.9b0
+    hooks:
+    -   id: black
+        args:
+            - ecgan
+            - --line-length=120
+            - --skip-string-normalization
+-   repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.1.0
+    hooks:
+        - id: pydocstyle
+          args:
+              - --ignore=D200,D203,D208,D212,D413,D407,D406,D107
+              - --ignore-decorators=property

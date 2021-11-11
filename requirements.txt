@@ -1,0 +1,37 @@
+## Required for training (and detection)
+numba >= 0.54.0
+numpy >= 1.20.0, < 1.22.0
+torch >= 1.9.1, < 1.10.0
+torchvision >= 0.10.1, < 0.11.0
+adabelief-pytorch >= 0.2.0, <0.3.0
+
+# tracking and storage
+wandb >= 0.12.2, < 0.13.0 # Required for organization and storage of experimental results (training as well as anomaly detection
+boto3~=1.17.64  # required for s3 storage with wandb
+
+# visualization
+matplotlib >= 3.4.3, < 3.5.0
+seaborn>= 0.11.2, <0.12.0
+
+
+## Required for preprocessing
+Pillow >=8.3.2, < 9.0.0
+pylttb >= 0.1.9, < 0.2.0
+kaggle >= 1.5.0, < 1.6.0  # required for downloading some datasets
+tqdm >= 4.62.0, < 4.63.0
+
+
+## Required for anomaly detection/evaluation
+scikit-learn >= 1.0.0, < 2.0.0
+umap-learn >= 0.5.1, < 0.6.0
+
+
+## Pipeline and miscellaneous
+setuptools >= 58.0.0, < 59.0.0
+pyyaml >= 5.4.0, < 6.0.0
+openpyxl >= 3.0.7, <= 3.1.0
+pre-commit >= 2.15.0, <= 2.16.0
+argparse == 1.4.0
+
+
+-e .
