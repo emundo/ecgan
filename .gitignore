@@ -185,6 +185,7 @@ eval
 eval-remote
 .dbconfig.yml
 *.yml
+!configs/*.yml
 
 # Wandb runs
 wandb
