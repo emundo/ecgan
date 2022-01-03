@@ -62,7 +62,6 @@ class AutoEncoder(BaseGenerativeModule):
 
         self.num_fixed_samples: int = 8
 
-        print("self.cfg latent", self.cfg.latent_distribution, LatentDistribution.ENCODER_BASED)
         if self.cfg.latent_distribution == LatentDistribution.ENCODER_BASED:
             self.fixed_noise = torch.empty((self.num_fixed_samples, self.seq_len, self.latent_size)).to(self.device)
         else:
@@ -240,9 +239,11 @@ class AutoEncoder(BaseGenerativeModule):
             metric_collection = []
 
             # Retrieve losses and update gradients
-            disc_losses, disc_metrics = self.criterion(real_data)
-            self._optim.optimize(disc_losses)
-            metric_collection.extend(disc_metrics)
+            losses, metrics = self.criterion(real_data)
+            self._optim.optimize(losses)
+            metric_collection.extend(metrics)
+
+            print("metric_collection", metric_collection)
 
             return {key: float(value) for (key, value) in metric_collection}
 

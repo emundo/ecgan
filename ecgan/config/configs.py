@@ -21,6 +21,7 @@ from ecgan.config.dataclasses import (
     SinePreprocessingConfig,
     TrainerConfig,
     VAEGANConfig,
+    VariationalAutoEncoderConfig,
 )
 from ecgan.config.nested_dataclass import nested_dataclass, nested_dataclass_asdict
 from ecgan.utils.custom_types import AnomalyDetectionStrategies, SupportedModules, TrackerType
@@ -299,6 +300,7 @@ class ModuleConfigFactory:
             SupportedModules.RNN.value: BaseNNConfig,
             SupportedModules.CNN.value: BaseNNConfig,
             SupportedModules.AUTOENCODER.value: AutoEncoderConfig,
+            SupportedModules.VAE.value: VariationalAutoEncoderConfig,
         }
 
         try:

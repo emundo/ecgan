@@ -454,6 +454,13 @@ class AutoEncoderConfig(ModuleConfig):
 
 
 @nested_dataclass
+class VariationalAutoEncoderConfig(AutoEncoderConfig):
+    """Generalized configuration of a GAN module."""
+
+    KL_BETA: float
+
+
+@nested_dataclass
 class GeneratorConfig(BaseNNConfig):
     """Generic generator configuration."""
 
