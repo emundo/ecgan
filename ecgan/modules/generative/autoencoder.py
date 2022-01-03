@@ -68,7 +68,6 @@ class AutoEncoder(BaseGenerativeModule):
             raise ValueError("Encoder latent space ('encoder') needs to be used for autoencoder.")
         # Tensors which can be filled during train/validation. Can be reset using self._reset_internal_tensors.
         self.reconstruction_error = torch.empty(0).to(self.device)
-        self.discrimination_error = torch.empty(0).to(self.device)
         self.latent_vectors_train = torch.empty(0).to(self.device)
         self.latent_vectors_vali = torch.empty(0).to(self.device)
         self.label = torch.empty(0).to(self.device)
@@ -243,8 +242,6 @@ class AutoEncoder(BaseGenerativeModule):
             self._optim.optimize(losses)
             metric_collection.extend(metrics)
 
-            print("metric_collection", metric_collection)
-
             return {key: float(value) for (key, value) in metric_collection}
 
         except TypeError as err:
@@ -380,30 +377,24 @@ class AutoEncoder(BaseGenerativeModule):
                 MetricType.FSCORE,
                 errors=[self.reconstruction_error.cpu()],
                 taus=torch.linspace(0, 1, 50).numpy().tolist(),
-                params=[torch.ones(1).numpy().tolist()],
+                params=[],
                 ground_truth_labels=self.label.cpu(),
             )
             logger.info(
                 "Best params: {} for data {}.".format(best_params, torch.unique(self.label, return_counts=True))
             )
             self.tau = best_params[0][1]
-            lambda_ = best_params[0][2]
             result.append(
                 ValueArtifact(
                     'grid/lambda_tau',
                     float(self.tau),
                 )
             )
-            result.append(
-                ValueArtifact(
-                    'grid/lambda',
-                    float(lambda_),
-                )
-            )
+
             predictions = retrieve_labels_from_weights(
-                errors=[self.reconstruction_error.cpu(), self.discrimination_error.cpu()],
+                errors=[self.reconstruction_error.cpu()],
                 tau=self.tau,
-                weighting_params=[lambda_],
+                weighting_params=[],
             )
             result.extend(
                 self._get_metrics(self.label, predictions, 'grid/lambda', log_fscore=True, log_auroc=True, log_mcc=True)
@@ -415,7 +406,6 @@ class AutoEncoder(BaseGenerativeModule):
     def _reset_internal_tensors(self):
         """Reset tensors which are filled internally during an epoch."""
         self.reconstruction_error = torch.empty(0).to(self.device)
-        self.discrimination_error = torch.empty(0).to(self.device)
         self.label = torch.empty(0).to(self.device)
         self.latent_vectors_train = torch.empty(0).to(self.device)
         self.latent_vectors_vali = torch.empty(0).to(self.device)
