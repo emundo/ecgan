@@ -522,3 +522,39 @@ class GANLossFactory:
             return WassersteinGeneratorLoss(discriminator_sampler, generator_sampler)
 
         raise AttributeError('Argument {0} is not set correctly.'.format(loss))
+
+
+class AutoEncoderLoss(Configurable):
+    """Base loss class for custom GAN losses."""
+
+    def __init__(self, autoencoder_sampler: GeneratorSampler, use_mse: bool) -> None:
+        super().__init__()
+        self.autoencoder_sampler = autoencoder_sampler
+        self._internal_loss = torch.nn.MSELoss() if use_mse else torch.nn.BCELoss()
+
+    def forward(self, training_data: Tensor) -> Tuple[LossType, LossMetricType]:
+        """Perform a forward pass for the loss."""
+        batch_size = training_data.shape[0]
+        torch.zeros(batch_size, device=training_data.device)
+
+        noise = cast(EncoderBasedGeneratorSampler, self.autoencoder_sampler).sample_encoder(training_data)
+        faked_output = self.autoencoder_sampler.sample(noise)
+
+        error = self._internal_loss(faked_output, training_data)
+
+        return error, [
+            ('loss_mse', float(error)),
+        ]
+
+    def __call__(self, training_data: Tensor) -> Tuple[LossType, LossMetricType]:
+        """Loss-specific forward will be applied upon call."""
+        return self.forward(training_data)
+
+    @staticmethod
+    def _configure(name: str) -> Dict:
+        return {'LOSS': {'NAME': name}}
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for a general loss function."""
+        return AutoEncoderLoss._configure(Losses.UNDEFINED.value)

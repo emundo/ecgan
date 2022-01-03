@@ -438,6 +438,22 @@ class BaseNNConfig(ModuleConfig):
 
 
 @nested_dataclass
+class AutoEncoderConfig(ModuleConfig):
+    """Generalized configuration of a GAN module."""
+
+    LATENT_SIZE: int
+    ENCODER: BaseNNConfig
+    DECODER: BaseNNConfig
+    TANH_OUT: bool
+    LATENT_SPACE: str
+
+    @property
+    def latent_distribution(self) -> LatentDistribution:
+        """Convenience conversion to internal enum type."""
+        return LatentDistribution(self.LATENT_SPACE)
+
+
+@nested_dataclass
 class GeneratorConfig(BaseNNConfig):
     """Generic generator configuration."""
 

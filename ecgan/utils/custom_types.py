@@ -237,6 +237,7 @@ class SupportedModules(Enum):
     VAEGAN = 'vaegan'
     RNN = 'rnn'
     CNN = 'cnn'
+    AUTOENCODER = 'autoencoder'
 
 
 # Optimizer can either handle a single tensor or multiple losses as a tuple (NAME, LossTensor).

@@ -7,6 +7,7 @@ import yaml
 
 from ecgan.config.dataclasses import (
     AdExperimentConfig,
+    AutoEncoderConfig,
     BaseNNConfig,
     DetectionConfig,
     EncoderGANConfig,
@@ -297,6 +298,7 @@ class ModuleConfigFactory:
             SupportedModules.VAEGAN.value: VAEGANConfig,
             SupportedModules.RNN.value: BaseNNConfig,
             SupportedModules.CNN.value: BaseNNConfig,
+            SupportedModules.AUTOENCODER.value: AutoEncoderConfig,
         }
 
         try:
