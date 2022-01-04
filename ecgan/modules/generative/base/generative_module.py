@@ -7,7 +7,7 @@ import torch
 from torch import no_grad
 
 from ecgan.config import ModuleConfig
-from ecgan.evaluation.metrics.classification import AUROCMetric, FScoreMetric, MCCMetric
+from ecgan.evaluation.metrics.classification import AUROCMetric, AvgPrecisionMetric, FScoreMetric, MCCMetric
 from ecgan.evaluation.metrics.mmd import MaxMeanDiscrepancy
 from ecgan.evaluation.metrics.tstr import TSTR
 from ecgan.modules.base import BaseModule
@@ -170,6 +170,7 @@ class BaseGenerativeModule(BaseModule):
         log_fscore: bool = True,
         log_mcc: bool = True,
         log_auroc: bool = True,
+        log_avg_prec: bool = True,
     ) -> List[ValueArtifact]:
         result: List = []
         if log_fscore:
@@ -182,5 +183,8 @@ class BaseGenerativeModule(BaseModule):
         if log_auroc:
             auroc = AUROCMetric().calculate(real_labels, predicted_labels)
             result.append(ValueArtifact('{}_auroc'.format(identifier), auroc))
+        if log_avg_prec:
+            avg_prec = AvgPrecisionMetric().calculate(real_labels, predicted_labels)
+            result.append(ValueArtifact('{}_ap'.format(identifier), avg_prec))
 
         return result

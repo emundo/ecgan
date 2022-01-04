@@ -16,7 +16,7 @@ from ecgan.config import AutoEncoderConfig, BaseCNNConfig, OptimizerConfig, nest
 from ecgan.evaluation.optimization import optimize_metric, optimize_tau_single_error, retrieve_labels_from_weights
 from ecgan.modules.generative.base import BaseGenerativeModule
 from ecgan.networks.beatgan import BeatganGenerator, BeatganInverseEncoder
-from ecgan.utils.artifacts import Artifact, ValueArtifact
+from ecgan.utils.artifacts import Artifact, ImageArtifact, ValueArtifact
 from ecgan.utils.custom_types import InputNormalization, LatentDistribution, MetricType, WeightInitialization
 from ecgan.utils.distances import L2Distance
 from ecgan.utils.layers import initialize_batchnorm, initialize_weights
@@ -68,8 +68,6 @@ class AutoEncoder(BaseGenerativeModule):
             raise ValueError("Encoder latent space ('encoder') needs to be used for autoencoder.")
         # Tensors which can be filled during train/validation. Can be reset using self._reset_internal_tensors.
         self.reconstruction_error = torch.empty(0).to(self.device)
-        self.latent_vectors_train = torch.empty(0).to(self.device)
-        self.latent_vectors_vali = torch.empty(0).to(self.device)
         self.label = torch.empty(0).to(self.device)
 
         # Required for validation/testing.
@@ -157,29 +155,6 @@ class AutoEncoder(BaseGenerativeModule):
             OptimizerConfig(**nested_dataclass_asdict(self.cfg.DECODER.OPTIMIZER)),
         )
 
-    # def _evaluate_train_step(self, disc_metrics: LossMetricType, gen_metrics: LossMetricType) -> Dict:
-    #     """
-    #     Evaluate and process metrics from the losses.
-    #
-    #     Metrics are logged and the noise is concatenated for later use during on_epoch_end.
-    #
-    #     Args:
-    #         disc_metrics: Discriminator metrics retrieved from the loss function.
-    #         gen_metrics: Generator metrics retrieved from the loss function.
-    #
-    #     Returns:
-    #         Dict with params to be logged to the tracker.
-    #     """
-    #     for idx, (key, val) in enumerate(gen_metrics):
-    #         if key == 'noise':
-    #             self.latent_vectors_train = torch.cat((self.latent_vectors_train, val), dim=0)
-    #             del gen_metrics[idx]
-    #
-    #     return {key: float(value) for (key, value) in disc_metrics + gen_metrics}
-    #
-    # def _get_validation_results(self, data: torch.Tensor) -> Dict:
-    #     return {}
-
     def get_sample(
         self, num_samples: Optional[int] = None, data: Optional[torch.Tensor] = None
     ) -> Tuple[Tensor, Tensor]:
@@ -264,12 +239,11 @@ class AutoEncoder(BaseGenerativeModule):
             self.set_fixed_samples()
 
         with torch.no_grad():
-            x_hat, latent_vector = self.autoencoder_sampler.sample_generator_encoder(data=data)
+            x_hat, _latent_vector = self.autoencoder_sampler.sample_generator_encoder(data=data)
             rec_error = l2_distance(data, x_hat)
 
         # concatenate tensors to form tensors for all batches in one epoch
         self.reconstruction_error = torch.cat((self.reconstruction_error, rec_error), dim=0)
-        self.latent_vectors_vali = torch.cat((self.latent_vectors_vali, latent_vector), dim=0)
         self.label = torch.cat((self.label, label), dim=0)
 
         return {}
@@ -335,7 +309,7 @@ class AutoEncoder(BaseGenerativeModule):
         self.reconstruction_error = scaler.fit_transform(self.reconstruction_error.unsqueeze(1)).squeeze()
 
         if epoch % sample_interval == 0:
-            # result.append(self._reconstruct_fixed_samples())
+            result.append(self._reconstruct_fixed_samples())
             if self.fixed_samples is None or self.fixed_samples_labels is None:
                 raise RuntimeError("Fixed samples not set correctly.")
 
@@ -343,24 +317,10 @@ class AutoEncoder(BaseGenerativeModule):
             # result.append(self._get_interpolation_grid(self.fixed_samples[1], 'Normal Class'))
             # result.append(self._get_interpolation_grid(self.fixed_samples[-1], 'Abnormal Class'))
 
-            # 2. SVM on reconsturction error and discrimination error
-            # pred_minmax, self.svm = optimize_svm(
-            #     MetricType.FSCORE,
-            #     [
-            #         self.reconstruction_error.cpu().detach(),
-            #         self.discrimination_error.cpu().detach(),
-            #     ],
-            #     self.label.cpu(),
-            # )
-            #
-            # result.extend(
-            #    self._get_metrics(self.label, pred_minmax, 'svm/minmax', log_fscore=True, log_auroc=True, log_mcc=True)
-            # )
-
             mmd = self.get_mmd()
             result.append(ValueArtifact('generative_metric/mmd', mmd))
-            tstr_dict = self.get_tstr()
-            result.append(ValueArtifact('generative_metric/tstr', tstr_dict))
+            # tstr_dict = self.get_tstr()
+            # result.append(ValueArtifact('generative_metric/tstr', tstr_dict))
 
             # Evaluate lambda = 0, lambda=1 for anogan and gamma=1 for vaegan
             tau_range = torch.linspace(0, 1, 50).cpu().tolist()
@@ -403,49 +363,41 @@ class AutoEncoder(BaseGenerativeModule):
         self._reset_internal_tensors()
         return result
 
+    def _reconstruct_fixed_samples(self):
+        if self.fixed_samples is None or self.fixed_samples_labels is None:
+            raise RuntimeError("Fixed samples not set correctly.")
+
+        with torch.no_grad():
+            faked_samples, _ = self.autoencoder_sampler.sample_generator_encoder(data=self.fixed_samples)
+
+        samples = torch.empty(
+            (
+                2 * self.num_fixed_samples,
+                faked_samples.shape[1],
+                faked_samples.shape[2],
+            )
+        )
+        labels = torch.empty((2 * self.num_fixed_samples, 1))
+        # else:
+        #     if self.cfg.TANH_OUT:
+        #         gen_samples = (gen_samples / 2) + 0.5
+        #
+
+        for i in range(self.num_fixed_samples):
+            samples[2 * i] = self.fixed_samples[i]
+            samples[2 * i + 1] = faked_samples[i]
+            labels[2 * i] = self.fixed_samples_labels[i]
+            labels[2 * i + 1] = self.fixed_samples_labels[i]
+
+        return ImageArtifact(
+            'Fixed Generator Samples',
+            self.plotter.get_sampling_grid(
+                samples,
+                label=labels,
+            ),
+        )
+
     def _reset_internal_tensors(self):
         """Reset tensors which are filled internally during an epoch."""
         self.reconstruction_error = torch.empty(0).to(self.device)
         self.label = torch.empty(0).to(self.device)
-        self.latent_vectors_train = torch.empty(0).to(self.device)
-        self.latent_vectors_vali = torch.empty(0).to(self.device)
-        #
-        # noise = torch.cat(
-        #     [
-        #         self.fixed_noise,
-        #         self.autoencoder_sampler.sample_z(len(self.fixed_noise)),
-        #     ]
-        # )
-        # with torch.no_grad():
-        #     gen_samples = self.autoencoder_sampler.sample(noise)
-        #
-        # train_cfg = get_global_config().trainer_config
-        # if train_cfg.transformation == Transformation.FOURIER:
-        #     result.append(
-        #         ImageArtifact(
-        #             'FFT Samples',
-        #             self.plotter.get_sampling_grid(
-        #                 gen_samples,
-        #             ),
-        #         )
-        #     )
-        # else:
-        #     if self.cfg.GENERATOR.TANH_OUT:
-        #         gen_samples = (gen_samples / 2) + 0.5
-        #
-        #     result.append(
-        #         ImageArtifact(
-        #             'Generator Samples',
-        #             self.plotter.get_sampling_grid(
-        #                 gen_samples,
-        #             ),
-        #         )
-        #     )
-        #
-        # mmd_score = self.get_mmd()
-        # result.append(ValueArtifact('MMD', mmd_score))
-        #
-        # tstr_dict = self.get_tstr()
-        # result.append(ValueArtifact('generative_metric/tstr', tstr_dict))
-        #
-        # return result

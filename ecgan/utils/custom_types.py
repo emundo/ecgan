@@ -153,6 +153,7 @@ class MetricType(Enum):
     FSCORE = 'fscore'
     MCC = 'mcc'
     AUROC = 'auroc'
+    AP = 'average_precision'
 
 
 class WeightInitialization(Enum):

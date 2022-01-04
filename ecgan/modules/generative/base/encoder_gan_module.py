@@ -376,7 +376,14 @@ class BaseEncoderGANModule(BaseGANModule):
                 weighting_params=[self.lambda_],
             )
             result.extend(
-                self._get_metrics(self.label, predictions, 'grid/lambda', log_fscore=True, log_auroc=True, log_mcc=True)
+                self._get_metrics(
+                    self.label,
+                    predictions,
+                    'grid/lambda',
+                    log_fscore=True,
+                    log_auroc=True,
+                    log_mcc=True,
+                )
             )
 
         result.extend(self._on_epoch_end_addition(epoch, sample_interval))
