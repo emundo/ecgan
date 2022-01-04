@@ -139,7 +139,7 @@ class BaseGenerativeModule(BaseModule):
 
         return tstr_score
 
-    def get_mmd(self, num_samples: int = 1024, sigma: float = 5) -> float:
+    def get_mmd(self, num_samples: int = 512, sigma: float = 5.0) -> float:
         """
         Calculate the maximum mean discrepancy.
 

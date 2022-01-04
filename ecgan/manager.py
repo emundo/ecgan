@@ -101,7 +101,6 @@ def train():
 
     data = load_pickle_numpy(os.path.join(target_dir, 'data.pkl'))
     label = load_pickle_numpy(os.path.join(target_dir, 'label.pkl'))
-
     trainer = Trainer(data=data, label=label)
     trainer.fit()
 

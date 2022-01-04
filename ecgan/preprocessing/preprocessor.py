@@ -16,6 +16,7 @@ from ecgan.preprocessing.cleansing import DataCleanser
 from ecgan.preprocessing.sampling import resample
 from ecgan.utils.custom_types import SamplingAlgorithm
 from ecgan.utils.datasets import (
+    CMUMoCapDataset,
     DatasetFactory,
     MitbihBeatganDataset,
     MitbihDataset,
@@ -249,6 +250,60 @@ class PtbExtractedBeatsPreprocessor(ExtractedBeatsPreprocessor):
 
     def _get_src_files(self) -> List:
         return ['ptbdb_abnormal.csv', 'ptbdb_normal.csv']
+
+
+class CMUMoCapPreprocessor(BasePreprocessor):
+    """Preprocess the CMU MoCap subset used in `Zhou et al. 2019 <https://www.ijcai.org/proceedings/2019/0616.pdf>`_."""
+
+    # Original strides used in BeatGAN preprocessing
+    STRIDE = 5
+    # Window size used in BeatGAN
+
+    def _window(self, data: np.ndarray, stride: int) -> np.ndarray:
+        window = self.cfg.TARGET_SEQUENCE_LENGTH
+        data_length = data.shape[0]
+        samples = []
+        for start_idx in np.arange(0, data_length, stride):
+            if start_idx + window >= data_length:
+                break
+            samples.append(data[start_idx : start_idx + window, :])
+
+        return np.array(samples)
+
+    def preprocess(self) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Preprocess the dataset.
+
+        Load the raw CSV data, reshape the univariate series into multivariate series,
+        extract labels, call the _preprocess_worker to cleanse and resample the data.
+
+        Data is sampled as described in `Zhou et al. 2019 <https://www.ijcai.org/proceedings/2019/0616.pdf>`_.
+
+        Returns:
+            Tuple of data and labels in a framework compatible format.
+        """
+        raw_data_path = os.path.join(self.target, 'data.csv')
+        raw_labels_path = os.path.join(self.target, 'labels.csv')
+
+        raw_data = np.genfromtxt(raw_data_path, delimiter=",")
+        raw_labels = np.genfromtxt(raw_labels_path, delimiter=",")
+
+        walking_data = raw_data[raw_labels == CMUMoCapDataset.beat_types['walking']]
+        jogging_data = raw_data[raw_labels == CMUMoCapDataset.beat_types['jogging']]
+        jumping_data = raw_data[raw_labels == CMUMoCapDataset.beat_types['jumping']]
+
+        walking_data = self._window(walking_data, self.STRIDE)
+        jogging_data = self._window(jogging_data, 20)
+        jumping_data = self._window(jumping_data, 5)
+
+        walking_labels = np.zeros(walking_data.shape[0])
+        jogging_labels = np.ones(jogging_data.shape[0])
+        jumping_labels = np.ones(jumping_data.shape[0]) * 2
+
+        self.data = np.concatenate([walking_data, jogging_data, jumping_data])
+        self.labels = np.concatenate([walking_labels, jogging_labels, jumping_labels])
+
+        return self.data, self.labels
 
 
 class MitbihBeatganPreprocessor(BasePreprocessor):
@@ -606,4 +661,6 @@ class PreprocessorFactory:
             return MitbihBeatganPreprocessor(cfg, dataset)
         if dataset == PTBExtractedBeatsDataset.name:
             return PtbExtractedBeatsPreprocessor(cfg, dataset)
+        if dataset == CMUMoCapDataset.name:
+            return CMUMoCapPreprocessor(cfg, dataset)
         raise ValueError('Preprocessing mode {0} is unknown.'.format(dataset))

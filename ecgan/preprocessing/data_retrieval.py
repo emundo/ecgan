@@ -14,6 +14,7 @@ from ecgan.config import PreprocessingConfig, SinePreprocessingConfig
 from ecgan.utils.configurable import Configurable
 from ecgan.utils.custom_types import TrackerType, Transformation
 from ecgan.utils.datasets import (
+    CMUMoCapDataset,
     DatasetFactory,
     MitbihBeatganDataset,
     MitbihDataset,
@@ -175,7 +176,7 @@ class PtbExtractedBeatsDataRetriever(KaggleDataRetriever):
     """
     Download the (beat-wise) segmented PTB dataset.
 
-    The segmented PTB dataset is downloaded via the regular KaggleDataLoader.
+    The segmented PTB dataset is downloaded via the regular `KaggleDataRetriever`.
 
     | Paper: `Kachuee et al. 2018 <https://arxiv.org/abs/1805.00794>`_.
     | Information on source: Data is downloaded from the authors
@@ -189,6 +190,30 @@ class PtbExtractedBeatsDataRetriever(KaggleDataRetriever):
         config: Dict = PreprocessingConfig.configure(
             loading_src=PTBExtractedBeatsDataset.loading_src,
             target_sequence_length=PTBExtractedBeatsDataset.default_seq_len,
+            num_workers=num_workers,
+        )
+
+        return config
+
+
+class CMUMoCapDataRetriever(KaggleDataRetriever):
+    """
+    Download the subset of the CMU MoCap dataset used in BeatGAN.
+
+    The dataset is downloaded via the regular `KaggleDataRetriever`.
+
+    | Paper: `Zhou et al. 2019 <https://www.ijcai.org/proceedings/2019/0616.pdf>`_.
+    | Information on source: Data is downloaded from a kaggle upload
+      `unofficial kaggle repository <https://www.kaggle.com/maximdolg/cmu-mocap-dataset-as-used-in-beatgan>`_.
+    """
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for the MITBIH dataset with extracted beats."""
+        num_workers = get_num_workers()
+        config: Dict = PreprocessingConfig.configure(
+            loading_src=CMUMoCapDataset.loading_src,
+            target_sequence_length=CMUMoCapDataset.default_seq_len,
             num_workers=num_workers,
         )
 
@@ -520,6 +545,16 @@ class MitbihBeatganDataRetriever(UrlDataRetriever):
 class DataRetrieverFactory:
     """Meta module for creating data retriever instances."""
 
+    datasets = {
+        MitbihDataset.name: MitbihDataRetriever,
+        MitbihExtractedBeatsDataset.name: MitbihExtractedBeatsDataRetriever,
+        ShaoxingDataset.name: ShaoxingDataRetriever,
+        SineDataset.name: SineDataRetriever,
+        MitbihBeatganDataset.name: MitbihBeatganDataRetriever,
+        PTBExtractedBeatsDataset.name: PtbExtractedBeatsDataRetriever,
+        CMUMoCapDataset.name: CMUMoCapDataRetriever,
+    }
+
     def __call__(self, dataset: str, cfg: PreprocessingConfig) -> DataRetriever:
         """
         Retrieve a specified dataset and save it to disc.
@@ -527,18 +562,12 @@ class DataRetrieverFactory:
         Args:
             dataset: String specifying the dataset to be downloaded.
             cfg: Configuration for preprocessing.
-        """
-        datasets = {
-            MitbihDataset.name: MitbihDataRetriever,
-            MitbihExtractedBeatsDataset.name: MitbihExtractedBeatsDataRetriever,
-            ShaoxingDataset.name: ShaoxingDataRetriever,
-            SineDataset.name: SineDataRetriever,
-            MitbihBeatganDataset.name: MitbihBeatganDataRetriever,
-            PTBExtractedBeatsDataset.name: PtbExtractedBeatsDataRetriever,
-        }
 
+        Returns:
+            DataRetriever instance.
+        """
         try:
-            return datasets[dataset](dataset, cfg)  # type: ignore
+            return DataRetrieverFactory.datasets[dataset](dataset, cfg)  # type: ignore
         except KeyError as err:
             raise ValueError('Dataset {} is unknown.'.format(dataset)) from err
 
@@ -551,19 +580,10 @@ class DataRetrieverFactory:
             dataset: String specifying the dataset to be downloaded.
 
         Returns:
-            DataRetriever class.
+            DataRetriever instance.
         """
-        datasets = {
-            MitbihDataset.name: MitbihDataRetriever,
-            MitbihExtractedBeatsDataset.name: MitbihExtractedBeatsDataRetriever,
-            ShaoxingDataset.name: ShaoxingDataRetriever,
-            SineDataset.name: SineDataRetriever,
-            MitbihBeatganDataset.name: MitbihBeatganDataRetriever,
-            PTBExtractedBeatsDataset.name: PtbExtractedBeatsDataRetriever,
-        }
-
         try:
-            return cast(DataRetriever, datasets[dataset])
+            return cast(DataRetriever, DataRetrieverFactory.datasets[dataset])
         except KeyError as err:
             raise ValueError('Dataset {0} is unknown.'.format(dataset)) from err
 
