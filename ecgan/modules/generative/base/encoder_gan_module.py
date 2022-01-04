@@ -53,6 +53,7 @@ class BaseEncoderGANModule(BaseGANModule):
         self.z_mu: float = 0.0
         self.z_mode: float = 0.0
         self.gamma: float = 0.0  # not currently supported via saved grid search - use svm_mu for improved results
+        self.normalization_params: Dict = {'reconstruction_error': {}, 'discrimination_error': {}, 'latent_error': {}}
 
     @property
     def encoder(self):
@@ -194,7 +195,11 @@ class BaseEncoderGANModule(BaseGANModule):
         # Min-max normalize error:
         scaler = MinMaxTransformation()
         self.reconstruction_error = scaler.fit_transform(self.reconstruction_error.unsqueeze(1)).squeeze()
+        scaling_params = scaler.get_min_max()
+        self.normalization_params['reconstruction_error'] = scaling_params
         self.discrimination_error = scaler.fit_transform(self.discrimination_error.unsqueeze(1)).squeeze()
+        scaling_params = scaler.get_min_max()
+        self.normalization_params['discrimination_error'] = scaling_params
 
         if epoch % sample_interval == 0:
             result.append(self._reconstruct_fixed_samples())
@@ -268,6 +273,8 @@ class BaseEncoderGANModule(BaseGANModule):
 
             # For each scaled norm: subtract mode of mu to approximately shift to center of chi distribution.
             scaled_latent_norm = scaler.fit_transform((latent_norm_vali.unsqueeze(1)) - self.z_mode).squeeze()
+            scaling_params = scaler.get_min_max()
+            self.normalization_params['latent_error'] = scaling_params
 
             # Get anomaly scores:
             # 1. SVM on reconstruction error, discrimination error and latent norm
@@ -447,6 +454,7 @@ class BaseEncoderGANModule(BaseGANModule):
                 'Z_MU': self.z_mu,
                 'Z_MODE': self.z_mode,
                 'SVM_MU': self.svm_mu,
+                'NORM_PARAMS': self.normalization_params,
             },
         }
 
@@ -470,6 +478,7 @@ class BaseEncoderGANModule(BaseGANModule):
         self.z_mu = model['ANOMALY_DETECTION']['Z_MU']
         self.z_mode = model['ANOMALY_DETECTION']['Z_MODE']
         self.svm_mu = model['ANOMALY_DETECTION']['SVM_MU']
+        self.normalization_params = model['ANOMALY_DETECTION']['NORM_PARAMS']
         return self
 
     def set_fixed_samples(self) -> None:
