@@ -319,8 +319,8 @@ class AutoEncoder(BaseGenerativeModule):
 
             mmd = self.get_mmd()
             result.append(ValueArtifact('generative_metric/mmd', mmd))
-            # tstr_dict = self.get_tstr()
-            # result.append(ValueArtifact('generative_metric/tstr', tstr_dict))
+            tstr_dict = self.get_tstr()
+            result.append(ValueArtifact('generative_metric/tstr', tstr_dict))
 
             # Evaluate lambda = 0, lambda=1 for anogan and gamma=1 for vaegan
             tau_range = torch.linspace(0, 1, 50).cpu().tolist()
