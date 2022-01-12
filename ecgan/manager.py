@@ -168,6 +168,7 @@ def detect():
         location=exp_cfg.TRACKER.tracker_name,
         target_dir=tracker.run_dir,
     )
+
     module_cfg = get_global_config().module_config
 
     rescale_to_unit_circle = False
