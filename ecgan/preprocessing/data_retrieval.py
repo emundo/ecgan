@@ -16,6 +16,7 @@ from ecgan.utils.custom_types import TrackerType, Transformation
 from ecgan.utils.datasets import (
     CMUMoCapDataset,
     DatasetFactory,
+    ExtendedCMUMoCapDataset,
     MitbihBeatganDataset,
     MitbihDataset,
     MitbihExtractedBeatsDataset,
@@ -214,6 +215,30 @@ class CMUMoCapDataRetriever(KaggleDataRetriever):
         config: Dict = PreprocessingConfig.configure(
             loading_src=CMUMoCapDataset.loading_src,
             target_sequence_length=CMUMoCapDataset.default_seq_len,
+            num_workers=num_workers,
+        )
+
+        return config
+
+
+class ExtendedCMUMoCapDataRetriever(KaggleDataRetriever):
+    """
+    Download a extened version of the subset of the CMU MoCap dataset used in BeatGAN.
+
+    The dataset is downloaded via the regular `KaggleDataRetriever`.
+
+    | Paper: `Zhou et al. 2019 <https://www.ijcai.org/proceedings/2019/0616.pdf>`_.
+    | Information on source: Data is downloaded from a kaggle upload
+      `unofficial kaggle repository <https://www.kaggle.com/maximdolg/cmu-mocap-dataset-as-used-in-beatgan>`_.
+    """
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for the MITBIH dataset with extracted beats."""
+        num_workers = get_num_workers()
+        config: Dict = PreprocessingConfig.configure(
+            loading_src=ExtendedCMUMoCapDataset.loading_src,
+            target_sequence_length=ExtendedCMUMoCapDataset.default_seq_len,
             num_workers=num_workers,
         )
 
@@ -553,6 +578,7 @@ class DataRetrieverFactory:
         MitbihBeatganDataset.name: MitbihBeatganDataRetriever,
         PTBExtractedBeatsDataset.name: PtbExtractedBeatsDataRetriever,
         CMUMoCapDataset.name: CMUMoCapDataRetriever,
+        ExtendedCMUMoCapDataset.name: ExtendedCMUMoCapDataRetriever,
     }
 
     def __call__(self, dataset: str, cfg: PreprocessingConfig) -> DataRetriever:

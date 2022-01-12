@@ -18,6 +18,7 @@ from ecgan.utils.custom_types import SamplingAlgorithm
 from ecgan.utils.datasets import (
     CMUMoCapDataset,
     DatasetFactory,
+    ExtendedCMUMoCapDataset,
     MitbihBeatganDataset,
     MitbihDataset,
     MitbihExtractedBeatsDataset,
@@ -302,6 +303,42 @@ class CMUMoCapPreprocessor(BasePreprocessor):
 
         self.data = np.concatenate([walking_data, jogging_data, jumping_data])
         self.labels = np.concatenate([walking_labels, jogging_labels, jumping_labels])
+
+        return self.data, self.labels
+
+
+class ExtendedCMUMoCapPreprocessor(CMUMoCapPreprocessor):
+    """
+    Preprocess the CMU MoCap subset used in `Zhou et al. 2019 <https://www.ijcai.org/proceedings/2019/0616.pdf>`_.
+
+    The original dataset by Zhou et al. is extended an additional class _dancing_.
+    """
+
+    def preprocess(self) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Preprocess the dataset.
+
+        Load the raw CSV data, reshape the univariate series into multivariate series,
+        extract labels, call the _preprocess_worker to cleanse and resample the data.
+
+        Data is sampled as described in `Zhou et al. 2019 <https://www.ijcai.org/proceedings/2019/0616.pdf>`_.
+        Extended data of class _dancing_ is sampled same as the _walking_ class in the original.
+
+        Returns:
+            Tuple of data and labels in a framework compatible format.
+        """
+        raw_data_path = os.path.join(self.target, 'data.csv')
+        raw_labels_path = os.path.join(self.target, 'labels.csv')
+        raw_data = np.genfromtxt(raw_data_path, delimiter=",")
+        raw_labels = np.genfromtxt(raw_labels_path, delimiter=",")
+
+        data, labels = super().preprocess()
+
+        dancing_data = raw_data[raw_labels == ExtendedCMUMoCapDataset.beat_types['dancing']]
+        dancing_data = self._window(dancing_data, self.STRIDE)
+        dancing_labels = np.ones(dancing_data.shape[0]) * 3
+        self.data = np.concatenate([data, dancing_data])
+        self.labels = np.concatenate([labels, dancing_labels])
 
         return self.data, self.labels
 
@@ -663,4 +700,6 @@ class PreprocessorFactory:
             return PtbExtractedBeatsPreprocessor(cfg, dataset)
         if dataset == CMUMoCapDataset.name:
             return CMUMoCapPreprocessor(cfg, dataset)
+        if dataset == ExtendedCMUMoCapDataset.name:
+            return ExtendedCMUMoCapPreprocessor(cfg, dataset)
         raise ValueError('Preprocessing mode {0} is unknown.'.format(dataset))

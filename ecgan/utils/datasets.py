@@ -155,6 +155,17 @@ class CMUMoCapDataset(Dataset):
     beat_types = {'walking': 0, 'jogging': 1, 'jumping': 2}
 
 
+class ExtendedCMUMoCapDataset(CMUMoCapDataset):
+    """Static description of the extended CMU MoCap subset."""
+
+    name = 'cmu_mocap_extended'
+    num_channels = 4
+    num_classes = 4
+    loading_src = 'maximdolg/extended-cmu-mocap-dataset-for-beatgan'
+    percentage_normal = 0.378
+    beat_types = {'walking': 0, 'jogging': 1, 'jumping': 2, 'dancing': 3}
+
+
 class DatasetFactory:
     """Meta module for creating datasets objects containing static data to describe the datasets."""
 
@@ -168,6 +179,7 @@ class DatasetFactory:
             SineDataset.name: SineDataset,
             PTBExtractedBeatsDataset.name: PTBExtractedBeatsDataset,
             CMUMoCapDataset.name: CMUMoCapDataset,
+            ExtendedCMUMoCapDataset.name: ExtendedCMUMoCapDataset,
         }
         try:
             return datasets[dataset]
