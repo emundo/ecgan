@@ -574,7 +574,6 @@ class VariationalAutoEncoderLoss(Configurable):
         super().__init__()
         self._internal_loss = torch.nn.MSELoss() if use_mse else torch.nn.BCELoss()
         self._kl_loss = KLLoss()
-        self._adversarial_loss = L2Loss()
         self.kl_beta = kl_beta
         self._kl_weight = 1.0
 

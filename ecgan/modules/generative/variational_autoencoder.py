@@ -12,7 +12,7 @@ from typing import Any, Dict, cast
 from torch import nn
 from torch.distributions import Normal
 
-from ecgan.config import BaseCNNConfig, OptimizerConfig, VAEGANConfig, nested_dataclass_asdict
+from ecgan.config import BaseCNNConfig, OptimizerConfig, VariationalAutoEncoderConfig, nested_dataclass_asdict
 from ecgan.modules.generative.autoencoder import AutoEncoder
 from ecgan.networks.beatgan import BeatganGenerator, BeatganInverseEncoder
 from ecgan.networks.vaegan import VAEEncoder
@@ -34,12 +34,13 @@ class VariationalAutoEncoder(AutoEncoder):
 
     def __init__(
         self,
-        cfg: VAEGANConfig,
+        cfg: VariationalAutoEncoderConfig,
         seq_len: int,
         num_channels: int,
     ):
         self.distribution = Normal(0, 1)
         super().__init__(cfg, seq_len, num_channels)  # type: ignore
+        self.cfg: VariationalAutoEncoderConfig = cast(VariationalAutoEncoderConfig, self.cfg)
 
     @property
     def autoencoder_sampler(self) -> VAEGANGeneratorSampler:
@@ -93,10 +94,9 @@ class VariationalAutoEncoder(AutoEncoder):
         return VariationalAutoEncoderLoss(
             self.autoencoder_sampler,
             self.cfg.TANH_OUT,  # use MSE if Tanh out, use BCE if sig out
-            self.cfg.KL_BETA,  # type: ignore
+            self.cfg.KL_BETA,
             distribution=self.distribution,
-            device=self.device
-            # cast(EncoderBasedGeneratorSampler, self.generator_sampler),
+            device=self.device,
         )
 
     def _init_optim(self) -> BaseOptimizer:
@@ -112,7 +112,7 @@ class VariationalAutoEncoder(AutoEncoder):
         config = {
             'module': {
                 'LATENT_SIZE': 5,
-                'KL_BETA': 1,
+                'KL_BETA': 0.0001,
                 'LATENT_SPACE': LatentDistribution.ENCODER_BASED.value,
                 'TANH_OUT': True,
                 'DECODER': {

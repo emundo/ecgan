@@ -66,12 +66,12 @@ class BaseGenerativeModule(BaseModule):
         lower_volume_class = (
             0 if self.vali_dataset_sampler.get_dataset_size(0) < self.vali_dataset_sampler.get_dataset_size(1) else 1
         )
+
         num_test_samples_per_class = (self.vali_dataset_sampler.get_dataset_size(lower_volume_class)) // 3
         num_train_samples_per_class = (
             self.vali_dataset_sampler.get_dataset_size(lower_volume_class) - num_test_samples_per_class
         )
         samples_per_class = num_test_samples_per_class + num_train_samples_per_class
-
         abnormal_data_samples = self.vali_dataset_sampler.sample_class(samples_per_class, class_label=1)
         normal_data_samples = self.vali_dataset_sampler.sample_class(samples_per_class, class_label=0)
         anomalous_data_train = {
