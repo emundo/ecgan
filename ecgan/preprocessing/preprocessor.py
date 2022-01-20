@@ -8,6 +8,7 @@ from typing import List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
+from scipy.io import arff
 from sklearn.impute import KNNImputer
 from tqdm import tqdm
 
@@ -18,12 +19,14 @@ from ecgan.utils.custom_types import SamplingAlgorithm
 from ecgan.utils.datasets import (
     CMUMoCapDataset,
     DatasetFactory,
+    ElectricDevicesDataset,
     ExtendedCMUMoCapDataset,
     MitbihBeatganDataset,
     MitbihDataset,
     MitbihExtractedBeatsDataset,
     PTBExtractedBeatsDataset,
     ShaoxingDataset,
+    WaferDataset,
 )
 from ecgan.utils.miscellaneous import save_pickle
 
@@ -136,6 +139,7 @@ class ExtractedBeatsPreprocessor(BasePreprocessor):
         self.data = np.expand_dims(raw_data[:, :-1], axis=-1)
         self.labels = raw_data[:, -1]
         logger.info('Starting resampling and cleansing.')
+        print("data", self.data.shape)
         data_split = np.array_split(self.data, self.cfg.NUM_WORKERS)
         labels_split = np.array_split(self.labels, self.cfg.NUM_WORKERS)
         with mp.Pool(processes=self.cfg.NUM_WORKERS) as pool:
@@ -343,6 +347,122 @@ class ExtendedCMUMoCapPreprocessor(CMUMoCapPreprocessor):
         return self.data, self.labels
 
 
+class ElectricDevicesPreprocessor(BasePreprocessor):
+    """
+    Preprocess the Electric Devices Dataset from TODO.
+    """
+
+    def preprocess(self) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Preprocess the dataset.
+
+        Returns:
+            Tuple of data and labels in a framework compatible format.
+        """
+        logger.info('Loading arff data to memory.')
+        file_list = [
+            os.path.join(self.target, 'ElectricDevices_TRAIN.arff'),
+            os.path.join(self.target, 'ElectricDevices_TEST.arff'),
+        ]
+        data = np.empty(0)
+        label = np.empty(0)
+
+        for file in file_list:
+            try:
+                data_ = arff.loadarff(file)[0]
+                data_ = np.char.decode(np.array([list(tpl) for tpl in data_]), encoding='UTF-8').astype(float)
+                data = np.append(data, data_[:, :96])
+                label = np.append(label, data_[:, 96])
+            except Exception as e:
+                raise RuntimeError('Could not preprocess data:{}'.format(e)) from e
+
+        self.data = np.reshape(data, (-1, 96))
+        self.labels = label
+
+        # TODO decide which classes are (ab)normal
+        logger.info(
+            'Final dataset has {} samples with shape {}. Class distribution: {}'.format(
+                len(self.data),
+                self.data.shape,
+                np.unique(self.labels, return_counts=True),
+            )
+        )
+        return self.data, self.labels
+
+
+class WaferPreprocessor(BasePreprocessor):
+    """
+    Preprocess the Electric Devices Dataset from TODO.
+    """
+
+    def preprocess(self) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Preprocess the dataset.
+
+        Returns:
+            Tuple of data and labels in a framework compatible format.
+        """
+        logger.info('Loading arff data to memory.')
+        file_list = [os.path.join(self.target, 'Wafer_TRAIN.arff'), os.path.join(self.target, 'Wafer_TEST.arff')]
+        data = np.empty(0)
+        label = np.empty(0)
+        seq_len = WaferDataset.default_seq_len
+
+        for file in file_list:
+            try:
+                data_ = arff.loadarff(file)[0]
+                data_ = np.char.decode(np.array([list(tpl) for tpl in data_]), encoding='UTF-8').astype(float)
+                data = np.append(data, data_[:, :seq_len])
+                label = np.append(label, data_[:, seq_len])
+            except Exception as e:
+                raise RuntimeError('Could not preprocess data:{}'.format(e)) from e
+
+        label[label == 1.0] = 0
+        label[label == -1.0] = 1
+
+        self.data = np.reshape(data, (-1, seq_len))
+        self.data = np.expand_dims(self.data, -1)
+        self.labels = label
+        print("shape", self.data.shape)
+
+        if self.cfg.TARGET_SEQUENCE_LENGTH != self.data.shape[1]:
+            logger.info('Starting resampling to target length {}.'.format(self.cfg.TARGET_SEQUENCE_LENGTH))
+            if self.cfg.RESAMPLING_ALGORITHM is not None:
+                with mp.Pool(processes=self.cfg.NUM_WORKERS) as pool:
+                    data_split = np.array_split(self.data, self.cfg.NUM_WORKERS)
+                    results = [
+                        pool.apply_async(
+                            MitbihBeatganPreprocessor._preprocess_worker,  # pylint: disable=W0212
+                            args=(
+                                data_split[pos],
+                                self.cfg.TARGET_SEQUENCE_LENGTH,
+                                self.cfg.resampling_algorithm,
+                                pos,
+                            ),
+                        )
+                        for pos in range(self.cfg.NUM_WORKERS)
+                    ]
+                    output = [p.get() for p in results]
+                    pool.close()
+                    pool.join()
+                    output.sort()
+                    self.data: np.ndarray = np.concatenate([out[1] for out in output])
+
+        if len(self.data) != len(self.labels):
+            raise ValueError('The number of labels and samples does not match.')
+
+        logger.info('Loaded (and resampled) data.')
+
+        logger.info(
+            'Final dataset has {} samples with shape {}. Class distribution: {}'.format(
+                len(self.data),
+                self.data.shape,
+                np.unique(self.labels, return_counts=True),
+            )
+        )
+        return self.data, self.labels
+
+
 class MitbihBeatganPreprocessor(BasePreprocessor):
     """Preprocess the MITBIH dataset from `Zhou et al. 2019 <https://www.ijcai.org/Proceedings/2019/0616.pdf>`_."""
 
@@ -439,6 +559,7 @@ class MitbihBeatganPreprocessor(BasePreprocessor):
                 data=data[idx],
                 algorithm=resample_algorithm,
                 target_rate=resampling_target,
+                interpolation_strategy='linear',
             )
 
         return worker_id, resampled
@@ -665,7 +786,7 @@ class ShaoxingPreprocessor(BasePreprocessor):
         return result
 
 
-class PreprocessorFactory:
+class PreprocessorFactory:  # pylint: disable=R0911
     """Meta module for creating preprocessor instances."""
 
     def __call__(self, cfg: PreprocessingConfig, dataset: str) -> BasePreprocessor:
@@ -702,4 +823,8 @@ class PreprocessorFactory:
             return CMUMoCapPreprocessor(cfg, dataset)
         if dataset == ExtendedCMUMoCapDataset.name:
             return ExtendedCMUMoCapPreprocessor(cfg, dataset)
+        if dataset == ElectricDevicesDataset.name:
+            return ElectricDevicesPreprocessor(cfg, dataset)
+        if dataset == WaferDataset.name:
+            return WaferPreprocessor(cfg, dataset)
         raise ValueError('Preprocessing mode {0} is unknown.'.format(dataset))

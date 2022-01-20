@@ -8,14 +8,15 @@ from math import ceil, floor
 from typing import Dict, List, Tuple, cast
 
 import torch
-import wandb
 
+import wandb
 from ecgan.config import PreprocessingConfig, SinePreprocessingConfig
 from ecgan.utils.configurable import Configurable
 from ecgan.utils.custom_types import TrackerType, Transformation
 from ecgan.utils.datasets import (
     CMUMoCapDataset,
     DatasetFactory,
+    ElectricDevicesDataset,
     ExtendedCMUMoCapDataset,
     MitbihBeatganDataset,
     MitbihDataset,
@@ -23,6 +24,7 @@ from ecgan.utils.datasets import (
     PTBExtractedBeatsDataset,
     ShaoxingDataset,
     SineDataset,
+    WaferDataset,
 )
 from ecgan.utils.miscellaneous import get_num_workers, load_pickle, load_pickle_numpy, save_pickle
 from ecgan.utils.splitting import load_split
@@ -223,7 +225,7 @@ class CMUMoCapDataRetriever(KaggleDataRetriever):
 
 class ExtendedCMUMoCapDataRetriever(KaggleDataRetriever):
     """
-    Download a extened version of the subset of the CMU MoCap dataset used in BeatGAN.
+    Download a extended version of the subset of the CMU MoCap dataset used in BeatGAN.
 
     The dataset is downloaded via the regular `KaggleDataRetriever`.
 
@@ -234,7 +236,7 @@ class ExtendedCMUMoCapDataRetriever(KaggleDataRetriever):
 
     @staticmethod
     def configure() -> Dict:
-        """Return the default configuration for the MITBIH dataset with extracted beats."""
+        """Return the default configuration for extended CMU MoCap Dataset."""
         num_workers = get_num_workers()
         config: Dict = PreprocessingConfig.configure(
             loading_src=ExtendedCMUMoCapDataset.loading_src,
@@ -405,7 +407,7 @@ class UrlDataRetriever(DataRetriever):
         meta = self.get_meta()
 
         os.makedirs(path, exist_ok=True)
-        os.makedirs(os.path.join(path, 'raw'))
+        os.makedirs(os.path.join(path, 'raw'), exist_ok=True)
 
         save_location = os.path.join(path, '{0}_raw.zip'.format(self.dataset.name))
 
@@ -567,6 +569,58 @@ class MitbihBeatganDataRetriever(UrlDataRetriever):
         return config
 
 
+class ElectricDevicesDataRetriever(UrlDataRetriever):
+    """
+    Download the electric devices dataset from todo.
+    """
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for the MITBIH dataset with extracted beats."""
+        num_workers = get_num_workers()
+        config: Dict = PreprocessingConfig.configure(
+            loading_src=ElectricDevicesDataset.loading_src,
+            target_sequence_length=ElectricDevicesDataset.default_seq_len,
+            num_workers=num_workers,
+        )
+
+        return config
+
+    def get_meta(self) -> List[Tuple]:
+        """No metadata required."""
+        return []
+
+    def extract_data(self, save_location: str, unzip_location: str) -> None:
+        """
+        Extract data from zip file.
+
+        Args:
+            save_location: Reference to local directory where the zip is stored.
+            unzip_location: Reference to local directory where the data shall be extracted to.
+        """
+        with zipfile.ZipFile(save_location, 'r') as zip_ref:
+            # extract content into folder but remove toplevel dir.
+            zip_ref.extractall(unzip_location)
+
+
+class WaferDataRetriever(ElectricDevicesDataRetriever):
+    """
+    Download the Wafer dataset from todo.
+    """
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for the MITBIH dataset with extracted beats."""
+        num_workers = get_num_workers()
+        config: Dict = PreprocessingConfig.configure(
+            loading_src=WaferDataset.loading_src,
+            target_sequence_length=WaferDataset.default_seq_len,
+            num_workers=num_workers,
+        )
+
+        return config
+
+
 class DataRetrieverFactory:
     """Meta module for creating data retriever instances."""
 
@@ -579,6 +633,8 @@ class DataRetrieverFactory:
         PTBExtractedBeatsDataset.name: PtbExtractedBeatsDataRetriever,
         CMUMoCapDataset.name: CMUMoCapDataRetriever,
         ExtendedCMUMoCapDataset.name: ExtendedCMUMoCapDataRetriever,
+        ElectricDevicesDataset.name: ElectricDevicesDataRetriever,
+        WaferDataset.name: WaferDataRetriever,
     }
 
     def __call__(self, dataset: str, cfg: PreprocessingConfig) -> DataRetriever:
