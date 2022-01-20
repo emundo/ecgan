@@ -139,7 +139,6 @@ class ExtractedBeatsPreprocessor(BasePreprocessor):
         self.data = np.expand_dims(raw_data[:, :-1], axis=-1)
         self.labels = raw_data[:, -1]
         logger.info('Starting resampling and cleansing.')
-        print("data", self.data.shape)
         data_split = np.array_split(self.data, self.cfg.NUM_WORKERS)
         labels_split = np.array_split(self.labels, self.cfg.NUM_WORKERS)
         with mp.Pool(processes=self.cfg.NUM_WORKERS) as pool:
@@ -422,31 +421,29 @@ class WaferPreprocessor(BasePreprocessor):
 
         self.data = np.reshape(data, (-1, seq_len))
         self.data = np.expand_dims(self.data, -1)
-        self.labels = label
-        print("shape", self.data.shape)
+        self.labels = label.astype(int)
+        data_split = np.array_split(self.data, self.cfg.NUM_WORKERS)
+        labels_split = np.array_split(self.labels, self.cfg.NUM_WORKERS)
+        with mp.Pool(processes=self.cfg.NUM_WORKERS) as pool:
+            results = [
+                pool.apply_async(
+                    self._preprocess_worker,
+                    args=(
+                        data_split[pos],
+                        labels_split[pos],
+                        self.cfg.TARGET_SEQUENCE_LENGTH,
+                        pos,
+                    ),
+                )
+                for pos in range(self.cfg.NUM_WORKERS)
+            ]
+            output = [p.get() for p in results]
+            pool.close()
+            pool.join()
+            output.sort()
 
-        if self.cfg.TARGET_SEQUENCE_LENGTH != self.data.shape[1]:
-            logger.info('Starting resampling to target length {}.'.format(self.cfg.TARGET_SEQUENCE_LENGTH))
-            if self.cfg.RESAMPLING_ALGORITHM is not None:
-                with mp.Pool(processes=self.cfg.NUM_WORKERS) as pool:
-                    data_split = np.array_split(self.data, self.cfg.NUM_WORKERS)
-                    results = [
-                        pool.apply_async(
-                            MitbihBeatganPreprocessor._preprocess_worker,  # pylint: disable=W0212
-                            args=(
-                                data_split[pos],
-                                self.cfg.TARGET_SEQUENCE_LENGTH,
-                                self.cfg.resampling_algorithm,
-                                pos,
-                            ),
-                        )
-                        for pos in range(self.cfg.NUM_WORKERS)
-                    ]
-                    output = [p.get() for p in results]
-                    pool.close()
-                    pool.join()
-                    output.sort()
-                    self.data: np.ndarray = np.concatenate([out[1] for out in output])
+        self.data: np.ndarray = np.concatenate([out[1]['data'] for out in output])
+        self.labels: np.ndarray = np.concatenate([out[1]['labels'] for out in output]).flatten().astype(dtype=np.int_)
 
         if len(self.data) != len(self.labels):
             raise ValueError('The number of labels and samples does not match.')
@@ -461,6 +458,49 @@ class WaferPreprocessor(BasePreprocessor):
             )
         )
         return self.data, self.labels
+
+    def _preprocess_worker(
+        self,
+        data: np.ndarray,
+        labels: np.ndarray,
+        resampling_target: int,
+        worker_id: int,
+    ) -> Tuple[int, dict]:
+        """
+        Perform preprocessing using multiprocessing. Each worker is given a batch of data to cleanse and resample.
+
+        Args:
+            data: Raw downloaded data.
+            labels: Labels corresponding to the data.
+            resampling_target: Target sequence length.
+            worker_id: Identifier of the multiprocessing worker.
+
+        Returns:
+            A tuple containing the ID of the multiprocessing worker as well as a Dict
+            containing the preprocessed data, labels and the indices of the removed samples.
+        """
+        target_array = np.empty((data.shape[0], resampling_target, 1))
+
+        should_resample = (
+            self.cfg.RESAMPLING_ALGORITHM is not None and self.cfg.TARGET_SEQUENCE_LENGTH != self.data.shape[1]
+        )
+
+        for idx in tqdm(range(len(labels)), leave=False):
+            # Resample the loaded ECG data if desired.
+            if should_resample:
+                target_array[idx] = resample(
+                    data=data[idx],
+                    algorithm=self.cfg.resampling_algorithm,
+                    target_rate=resampling_target,
+                    interpolation_strategy='linear',
+                )
+
+        data = target_array if should_resample else data
+
+        return worker_id, {
+            'data': data,
+            'labels': labels,
+        }
 
 
 class MitbihBeatganPreprocessor(BasePreprocessor):
