@@ -155,9 +155,28 @@ class GANAnomalyDetector(ReconstructionDetector):
         )
 
         if self.detection_cfg.NORMALIZE_ERROR:
-            scaler = MinMaxTransformation()
-            discriminator_error = scaler.fit_transform(discriminator_error.unsqueeze(1)).squeeze()
-            reconstruction_error = scaler.fit_transform(reconstruction_error.unsqueeze(1)).squeeze()
+            disc_scaler = MinMaxTransformation()
+            rec_scaler = MinMaxTransformation()
+            if hasattr(self.module, 'normalization_params'):
+                vali_normalization_params = self.module.normalization_params  # type: ignore
+                disc_scaler.set_params(
+                    {
+                        'min': [vali_normalization_params['discrimination_error']['min']],
+                        'max': [vali_normalization_params['discrimination_error']['max']],
+                    }
+                )
+                rec_scaler.set_params(
+                    {
+                        'min': [vali_normalization_params['reconstruction_error']['min']],
+                        'max': [vali_normalization_params['reconstruction_error']['max']],
+                    }
+                )
+                discriminator_error = disc_scaler.transform(discriminator_error.unsqueeze(1)).squeeze()
+                reconstruction_error = rec_scaler.transform(reconstruction_error.unsqueeze(1)).squeeze()
+            else:
+                logger.info("Unable to set normalization parameters. Retrieving new parameters")
+                discriminator_error = disc_scaler.fit_transform(discriminator_error.unsqueeze(1)).squeeze()
+                reconstruction_error = rec_scaler.fit_transform(reconstruction_error.unsqueeze(1)).squeeze()
 
         if self.detection_cfg.AD_SCORE_STRATEGY is None:
             raise ValueError("No AD score strategy selected.")
@@ -273,9 +292,17 @@ class GANAnomalyDetector(ReconstructionDetector):
 
         latent_norm = torch.norm(self._noise.squeeze(), dim=1)
         if self.detection_cfg.NORMALIZE_ERROR:
-            scaler = MinMaxTransformation()
-            scaled_latent_norm = scaler.fit_transform((latent_norm.unsqueeze(1)) - self.module.z_mode).squeeze()
-            return scaled_latent_norm
+            latent_scaler = MinMaxTransformation()
+            if hasattr(self.module, 'normalization_params'):
+                vali_normalization_params = self.module.normalization_params
+                latent_scaler.set_params(
+                    {
+                        'min': [vali_normalization_params['latent_error']['min']],
+                        'max': [vali_normalization_params['latent_error']['max']],
+                    }
+                )
+                return latent_scaler.transform((latent_norm.unsqueeze(1)) - self.module.z_mode).squeeze()
+            return latent_scaler.fit_transform((latent_norm.unsqueeze(1)) - self.module.z_mode).squeeze()
         return latent_norm
 
     def _reconstruct(self, data: Tensor) -> Tensor:

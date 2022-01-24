@@ -128,9 +128,13 @@ class MinMaxTransformation(DataTransformation):
             )
         return normalized_data
 
-    def get_min_max(self) -> Dict:
+    def get_params(self) -> Dict:
         """Retrieve normalization parameters."""
         return self.params  # type: ignore
+
+    def set_params(self, params: Dict) -> None:
+        """Set existing normalization parameters."""
+        self.params = params
 
 
 class StandardizationTransformation(DataTransformation):

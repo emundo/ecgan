@@ -195,10 +195,10 @@ class BaseEncoderGANModule(BaseGANModule):
         # Min-max normalize error:
         scaler = MinMaxTransformation()
         self.reconstruction_error = scaler.fit_transform(self.reconstruction_error.unsqueeze(1)).squeeze()
-        scaling_params = {key: value[0] for key, value in scaler.get_min_max().items()}
+        scaling_params = {key: value[0] for key, value in scaler.get_params().items()}
         self.normalization_params['reconstruction_error'] = scaling_params
         self.discrimination_error = scaler.fit_transform(self.discrimination_error.unsqueeze(1)).squeeze()
-        scaling_params = {key: value[0] for key, value in scaler.get_min_max().items()}
+        scaling_params = {key: value[0] for key, value in scaler.get_params().items()}
         self.normalization_params['discrimination_error'] = scaling_params
 
         if epoch % sample_interval == 0:
@@ -273,7 +273,7 @@ class BaseEncoderGANModule(BaseGANModule):
 
             # For each scaled norm: subtract mode of mu to approximately shift to center of chi distribution.
             scaled_latent_norm = scaler.fit_transform((latent_norm_vali.unsqueeze(1)) - self.z_mode).squeeze()
-            scaling_params = {key: value[0] for key, value in scaler.get_min_max().items()}
+            scaling_params = {key: value[0] for key, value in scaler.get_params().items()}
             self.normalization_params['latent_error'] = scaling_params
 
             # Get anomaly scores:
