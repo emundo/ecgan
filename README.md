@@ -39,14 +39,14 @@ By calling `ecgan-init -d DATASET -m MODULE -o FILE_NAME PROJECT NAME` a configu
 is generated. This can be manually updated and contains most relevant hyperparameters.
 After applying changes to the config file if desired you can start the preprocessing of
 the chosen DATASET using `ecgan-preprocess` before training the model by invoking `ecgan-train`.
-To perform anomaly detection, the `-a model_reference` flag is used (see [docs](https://emundo.github.io/ecgan) for more
+To perform anomaly detection, the `-a model_reference` flag is used (see [docs](https://emundo.github.io/ecgan-docs) for more
 information).
 
 ### Data
 We support several datasets will be used for evaluation: MIT-BIH (small amount of patients, long recordings, often
 used), the PTB ECG dataset as well as the Shaoxing dataset (many patients, smaller recordings, published recently).
 
-Some of the datasets require setting up kaggle credentials or downloading it manually (see [docs](https://emundo.github.io/ecgan))
+Some of the datasets require setting up kaggle credentials or downloading it manually (see [docs](https://emundo.github.io/ecgan-docs))
 
 ## About
 

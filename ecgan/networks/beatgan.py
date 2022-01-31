@@ -1,4 +1,4 @@
-"""BeatGAN encoder, generator and discriminator from :ref:`BeatGAN`."""
+"""BeatGAN encoder, generator and discriminator from Zhou et al. 2019."""
 from typing import Dict, List
 
 from torch import nn
