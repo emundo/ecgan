@@ -204,6 +204,25 @@ class GANAnomalyDetector(ReconstructionDetector):
         logger.info("Predicting labels using {0}.".format(self.detection_cfg.AD_SCORE_STRATEGY))
         errors = [reconstruction_error.cpu(), discriminator_error.cpu()]
 
+        if self.detection_cfg.ad_score_strategy == MetricOptimization.RECONSTRUCTION_ERROR:
+            # Tau_{rec} is not explicitly calculated on the validation data for this experiment.
+            if not hasattr(self.module, 'tau'):
+                logger.warning(
+                    "DID NOT FIND PRETRAINED TAU. Optimizing on test data. This should be avoided and "
+                    "needs to be accounted for in the interpretation."
+                )
+
+                return optimize_grid_search(
+                    metric=MetricType.FSCORE,
+                    labels=test_y.cpu(),
+                    errors=errors,
+                    taus=cast(List[float], np.linspace(0, 2, 100).tolist()),
+                    params=[cast(List[float], np.linspace(0, 1, 50).tolist())],
+                )
+
+            logger.info("Loading tau from validation set...")
+            return retrieve_labels_from_weights(errors, self.module.tau, [1.0])
+
         if self.detection_cfg.ad_score_strategy == MetricOptimization.GRID_SEARCH_LAMBDA:
             if not (hasattr(self.module, 'tau') and hasattr(self.module, 'lambda_')):
                 logger.warning(
