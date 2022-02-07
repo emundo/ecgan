@@ -19,7 +19,6 @@ from ecgan.utils.custom_types import SamplingAlgorithm
 from ecgan.utils.datasets import (
     CMUMoCapDataset,
     DatasetFactory,
-    ElectricDevicesDataset,
     ExtendedCMUMoCapDataset,
     MitbihBeatganDataset,
     MitbihDataset,
@@ -346,52 +345,9 @@ class ExtendedCMUMoCapPreprocessor(CMUMoCapPreprocessor):
         return self.data, self.labels
 
 
-class ElectricDevicesPreprocessor(BasePreprocessor):
-    """
-    Preprocess the Electric Devices Dataset from TODO.
-    """
-
-    def preprocess(self) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Preprocess the dataset.
-
-        Returns:
-            Tuple of data and labels in a framework compatible format.
-        """
-        logger.info('Loading arff data to memory.')
-        file_list = [
-            os.path.join(self.target, 'ElectricDevices_TRAIN.arff'),
-            os.path.join(self.target, 'ElectricDevices_TEST.arff'),
-        ]
-        data = np.empty(0)
-        label = np.empty(0)
-
-        for file in file_list:
-            try:
-                data_ = arff.loadarff(file)[0]
-                data_ = np.char.decode(np.array([list(tpl) for tpl in data_]), encoding='UTF-8').astype(float)
-                data = np.append(data, data_[:, :96])
-                label = np.append(label, data_[:, 96])
-            except Exception as e:
-                raise RuntimeError('Could not preprocess data:{}'.format(e)) from e
-
-        self.data = np.reshape(data, (-1, 96))
-        self.labels = label
-
-        # TODO decide which classes are (ab)normal
-        logger.info(
-            'Final dataset has {} samples with shape {}. Class distribution: {}'.format(
-                len(self.data),
-                self.data.shape,
-                np.unique(self.labels, return_counts=True),
-            )
-        )
-        return self.data, self.labels
-
-
 class WaferPreprocessor(BasePreprocessor):
     """
-    Preprocess the Electric Devices Dataset from TODO.
+    Preprocess the Wafer Dataset from `Olszewski 2001 <https://www.cs.cmu.edu/~bobski/pubs/tr01108-twosided.pdf>`_.
     """
 
     def preprocess(self) -> Tuple[np.ndarray, np.ndarray]:
@@ -863,8 +819,6 @@ class PreprocessorFactory:  # pylint: disable=R0911
             return CMUMoCapPreprocessor(cfg, dataset)
         if dataset == ExtendedCMUMoCapDataset.name:
             return ExtendedCMUMoCapPreprocessor(cfg, dataset)
-        if dataset == ElectricDevicesDataset.name:
-            return ElectricDevicesPreprocessor(cfg, dataset)
         if dataset == WaferDataset.name:
             return WaferPreprocessor(cfg, dataset)
         raise ValueError('Preprocessing mode {0} is unknown.'.format(dataset))

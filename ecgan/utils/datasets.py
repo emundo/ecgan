@@ -64,20 +64,6 @@ class MitbihDataset(Dataset):
 
 
 @dataclass
-class ElectricDevicesDataset(Dataset):
-    """Static description of the Mitbih dataset."""
-
-    name = 'electric_devices'
-    num_channels = 1
-    num_classes = 7
-    default_seq_len = 96
-    loading_src = 'http://www.timeseriesclassification.com/Downloads/ElectricDevices.zip'
-    percentage_normal = 0.828
-
-    beat_types = {'Normal': 0, 'Arrhythmic': 1}  # TODO
-
-
-@dataclass
 class WaferDataset(Dataset):
     """Static description of the Wafer dataset."""
 
@@ -86,9 +72,9 @@ class WaferDataset(Dataset):
     num_classes = 2
     default_seq_len = 152
     loading_src = 'http://www.timeseriesclassification.com/Downloads/Wafer.zip'
-    percentage_normal = 0.828  # TODO
+    percentage_normal = 0.894
 
-    beat_types = {'Normal': 0, 'Abnormal': 1}  # TODO
+    beat_types = {'Normal': 0, 'Abnormal': 1}
 
 
 @dataclass
@@ -208,7 +194,6 @@ class DatasetFactory:
             PTBExtractedBeatsDataset.name: PTBExtractedBeatsDataset,
             CMUMoCapDataset.name: CMUMoCapDataset,
             ExtendedCMUMoCapDataset.name: ExtendedCMUMoCapDataset,
-            ElectricDevicesDataset.name: ElectricDevicesDataset,
             WaferDataset.name: WaferDataset,
         }
         try:

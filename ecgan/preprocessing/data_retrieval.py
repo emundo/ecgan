@@ -16,7 +16,6 @@ from ecgan.utils.custom_types import TrackerType, Transformation
 from ecgan.utils.datasets import (
     CMUMoCapDataset,
     DatasetFactory,
-    ElectricDevicesDataset,
     ExtendedCMUMoCapDataset,
     MitbihBeatganDataset,
     MitbihDataset,
@@ -569,18 +568,25 @@ class MitbihBeatganDataRetriever(UrlDataRetriever):
         return config
 
 
-class ElectricDevicesDataRetriever(UrlDataRetriever):
+class WaferDataRetriever(UrlDataRetriever):
     """
-    Download the electric devices dataset from todo.
+    Download the Wafer dataset from a public time series dataset collection.
+
+    | **Paper**:
+    | See `Olszewski 2001 <https://www.cs.cmu.edu/~bobski/pubs/tr01108-twosided.pdf>`_.
+    | **Information on source**:
+    | Data is downloaded from a
+      `public repository for time series repository <http://www.timeseriesclassification.com/
+      description.php?Dataset=Wafer>`_.
     """
 
     @staticmethod
     def configure() -> Dict:
-        """Return the default configuration for the MITBIH dataset with extracted beats."""
+        """Return the default configuration for the Wafer dataset."""
         num_workers = get_num_workers()
         config: Dict = PreprocessingConfig.configure(
-            loading_src=ElectricDevicesDataset.loading_src,
-            target_sequence_length=ElectricDevicesDataset.default_seq_len,
+            loading_src=WaferDataset.loading_src,
+            target_sequence_length=WaferDataset.default_seq_len,
             num_workers=num_workers,
         )
 
@@ -603,24 +609,6 @@ class ElectricDevicesDataRetriever(UrlDataRetriever):
             zip_ref.extractall(unzip_location)
 
 
-class WaferDataRetriever(ElectricDevicesDataRetriever):
-    """
-    Download the Wafer dataset from todo.
-    """
-
-    @staticmethod
-    def configure() -> Dict:
-        """Return the default configuration for the MITBIH dataset with extracted beats."""
-        num_workers = get_num_workers()
-        config: Dict = PreprocessingConfig.configure(
-            loading_src=WaferDataset.loading_src,
-            target_sequence_length=WaferDataset.default_seq_len,
-            num_workers=num_workers,
-        )
-
-        return config
-
-
 class DataRetrieverFactory:
     """Meta module for creating data retriever instances."""
 
@@ -633,7 +621,6 @@ class DataRetrieverFactory:
         PTBExtractedBeatsDataset.name: PtbExtractedBeatsDataRetriever,
         CMUMoCapDataset.name: CMUMoCapDataRetriever,
         ExtendedCMUMoCapDataset.name: ExtendedCMUMoCapDataRetriever,
-        ElectricDevicesDataset.name: ElectricDevicesDataRetriever,
         WaferDataset.name: WaferDataRetriever,
     }
 
