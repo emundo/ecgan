@@ -168,7 +168,7 @@ class AUROCMetric(ClassificationMetric):
 
 
 class AvgPrecisionMetric(ClassificationMetric):
-    """Create a AP object."""
+    """Create an AP object."""
 
     def calculate(self, y: Union[torch.Tensor, np.ndarray], y_hat: Union[torch.Tensor, np.ndarray]) -> float:
         """

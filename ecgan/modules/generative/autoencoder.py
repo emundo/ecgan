@@ -143,9 +143,8 @@ class AutoEncoder(BaseGenerativeModule):
 
     def _init_criterion(self) -> Any:
         return AutoEncoderLoss(
-            self.autoencoder_sampler,
-            self.cfg.TANH_OUT  # use MSE if Tanh out, use BCE if sig out
-            # cast(EncoderBasedGeneratorSampler, self.generator_sampler),
+            cast(EncoderBasedGeneratorSampler, self.autoencoder_sampler),
+            self.cfg.TANH_OUT,  # use MSE if Tanh out, use BCE if sig out
         )
 
     def _init_optim(self) -> BaseOptimizer:
@@ -370,6 +369,9 @@ class AutoEncoder(BaseGenerativeModule):
         with torch.no_grad():
             faked_samples, _ = self.autoencoder_sampler.sample_generator_encoder(data=self.fixed_samples)
 
+        if self.cfg.TANH_OUT:
+            faked_samples = (faked_samples / 2) + 0.5
+
         samples = torch.empty(
             (
                 2 * self.num_fixed_samples,
@@ -378,10 +380,6 @@ class AutoEncoder(BaseGenerativeModule):
             )
         )
         labels = torch.empty((2 * self.num_fixed_samples, 1))
-        # else:
-        #     if self.cfg.TANH_OUT:
-        #         gen_samples = (gen_samples / 2) + 0.5
-        #
 
         for i in range(self.num_fixed_samples):
             samples[2 * i] = self.fixed_samples[i]

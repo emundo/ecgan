@@ -527,7 +527,7 @@ class GANLossFactory:
 class AutoEncoderLoss(Configurable):
     """Base loss class for custom GAN losses."""
 
-    def __init__(self, autoencoder_sampler: GeneratorSampler, use_mse: bool) -> None:
+    def __init__(self, autoencoder_sampler: EncoderBasedGeneratorSampler, use_mse: bool) -> None:
         super().__init__()
         self.autoencoder_sampler = autoencoder_sampler
         self._internal_loss = torch.nn.MSELoss() if use_mse else torch.nn.BCELoss()
@@ -537,7 +537,7 @@ class AutoEncoderLoss(Configurable):
         batch_size = training_data.shape[0]
         torch.zeros(batch_size, device=training_data.device)
 
-        noise = cast(EncoderBasedGeneratorSampler, self.autoencoder_sampler).sample_encoder(training_data)
+        noise = self.autoencoder_sampler.sample_encoder(training_data)
         faked_output = self.autoencoder_sampler.sample(noise)
 
         error = self._internal_loss(faked_output, training_data)
