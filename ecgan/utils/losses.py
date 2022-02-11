@@ -525,7 +525,7 @@ class GANLossFactory:
 
 
 class AutoEncoderLoss(Configurable):
-    """Base loss class for custom GAN losses."""
+    """Reconstruction based loss used by autoencoders."""
 
     def __init__(self, autoencoder_sampler: EncoderBasedGeneratorSampler, use_mse: bool) -> None:
         super().__init__()
@@ -556,12 +556,12 @@ class AutoEncoderLoss(Configurable):
 
     @staticmethod
     def configure() -> Dict:
-        """Return the default configuration for a general loss function."""
-        return AutoEncoderLoss._configure(Losses.UNDEFINED.value)
+        """Return the default configuration for the autoencoder loss function."""
+        return AutoEncoderLoss._configure(Losses.AUTOENCODER.value)
 
 
 class VariationalAutoEncoderLoss(Configurable):
-    """Base loss class for custom GAN losses."""
+    r"""Base loss of VAEs considering reconstruction loss as well as KL divergence weighted by :math:`\beta`."""
 
     def __init__(
         self,
@@ -619,5 +619,5 @@ class VariationalAutoEncoderLoss(Configurable):
 
     @staticmethod
     def configure() -> Dict:
-        """Return the default configuration for the VAEGAN generator loss."""
-        return VariationalAutoEncoderLoss._configure(Losses.VAEGAN_GENERATOR.value)
+        """Return the default configuration for the VAE loss."""
+        return VariationalAutoEncoderLoss._configure(Losses.VAE.value)

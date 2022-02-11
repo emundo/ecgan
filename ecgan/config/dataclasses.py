@@ -439,7 +439,7 @@ class BaseNNConfig(ModuleConfig):
 
 @nested_dataclass
 class AutoEncoderConfig(ModuleConfig):
-    """Generalized configuration of a GAN module."""
+    """Generalized configuration of a AE module."""
 
     LATENT_SIZE: int
     ENCODER: BaseNNConfig
@@ -455,7 +455,7 @@ class AutoEncoderConfig(ModuleConfig):
 
 @nested_dataclass
 class VariationalAutoEncoderConfig(AutoEncoderConfig):
-    """Generalized configuration of a GAN module."""
+    """Generalized configuration of a VAE module."""
 
     KL_BETA: float
 
@@ -518,7 +518,7 @@ class AdExperimentConfig:
 
 @dataclass
 class DetectionConfig:
-    """Generalized configuration of a module."""
+    """Generalized configuration of a detection object."""
 
     _name = "detection"
     DETECTOR: str
@@ -534,7 +534,7 @@ class DetectionConfig:
 
 @nested_dataclass
 class ReconstructionDetectionConfig(DetectionConfig):
-    """Generalized configuration of a module."""
+    """Generalized configuration of a reconstruction based detection config."""
 
     EMBEDDING: EmbeddingConfig
 

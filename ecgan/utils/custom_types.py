@@ -121,6 +121,8 @@ class Losses(Enum):
     AEGAN_GENERATOR = 'aegan_generator'
     AEGAN_DISCRIMINATOR = 'aegan_discriminator'
     VAEGAN_GENERATOR = 'vaegan_generator'
+    VAE = 'vae'
+    AUTOENCODER = 'autoencoder'
 
 
 class LabelingStrategy(Enum):

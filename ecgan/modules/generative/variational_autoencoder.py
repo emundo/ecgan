@@ -1,9 +1,7 @@
 """
-Implementation of a architecture using an autoencoder as generator.
+Implementation of a architecture using a variational autoencoder as generator.
 
-No discriminator is used in this model, :ref:`ecgan.modules.generative.aegan` can be used for the autoencoder.
-
-This model is currently only used as a reference method.
+No discriminator is used in this model, :ref:`ecgan.modules.generative.vaegan` additionally utilizes adversarial info.
 """
 import logging
 from itertools import chain
@@ -20,7 +18,7 @@ from ecgan.utils.custom_types import InputNormalization, LatentDistribution, Wei
 from ecgan.utils.layers import initialize_batchnorm, initialize_weights
 from ecgan.utils.losses import BceGeneratorLoss, VariationalAutoEncoderLoss
 from ecgan.utils.optimizer import Adam, BaseOptimizer, OptimizerFactory
-from ecgan.utils.sampler import GeneratorSampler, VAEGANGeneratorSampler
+from ecgan.utils.sampler import VAEGANGeneratorSampler
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +37,7 @@ class VariationalAutoEncoder(AutoEncoder):
         num_channels: int,
     ):
         self.distribution = Normal(0, 1)
-        super().__init__(cfg, seq_len, num_channels)  # type: ignore
+        super().__init__(cfg, seq_len, num_channels)
         self.cfg: VariationalAutoEncoderConfig = cast(VariationalAutoEncoderConfig, self.cfg)
 
     @property
@@ -80,7 +78,7 @@ class VariationalAutoEncoder(AutoEncoder):
 
         return model
 
-    def _init_autoencoder_sampler(self) -> GeneratorSampler:
+    def _init_autoencoder_sampler(self) -> VAEGANGeneratorSampler:
         return VAEGANGeneratorSampler(
             component=self.decoder,
             encoder=self.encoder,
@@ -108,7 +106,7 @@ class VariationalAutoEncoder(AutoEncoder):
 
     @staticmethod
     def configure() -> Dict:
-        """Return the default configuration for the BeatGAN model."""
+        """Return the default configuration for the VAE model."""
         config = {
             'module': {
                 'LATENT_SIZE': 5,

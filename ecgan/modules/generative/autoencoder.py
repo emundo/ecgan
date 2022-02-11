@@ -1,9 +1,7 @@
 """
 Implementation of a architecture using an autoencoder as generator.
 
-No discriminator is used in this model, :ref:`ecgan.modules.generative.aegan` can be used for the autoencoder.
-
-This model is currently only used as a reference method.
+No discriminator is used in this model, :ref:`ecgan.modules.generative.aegan` utilizes adversarial information.
 """
 import logging
 from itertools import chain
@@ -23,7 +21,7 @@ from ecgan.utils.layers import initialize_batchnorm, initialize_weights
 from ecgan.utils.losses import AEGANGeneratorLoss, AutoEncoderLoss, BceGeneratorLoss, BCELoss, L2Loss
 from ecgan.utils.miscellaneous import load_model
 from ecgan.utils.optimizer import Adam, BaseOptimizer, OptimizerFactory
-from ecgan.utils.sampler import EncoderBasedGeneratorSampler, GeneratorSampler
+from ecgan.utils.sampler import EncoderBasedGeneratorSampler
 from ecgan.utils.transformation import MinMaxTransformation
 
 logger = logging.getLogger(__name__)
@@ -71,7 +69,7 @@ class AutoEncoder(BaseGenerativeModule):
         self.label = torch.empty(0).to(self.device)
 
         # Required for validation/testing.
-        self.tau: float = 0.0
+        self.tau: float = 0.0  # Threshold for the reconstruction error
 
         self.seq_len = seq_len
         self.num_channels = num_channels
@@ -86,15 +84,15 @@ class AutoEncoder(BaseGenerativeModule):
         return cast(AEGANGeneratorLoss, self._criterion)
 
     @property
-    def encoder(self) -> Any:
+    def encoder(self) -> nn.Module:
         return self._encoder
 
     @property
-    def decoder(self) -> Any:
+    def decoder(self) -> nn.Module:
         return self._decoder
 
     @property
-    def autoencoder_sampler(self) -> Any:
+    def autoencoder_sampler(self) -> EncoderBasedGeneratorSampler:
         return self._autoencoder_sampler
 
     def _init_decoder(self) -> nn.Module:
@@ -132,7 +130,7 @@ class AutoEncoder(BaseGenerativeModule):
 
         return model
 
-    def _init_autoencoder_sampler(self) -> GeneratorSampler:
+    def _init_autoencoder_sampler(self) -> EncoderBasedGeneratorSampler:
         return EncoderBasedGeneratorSampler(
             component=self.decoder,
             encoder=self.encoder,
@@ -165,7 +163,7 @@ class AutoEncoder(BaseGenerativeModule):
 
     @staticmethod
     def configure() -> Dict:
-        """Return the default configuration for the BeatGAN model."""
+        """Return the default configuration for the autoencoder model."""
         config = {
             'module': {
                 'LATENT_SIZE': 5,
@@ -312,16 +310,11 @@ class AutoEncoder(BaseGenerativeModule):
             if self.fixed_samples is None or self.fixed_samples_labels is None:
                 raise RuntimeError("Fixed samples not set correctly.")
 
-            # Interpolate through latent space for normal and abnormal samples
-            # result.append(self._get_interpolation_grid(self.fixed_samples[1], 'Normal Class'))
-            # result.append(self._get_interpolation_grid(self.fixed_samples[-1], 'Abnormal Class'))
-
             mmd = self.get_mmd()
             result.append(ValueArtifact('generative_metric/mmd', mmd))
             tstr_dict = self.get_tstr()
             result.append(ValueArtifact('generative_metric/tstr', tstr_dict))
 
-            # Evaluate lambda = 0, lambda=1 for anogan and gamma=1 for vaegan
             tau_range = torch.linspace(0, 1, 50).cpu().tolist()
             result.append(
                 ValueArtifact(
@@ -331,7 +324,6 @@ class AutoEncoder(BaseGenerativeModule):
             )
         # Optimize F-score every 10 epochs
         if epoch % 10 == 0:
-            # if False:
             best_params = optimize_metric(
                 MetricType.FSCORE,
                 errors=[self.reconstruction_error.cpu()],

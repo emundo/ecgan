@@ -211,7 +211,7 @@ class CMUMoCapDataRetriever(KaggleDataRetriever):
 
     @staticmethod
     def configure() -> Dict:
-        """Return the default configuration for the MITBIH dataset with extracted beats."""
+        """Return the default configuration for the CMU MoCap dataset."""
         num_workers = get_num_workers()
         config: Dict = PreprocessingConfig.configure(
             loading_src=CMUMoCapDataset.loading_src,
