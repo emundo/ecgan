@@ -1,7 +1,6 @@
 #Custom
 results/
 data/
-!KDD/data/
 .idea/
 examples/prototyping*.py
 deploy/
