@@ -103,6 +103,7 @@ class MetricOptimization(Enum):
     SVM_LAMBDA_GAMMA = 'SVM_LAMBDA_GAMMA'
     GRID_SEARCH_LAMBDA = 'GRID_SEARCH_LAMBDA'
     GRID_SEARCH_LAMBDA_GAMMA = 'GRID_SEARCH_LAMBDA_GAMMA'
+    RECONSTRUCTION_ERROR = 'RECONSTRUCTION_ERROR'
 
 
 class Losses(Enum):
@@ -120,6 +121,8 @@ class Losses(Enum):
     AEGAN_GENERATOR = 'aegan_generator'
     AEGAN_DISCRIMINATOR = 'aegan_discriminator'
     VAEGAN_GENERATOR = 'vaegan_generator'
+    VAE = 'vae'
+    AUTOENCODER = 'autoencoder'
 
 
 class LabelingStrategy(Enum):
@@ -153,6 +156,7 @@ class MetricType(Enum):
     FSCORE = 'fscore'
     MCC = 'mcc'
     AUROC = 'auroc'
+    AP = 'average_precision'
 
 
 class WeightInitialization(Enum):
@@ -237,6 +241,8 @@ class SupportedModules(Enum):
     VAEGAN = 'vaegan'
     RNN = 'rnn'
     CNN = 'cnn'
+    AUTOENCODER = 'autoencoder'
+    VAE = 'variational_autoencoder'
 
 
 # Optimizer can either handle a single tensor or multiple losses as a tuple (NAME, LossTensor).

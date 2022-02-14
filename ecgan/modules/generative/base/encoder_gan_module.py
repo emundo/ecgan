@@ -53,6 +53,7 @@ class BaseEncoderGANModule(BaseGANModule):
         self.z_mu: float = 0.0
         self.z_mode: float = 0.0
         self.gamma: float = 0.0  # not currently supported via saved grid search - use svm_mu for improved results
+        self.normalization_params: Dict = {'reconstruction_error': {}, 'discrimination_error': {}, 'latent_error': {}}
 
     @property
     def encoder(self):
@@ -194,7 +195,11 @@ class BaseEncoderGANModule(BaseGANModule):
         # Min-max normalize error:
         scaler = MinMaxTransformation()
         self.reconstruction_error = scaler.fit_transform(self.reconstruction_error.unsqueeze(1)).squeeze()
+        scaling_params = {key: value[0] for key, value in scaler.get_params().items()}
+        self.normalization_params['reconstruction_error'] = scaling_params
         self.discrimination_error = scaler.fit_transform(self.discrimination_error.unsqueeze(1)).squeeze()
+        scaling_params = {key: value[0] for key, value in scaler.get_params().items()}
+        self.normalization_params['discrimination_error'] = scaling_params
 
         if epoch % sample_interval == 0:
             result.append(self._reconstruct_fixed_samples())
@@ -268,6 +273,8 @@ class BaseEncoderGANModule(BaseGANModule):
 
             # For each scaled norm: subtract mode of mu to approximately shift to center of chi distribution.
             scaled_latent_norm = scaler.fit_transform((latent_norm_vali.unsqueeze(1)) - self.z_mode).squeeze()
+            scaling_params = {key: value[0] for key, value in scaler.get_params().items()}
+            self.normalization_params['latent_error'] = scaling_params
 
             # Get anomaly scores:
             # 1. SVM on reconstruction error, discrimination error and latent norm
@@ -376,7 +383,14 @@ class BaseEncoderGANModule(BaseGANModule):
                 weighting_params=[self.lambda_],
             )
             result.extend(
-                self._get_metrics(self.label, predictions, 'grid/lambda', log_fscore=True, log_auroc=True, log_mcc=True)
+                self._get_metrics(
+                    self.label,
+                    predictions,
+                    'grid/lambda',
+                    log_fscore=True,
+                    log_auroc=True,
+                    log_mcc=True,
+                )
             )
 
         result.extend(self._on_epoch_end_addition(epoch, sample_interval))
@@ -440,7 +454,11 @@ class BaseEncoderGANModule(BaseGANModule):
                 'Z_MU': self.z_mu,
                 'Z_MODE': self.z_mode,
                 'SVM_MU': self.svm_mu,
+                'NORM_PARAMS': self.normalization_params,
             },
+            'FIXED_SAMPLES': self.fixed_samples.detach().cpu().tolist()
+            if isinstance(self.fixed_samples, torch.Tensor)
+            else None,  # temporary for tracking and graphing
         }
 
     def load(self, model_reference: str, load_optim: bool = False):
@@ -463,6 +481,7 @@ class BaseEncoderGANModule(BaseGANModule):
         self.z_mu = model['ANOMALY_DETECTION']['Z_MU']
         self.z_mode = model['ANOMALY_DETECTION']['Z_MODE']
         self.svm_mu = model['ANOMALY_DETECTION']['SVM_MU']
+        self.normalization_params = model['ANOMALY_DETECTION']['NORM_PARAMS']
         return self
 
     def set_fixed_samples(self) -> None:

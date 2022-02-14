@@ -47,10 +47,6 @@ exchanging the input normalization) and we aim to achieve high performances on g
 datasets with given preprocessing and a specific task (e.g. single-beat classification,
 multi-beat classification or beat generation).
 If you are able to improve an existing baseline, please use either 5 or 10-fold
-crossvalidation (i.e.set the :code:`trainer.CROSS_VAL_FOLDS` parameter to 5 or 10. Please report the
-resulting task metrics (see :ref:`Classification` and :ref:`Data Synthesis`). We will
+crossvalidation (i.e.set the :code:`trainer.CROSS_VAL_FOLDS` parameter to 5 or 10). Please report the
+resulting task metrics (see :ref:`Data Synthesis`). We will
 additionally run the code independently to verify the result before merging.
-
-Adding Modules
---------------
-

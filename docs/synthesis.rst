@@ -5,10 +5,16 @@ The currently supported data generation modules focus on GANs and combinations o
 
 Traditional GANs include:
 
-#. DCGAN
-#. RGAN
+#. :ref:`DCGAN`
+#. :ref:`RGAN`
+#. :ref:`Recurrent DCGAN`
 
-GANs with autoencoder based generators include;
+Traditional Autoencoder architectures include:
 
-#. BeatGAN (AEGAN)
-#. VAEGAN
+#. :ref:`Autoencoder`
+#. :ref:`Variational Autoencoder`
+
+GANs with autoencoder based generators include:
+
+#. :ref:`Autoencoder GAN` (AEGAN/BeatGAN)
+#. :ref:`VAEGAN`

@@ -1,7 +1,7 @@
 """Implementation of various normalizers for time series data."""
 from abc import ABC, abstractmethod
 from logging import getLogger
-from typing import Union
+from typing import Dict, Union
 
 import torch
 from numpy import ndarray
@@ -127,6 +127,14 @@ class MinMaxTransformation(DataTransformation):
                 self.params['max'][column] - self.params['min'][column]
             )
         return normalized_data
+
+    def get_params(self) -> Dict:
+        """Retrieve normalization parameters."""
+        return self.params  # type: ignore
+
+    def set_params(self, params: Dict) -> None:
+        """Set existing normalization parameters."""
+        self.params = params
 
 
 class StandardizationTransformation(DataTransformation):

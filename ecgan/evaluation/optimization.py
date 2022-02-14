@@ -162,6 +162,7 @@ def get_weighted_error(errors: List[Tensor], params: List[float]) -> Tensor:
         raise AttributeError("Sum or parameters may not be above 1 for weighting.")
     if len(params) == 0:  # If no params are given: only one error is used -> only the else case is triggered.
         params = [0.0]
+
     weighted_error_list = [
         (errors[index] * params[index]).tolist()
         if index is not len(errors) - 1

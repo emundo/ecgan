@@ -15,7 +15,7 @@ seaborn>= 0.11.2, <0.12.0
 
 
 ## Required for preprocessing
-Pillow >=8.3.2, < 9.0.0
+Pillow >= 9.0.0, < 10.0.0
 pylttb >= 0.1.9, < 0.2.0
 kaggle >= 1.5.0, < 1.6.0  # required for downloading some datasets
 tqdm >= 4.62.0, < 4.63.0

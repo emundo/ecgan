@@ -167,6 +167,31 @@ class AUROCMetric(ClassificationMetric):
         raise ValueError('Unexpected type of AUROC: {0}'.format(type(auroc)))
 
 
+class AvgPrecisionMetric(ClassificationMetric):
+    """Create an AP object."""
+
+    def calculate(self, y: Union[torch.Tensor, np.ndarray], y_hat: Union[torch.Tensor, np.ndarray]) -> float:
+        """
+        Calculate the average precision score.
+
+        Args:
+            y: Ground truth labels of shape (num_samples,).
+            y_hat: Predicted labels of shape (num_samples,).
+
+        Returns:
+            float: The average precision score.
+        """
+        y = to_numpy(y)
+        y_hat = to_numpy(y_hat)
+
+        average_precision: float = skm.average_precision_score(
+            y,
+            y_hat,
+        )
+
+        return average_precision
+
+
 class ClassificationMetricFactory:
     """Meta module for creating classification metric objects."""
 
@@ -180,6 +205,7 @@ class ClassificationMetricFactory:
             MetricType.FSCORE: FScoreMetric(**kwargs),
             MetricType.MCC: MCCMetric(),
             MetricType.AUROC: AUROCMetric(**kwargs),
+            MetricType.AP: AvgPrecisionMetric(),
         }
         try:
             return metrics[metric]

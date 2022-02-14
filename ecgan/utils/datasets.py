@@ -64,6 +64,20 @@ class MitbihDataset(Dataset):
 
 
 @dataclass
+class WaferDataset(Dataset):
+    """Static description of the Wafer dataset."""
+
+    name = 'wafer'
+    num_channels = 1
+    num_classes = 2
+    default_seq_len = 152
+    loading_src = 'http://www.timeseriesclassification.com/Downloads/Wafer.zip'
+    percentage_normal = 0.894
+
+    beat_types = {'Normal': 0, 'Abnormal': 1}
+
+
+@dataclass
 class MitbihExtractedBeatsDataset(Dataset):
     """Static description of the MITBIH dataset with extracted and downsampled single beats."""
 
@@ -143,6 +157,29 @@ class PTBExtractedBeatsDataset(Dataset):
     }
 
 
+class CMUMoCapDataset(Dataset):
+    """Static description of the CMU MoCap subset."""
+
+    name = 'cmu_mocap'
+    num_channels = 4
+    num_classes = 3
+    default_seq_len = 64
+    loading_src = 'maximdolg/cmu-mocap-dataset-as-used-in-beatgan'
+    percentage_normal = 0.73
+    beat_types = {'walking': 0, 'jogging': 1, 'jumping': 2}
+
+
+class ExtendedCMUMoCapDataset(CMUMoCapDataset):
+    """Static description of the extended CMU MoCap subset."""
+
+    name = 'cmu_mocap_extended'
+    num_channels = 4
+    num_classes = 4
+    loading_src = 'maximdolg/extended-cmu-mocap-dataset-for-beatgan'
+    percentage_normal = 0.378
+    beat_types = {'walking': 0, 'jogging': 1, 'jumping': 2, 'dancing': 3}
+
+
 class DatasetFactory:
     """Meta module for creating datasets objects containing static data to describe the datasets."""
 
@@ -155,6 +192,9 @@ class DatasetFactory:
             MitbihBeatganDataset.name: MitbihBeatganDataset,
             SineDataset.name: SineDataset,
             PTBExtractedBeatsDataset.name: PTBExtractedBeatsDataset,
+            CMUMoCapDataset.name: CMUMoCapDataset,
+            ExtendedCMUMoCapDataset.name: ExtendedCMUMoCapDataset,
+            WaferDataset.name: WaferDataset,
         }
         try:
             return datasets[dataset]

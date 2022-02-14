@@ -7,7 +7,7 @@ import torch
 from torch import no_grad
 
 from ecgan.config import ModuleConfig
-from ecgan.evaluation.metrics.classification import AUROCMetric, FScoreMetric, MCCMetric
+from ecgan.evaluation.metrics.classification import AUROCMetric, AvgPrecisionMetric, FScoreMetric, MCCMetric
 from ecgan.evaluation.metrics.mmd import MaxMeanDiscrepancy
 from ecgan.evaluation.metrics.tstr import TSTR
 from ecgan.modules.base import BaseModule
@@ -66,12 +66,12 @@ class BaseGenerativeModule(BaseModule):
         lower_volume_class = (
             0 if self.vali_dataset_sampler.get_dataset_size(0) < self.vali_dataset_sampler.get_dataset_size(1) else 1
         )
+
         num_test_samples_per_class = (self.vali_dataset_sampler.get_dataset_size(lower_volume_class)) // 3
         num_train_samples_per_class = (
             self.vali_dataset_sampler.get_dataset_size(lower_volume_class) - num_test_samples_per_class
         )
         samples_per_class = num_test_samples_per_class + num_train_samples_per_class
-
         abnormal_data_samples = self.vali_dataset_sampler.sample_class(samples_per_class, class_label=1)
         normal_data_samples = self.vali_dataset_sampler.sample_class(samples_per_class, class_label=0)
         anomalous_data_train = {
@@ -139,7 +139,7 @@ class BaseGenerativeModule(BaseModule):
 
         return tstr_score
 
-    def get_mmd(self, num_samples: int = 1024, sigma: float = 5) -> float:
+    def get_mmd(self, num_samples: int = 512, sigma: float = 5.0) -> float:
         """
         Calculate the maximum mean discrepancy.
 
@@ -170,6 +170,7 @@ class BaseGenerativeModule(BaseModule):
         log_fscore: bool = True,
         log_mcc: bool = True,
         log_auroc: bool = True,
+        log_avg_prec: bool = True,
     ) -> List[ValueArtifact]:
         result: List = []
         if log_fscore:
@@ -182,5 +183,8 @@ class BaseGenerativeModule(BaseModule):
         if log_auroc:
             auroc = AUROCMetric().calculate(real_labels, predicted_labels)
             result.append(ValueArtifact('{}_auroc'.format(identifier), auroc))
+        if log_avg_prec:
+            avg_prec = AvgPrecisionMetric().calculate(real_labels, predicted_labels)
+            result.append(ValueArtifact('{}_ap'.format(identifier), avg_prec))
 
         return result

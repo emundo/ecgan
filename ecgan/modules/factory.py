@@ -3,10 +3,12 @@ from ecgan.config import ModuleConfig
 from ecgan.modules.base import BaseModule
 from ecgan.modules.classifiers.nn_classifier import CNNClassifier, RNNClassifier
 from ecgan.modules.generative.aegan import AEGAN
+from ecgan.modules.generative.autoencoder import AutoEncoder
 from ecgan.modules.generative.dcgan import DCGAN
 from ecgan.modules.generative.rdcgan import RDCGAN
 from ecgan.modules.generative.rgan import RGAN
 from ecgan.modules.generative.vaegan import VAEGAN
+from ecgan.modules.generative.variational_autoencoder import VariationalAutoEncoder
 from ecgan.utils.custom_types import SupportedModules
 
 
@@ -24,6 +26,8 @@ class ModuleFactory:
             SupportedModules.RNN.value: RNNClassifier,
             SupportedModules.VAEGAN.value: VAEGAN,
             SupportedModules.CNN.value: CNNClassifier,
+            SupportedModules.AUTOENCODER.value: AutoEncoder,
+            SupportedModules.VAE.value: VariationalAutoEncoder,
         }
         try:
             return available_modules[module_name]

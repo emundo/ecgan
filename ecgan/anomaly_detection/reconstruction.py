@@ -271,10 +271,10 @@ class InverseMappingReconstructor(Reconstructor):
 
         Procedure:
             #. Query inverse mapping for latent representation of :math:`z_0`.
-            #. Create a synthetic series :math:`G(z_0)`
+            #. Create a synthetic series :math:`G(z_0)`.
 
         Args:
-            x: The input data in shape (N x *) that shall be reconstructed.
+            x: The input data in shape :math:`(N \times *)` that shall be reconstructed.
 
         Returns:
            Reconstructed series.

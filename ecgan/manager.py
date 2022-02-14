@@ -101,7 +101,6 @@ def train():
 
     data = load_pickle_numpy(os.path.join(target_dir, 'data.pkl'))
     label = load_pickle_numpy(os.path.join(target_dir, 'label.pkl'))
-
     trainer = Trainer(data=data, label=label)
     trainer.fit()
 
@@ -169,6 +168,7 @@ def detect():
         location=exp_cfg.TRACKER.tracker_name,
         target_dir=tracker.run_dir,
     )
+
     module_cfg = get_global_config().module_config
 
     rescale_to_unit_circle = False

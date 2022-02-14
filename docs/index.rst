@@ -9,7 +9,7 @@ The ECGAN framework provides a pipeline to preprocess, train and evaluate PyTorc
 trained on time series data. The focus lies on anomaly detection in ECG data: this
 is highlighted by datasets that are supported out-of-the-box. Generally, the aim is to
 offer tools to automatically preprocess the data, to provide a unified training and evaluation
-pipeline and toanalyse data, such as spectral analysis (FFT) and embeddings (UMAP/t-SNE).
+pipeline and to analyse data, such as spectral analysis (FFT) and embeddings (UMAP/t-SNE).
 
 The current focus of implemented models lies on ECG generation and its use for the detection of rhythmic or morphologic
 abnormalities in time series, but several other methods are already supported to serve as baseline detection algorithms.

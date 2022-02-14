@@ -8,19 +8,22 @@ from math import ceil, floor
 from typing import Dict, List, Tuple, cast
 
 import torch
-import wandb
 
+import wandb
 from ecgan.config import PreprocessingConfig, SinePreprocessingConfig
 from ecgan.utils.configurable import Configurable
 from ecgan.utils.custom_types import TrackerType, Transformation
 from ecgan.utils.datasets import (
+    CMUMoCapDataset,
     DatasetFactory,
+    ExtendedCMUMoCapDataset,
     MitbihBeatganDataset,
     MitbihDataset,
     MitbihExtractedBeatsDataset,
     PTBExtractedBeatsDataset,
     ShaoxingDataset,
     SineDataset,
+    WaferDataset,
 )
 from ecgan.utils.miscellaneous import get_num_workers, load_pickle, load_pickle_numpy, save_pickle
 from ecgan.utils.splitting import load_split
@@ -175,7 +178,7 @@ class PtbExtractedBeatsDataRetriever(KaggleDataRetriever):
     """
     Download the (beat-wise) segmented PTB dataset.
 
-    The segmented PTB dataset is downloaded via the regular KaggleDataLoader.
+    The segmented PTB dataset is downloaded via the regular `KaggleDataRetriever`.
 
     | Paper: `Kachuee et al. 2018 <https://arxiv.org/abs/1805.00794>`_.
     | Information on source: Data is downloaded from the authors
@@ -189,6 +192,54 @@ class PtbExtractedBeatsDataRetriever(KaggleDataRetriever):
         config: Dict = PreprocessingConfig.configure(
             loading_src=PTBExtractedBeatsDataset.loading_src,
             target_sequence_length=PTBExtractedBeatsDataset.default_seq_len,
+            num_workers=num_workers,
+        )
+
+        return config
+
+
+class CMUMoCapDataRetriever(KaggleDataRetriever):
+    """
+    Download the subset of the CMU MoCap dataset used in BeatGAN.
+
+    The dataset is downloaded via the regular `KaggleDataRetriever`.
+
+    | Paper: `Zhou et al. 2019 <https://www.ijcai.org/proceedings/2019/0616.pdf>`_.
+    | Information on source: Data is downloaded from a kaggle upload
+      `unofficial kaggle repository <https://www.kaggle.com/maximdolg/cmu-mocap-dataset-as-used-in-beatgan>`_.
+    """
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for the CMU MoCap dataset."""
+        num_workers = get_num_workers()
+        config: Dict = PreprocessingConfig.configure(
+            loading_src=CMUMoCapDataset.loading_src,
+            target_sequence_length=CMUMoCapDataset.default_seq_len,
+            num_workers=num_workers,
+        )
+
+        return config
+
+
+class ExtendedCMUMoCapDataRetriever(KaggleDataRetriever):
+    """
+    Download a extended version of the subset of the CMU MoCap dataset used in BeatGAN.
+
+    The dataset is downloaded via the regular `KaggleDataRetriever`.
+
+    | Paper: `Zhou et al. 2019 <https://www.ijcai.org/proceedings/2019/0616.pdf>`_.
+    | Information on source: Data is downloaded from a kaggle upload
+      `unofficial kaggle repository <https://www.kaggle.com/maximdolg/cmu-mocap-dataset-as-used-in-beatgan>`_.
+    """
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for extended CMU MoCap Dataset."""
+        num_workers = get_num_workers()
+        config: Dict = PreprocessingConfig.configure(
+            loading_src=ExtendedCMUMoCapDataset.loading_src,
+            target_sequence_length=ExtendedCMUMoCapDataset.default_seq_len,
             num_workers=num_workers,
         )
 
@@ -355,7 +406,7 @@ class UrlDataRetriever(DataRetriever):
         meta = self.get_meta()
 
         os.makedirs(path, exist_ok=True)
-        os.makedirs(os.path.join(path, 'raw'))
+        os.makedirs(os.path.join(path, 'raw'), exist_ok=True)
 
         save_location = os.path.join(path, '{0}_raw.zip'.format(self.dataset.name))
 
@@ -517,8 +568,61 @@ class MitbihBeatganDataRetriever(UrlDataRetriever):
         return config
 
 
+class WaferDataRetriever(UrlDataRetriever):
+    """
+    Download the Wafer dataset from a public time series dataset collection.
+
+    | **Paper**:
+    | See `Olszewski 2001 <https://www.cs.cmu.edu/~bobski/pubs/tr01108-twosided.pdf>`_.
+    | **Information on source**:
+    | Data is downloaded from a
+      `public repository for time series repository <http://www.timeseriesclassification.com/
+      description.php?Dataset=Wafer>`_.
+    """
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for the Wafer dataset."""
+        num_workers = get_num_workers()
+        config: Dict = PreprocessingConfig.configure(
+            loading_src=WaferDataset.loading_src,
+            target_sequence_length=WaferDataset.default_seq_len,
+            num_workers=num_workers,
+        )
+
+        return config
+
+    def get_meta(self) -> List[Tuple]:
+        """No metadata required."""
+        return []
+
+    def extract_data(self, save_location: str, unzip_location: str) -> None:
+        """
+        Extract data from zip file.
+
+        Args:
+            save_location: Reference to local directory where the zip is stored.
+            unzip_location: Reference to local directory where the data shall be extracted to.
+        """
+        with zipfile.ZipFile(save_location, 'r') as zip_ref:
+            # extract content into folder but remove toplevel dir.
+            zip_ref.extractall(unzip_location)
+
+
 class DataRetrieverFactory:
     """Meta module for creating data retriever instances."""
+
+    datasets = {
+        MitbihDataset.name: MitbihDataRetriever,
+        MitbihExtractedBeatsDataset.name: MitbihExtractedBeatsDataRetriever,
+        ShaoxingDataset.name: ShaoxingDataRetriever,
+        SineDataset.name: SineDataRetriever,
+        MitbihBeatganDataset.name: MitbihBeatganDataRetriever,
+        PTBExtractedBeatsDataset.name: PtbExtractedBeatsDataRetriever,
+        CMUMoCapDataset.name: CMUMoCapDataRetriever,
+        ExtendedCMUMoCapDataset.name: ExtendedCMUMoCapDataRetriever,
+        WaferDataset.name: WaferDataRetriever,
+    }
 
     def __call__(self, dataset: str, cfg: PreprocessingConfig) -> DataRetriever:
         """
@@ -527,18 +631,12 @@ class DataRetrieverFactory:
         Args:
             dataset: String specifying the dataset to be downloaded.
             cfg: Configuration for preprocessing.
-        """
-        datasets = {
-            MitbihDataset.name: MitbihDataRetriever,
-            MitbihExtractedBeatsDataset.name: MitbihExtractedBeatsDataRetriever,
-            ShaoxingDataset.name: ShaoxingDataRetriever,
-            SineDataset.name: SineDataRetriever,
-            MitbihBeatganDataset.name: MitbihBeatganDataRetriever,
-            PTBExtractedBeatsDataset.name: PtbExtractedBeatsDataRetriever,
-        }
 
+        Returns:
+            DataRetriever instance.
+        """
         try:
-            return datasets[dataset](dataset, cfg)  # type: ignore
+            return DataRetrieverFactory.datasets[dataset](dataset, cfg)  # type: ignore
         except KeyError as err:
             raise ValueError('Dataset {} is unknown.'.format(dataset)) from err
 
@@ -551,19 +649,10 @@ class DataRetrieverFactory:
             dataset: String specifying the dataset to be downloaded.
 
         Returns:
-            DataRetriever class.
+            DataRetriever instance.
         """
-        datasets = {
-            MitbihDataset.name: MitbihDataRetriever,
-            MitbihExtractedBeatsDataset.name: MitbihExtractedBeatsDataRetriever,
-            ShaoxingDataset.name: ShaoxingDataRetriever,
-            SineDataset.name: SineDataRetriever,
-            MitbihBeatganDataset.name: MitbihBeatganDataRetriever,
-            PTBExtractedBeatsDataset.name: PtbExtractedBeatsDataRetriever,
-        }
-
         try:
-            return cast(DataRetriever, datasets[dataset])
+            return cast(DataRetriever, DataRetrieverFactory.datasets[dataset])
         except KeyError as err:
             raise ValueError('Dataset {0} is unknown.'.format(dataset)) from err
 

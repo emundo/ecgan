@@ -1,4 +1,4 @@
-Generative Adversial Networks
+Generative Models
 =================================
 
 .. toctree::

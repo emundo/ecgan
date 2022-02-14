@@ -15,7 +15,7 @@ setup(
             'ecgan-inverse = ecgan.cli:run_inverse',
         ]
     },
-    version='0.0.1',
+    version='0.0.2',
     description='Library to train and evaluate ML architectures to detect anomalies in time series, especially ECG.',
     long_description=long_description,
     long_description_content_type='text/markdown',

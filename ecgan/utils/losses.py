@@ -522,3 +522,102 @@ class GANLossFactory:
             return WassersteinGeneratorLoss(discriminator_sampler, generator_sampler)
 
         raise AttributeError('Argument {0} is not set correctly.'.format(loss))
+
+
+class AutoEncoderLoss(Configurable):
+    """Reconstruction based loss used by autoencoders."""
+
+    def __init__(self, autoencoder_sampler: EncoderBasedGeneratorSampler, use_mse: bool) -> None:
+        super().__init__()
+        self.autoencoder_sampler = autoencoder_sampler
+        self._internal_loss = torch.nn.MSELoss() if use_mse else torch.nn.BCELoss()
+
+    def forward(self, training_data: Tensor) -> Tuple[LossType, LossMetricType]:
+        """Perform a forward pass for the loss."""
+        batch_size = training_data.shape[0]
+        torch.zeros(batch_size, device=training_data.device)
+
+        noise = self.autoencoder_sampler.sample_encoder(training_data)
+        faked_output = self.autoencoder_sampler.sample(noise)
+
+        error = self._internal_loss(faked_output, training_data)
+
+        return error, [
+            ('loss_mse', float(error)),
+        ]
+
+    def __call__(self, training_data: Tensor) -> Tuple[LossType, LossMetricType]:
+        """Loss-specific forward will be applied upon call."""
+        return self.forward(training_data)
+
+    @staticmethod
+    def _configure(name: str) -> Dict:
+        return {'LOSS': {'NAME': name}}
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for the autoencoder loss function."""
+        return AutoEncoderLoss._configure(Losses.AUTOENCODER.value)
+
+
+class VariationalAutoEncoderLoss(Configurable):
+    r"""Base loss of VAEs considering reconstruction loss as well as KL divergence weighted by :math:`\beta`."""
+
+    def __init__(
+        self,
+        autoencoder_sampler: GeneratorSampler,
+        use_mse: bool,
+        kl_beta: float,
+        distribution: torch.distributions.Distribution,
+        device,
+    ) -> None:
+        super().__init__()
+        self._internal_loss = torch.nn.MSELoss() if use_mse else torch.nn.BCELoss()
+        self._kl_loss = KLLoss()
+        self.kl_beta = kl_beta
+        self._kl_weight = 1.0
+
+        self.generator_sampler = cast(VAEGANGeneratorSampler, autoencoder_sampler)
+        self.distribution = distribution
+        self.device = device
+
+    def __call__(self, training_data: Tensor) -> Tuple[LossType, LossMetricType]:
+        """Loss-specific forward will be applied upon call."""
+        return self.forward(training_data)
+
+    @property
+    def kl_weight(self) -> float:
+        return self._kl_weight
+
+    @kl_weight.setter
+    def kl_weight(self, new_kl_weight: float) -> None:
+        self._kl_weight = new_kl_weight
+
+    def forward(self, training_data: Tensor) -> Tuple[LossType, LossMetricType]:
+        """Perform a forward pass for the loss."""
+        batch_size, num_channel, seq_len = training_data.shape
+        rec_loss_scale_factor = 1 / (batch_size * num_channel * seq_len)
+
+        mu, log_var = cast(VAEGANGeneratorSampler, self.generator_sampler).sample_mu_logvar(training_data)
+        faked_output, _noise = cast(VAEGANGeneratorSampler, self.generator_sampler).sample_pre_computed(mu, log_var)
+
+        reconstruction_error = self._internal_loss(faked_output, training_data) * rec_loss_scale_factor
+
+        kl_loss: Tensor = self._kl_loss.forward(mu, log_var) * self.kl_beta * self.kl_weight
+        weighted_error = kl_loss + reconstruction_error
+
+        return weighted_error, [
+            ('gen_kl_loss', float(kl_loss)),
+            ('gen_reconstruction_loss', float(reconstruction_error)),
+            ('latent/z_std_avg', float(torch.mean(torch.exp(0.5 * log_var)))),
+            ('gen_weighted_loss', float(weighted_error)),
+        ]
+
+    @staticmethod
+    def _configure(name: str) -> Dict:
+        return {'LOSS': {'NAME': name}}
+
+    @staticmethod
+    def configure() -> Dict:
+        """Return the default configuration for the VAE loss."""
+        return VariationalAutoEncoderLoss._configure(Losses.VAE.value)

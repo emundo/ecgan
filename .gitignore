@@ -7,6 +7,7 @@ deploy/
 artifacts/
 *.yml
 reproduction/
+prototyping/
 
 # Created by https://www.gitignore.io/api/osx,python,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=osx,python,visualstudiocode
@@ -185,6 +186,7 @@ eval
 eval-remote
 .dbconfig.yml
 *.yml
+!configs/*.yml
 
 # Wandb runs
 wandb
