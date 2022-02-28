@@ -1,6 +1,8 @@
 """Manages initialization, preprocessing, training and anomaly detection of ecgan."""
 import os
 
+from torch.backends import cudnn
+
 from ecgan.anomaly_detection.anomaly_manager import AnomalyManager
 from ecgan.config import (
     ExperimentConfig,
@@ -28,6 +30,7 @@ from ecgan.utils.miscellaneous import load_pickle_numpy, merge_dicts, update_dic
 from ecgan.utils.parser import config_parser, detection_parser, init_parser, inverse_parser
 
 logger = setup_logger('ecgan')
+cudnn.deterministic = True  # use deterministic GPU operations
 
 
 def init():

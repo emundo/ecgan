@@ -43,8 +43,8 @@ class BaseEncoderGANModule(BaseGANModule):
             seq_len=seq_len,
             num_channels=num_channels,
         )
-
-        self._encoder = nn.DataParallel(self.encoder)
+        if self.device == 'gpu':
+            self._encoder = nn.DataParallel(self.encoder)
         self._encoder.to(self.device)
         # Have to be set after data sampler has been added. Not possible upon creation.
         self.fixed_samples: Optional[torch.Tensor] = None

@@ -103,7 +103,8 @@ class TSTRCNN(TSTRClassifier):
         initialize_weights(
             self.cnn_classifier, NormalInitializationConfig(NAME=WeightInitialization.NORMAL.value, MEAN=0.0, STD=0.02)
         )
-        self.cnn_classifier = DataParallel(self.cnn_classifier)  # type: ignore
+        if device == 'gpu':
+            self.cnn_classifier = DataParallel(self.cnn_classifier)  # type: ignore
         self.cnn_classifier.to(device)
         self.device = device
         loss_config = LossConfig(NAME=Losses.CROSS_ENTROPY.value, REDUCTION='mean')
@@ -144,7 +145,8 @@ class TSTRCNN(TSTRClassifier):
         self.cnn_classifier.eval()
         test_data: Tensor = from_numpy(test_x) if not isinstance(test_x, Tensor) else test_x
         with torch.no_grad():
-            predictions = self.cnn_classifier(test_data)
+            # currently not very efficient, switching devices a lot. Might need some future work
+            predictions = self.cnn_classifier(test_data.to(self.device))
             prediction_labels: np.ndarray = torch.argmax(predictions, dim=1).cpu().numpy()
 
         return prediction_labels

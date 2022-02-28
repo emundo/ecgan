@@ -46,11 +46,12 @@ class AutoEncoder(BaseGenerativeModule):
         self.latent_size: int = self.cfg.LATENT_SIZE
         self.num_classes: int = self.dataset.NUM_CLASSES_BINARY
         self._decoder = self._init_decoder()
-        self._decoder = nn.DataParallel(self.decoder)
-        self._decoder.to(self.device)
-
         self._encoder = self._init_encoder()
-        self._encoder = nn.DataParallel(self.encoder)
+        if self.device == 'gpu':
+            self._decoder = nn.DataParallel(self.decoder)
+            self._encoder = nn.DataParallel(self.encoder)
+
+        self._decoder.to(self.device)
         self._encoder.to(self.device)
 
         self._optim = self._init_optim()
