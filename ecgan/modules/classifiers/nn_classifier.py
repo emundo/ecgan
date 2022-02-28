@@ -29,7 +29,8 @@ class NNClassifier(BaseModule, BaseClassifier):
 
         self.cfg: BaseNNConfig = cfg
         self._classifier = self._init_classifier(self.cfg)
-        self._classifier = nn.DataParallel(self.classifier)
+        if self.device == 'gpu':
+            self._classifier = nn.DataParallel(self.classifier)
         self._classifier.to(self.device)
 
         self._optim = self._init_optimizer()

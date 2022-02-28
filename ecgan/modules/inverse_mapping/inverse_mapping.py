@@ -44,7 +44,8 @@ class InvertibleBaseModule(BaseModule, Configurable):
         self._inv_config = inv_cfg
         self._generator_module = self._init_generator_module()
         self.inv = self._init_inv()
-        self.inv = nn.DataParallel(self.inv)
+        if self.device == 'gpu':
+            self.inv = nn.DataParallel(self.inv)
         self.inv.to(self.device)
 
         self.exp_cfg = get_global_config().experiment_config

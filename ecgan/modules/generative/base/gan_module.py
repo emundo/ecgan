@@ -38,11 +38,11 @@ class BaseGANModule(BaseGenerativeModule):
         self.latent_size: int = self.cfg.LATENT_SIZE
         self.num_classes: int = self.dataset.NUM_CLASSES_BINARY
         self._generator = self._init_generator()
-        self._generator = nn.DataParallel(self.generator)
-        self._generator.to(self.device)
-
         self._discriminator = self._init_discriminator()
-        self._discriminator = nn.DataParallel(self.discriminator)
+        if self.device == 'gpu':
+            self._generator = nn.DataParallel(self.generator)
+            self._discriminator = nn.DataParallel(self.discriminator)
+        self._generator.to(self.device)
         self._discriminator.to(self.device)
 
         self._optim_gen = self._init_optim_gen()

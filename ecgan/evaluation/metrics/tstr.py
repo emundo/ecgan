@@ -103,7 +103,8 @@ class TSTRCNN(TSTRClassifier):
         initialize_weights(
             self.cnn_classifier, NormalInitializationConfig(NAME=WeightInitialization.NORMAL.value, MEAN=0.0, STD=0.02)
         )
-        self.cnn_classifier = DataParallel(self.cnn_classifier)  # type: ignore
+        if device == 'gpu':
+            self.cnn_classifier = DataParallel(self.cnn_classifier)  # type: ignore
         self.cnn_classifier.to(device)
         self.device = device
         loss_config = LossConfig(NAME=Losses.CROSS_ENTROPY.value, REDUCTION='mean')
