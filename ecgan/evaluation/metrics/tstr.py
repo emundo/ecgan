@@ -145,7 +145,8 @@ class TSTRCNN(TSTRClassifier):
         self.cnn_classifier.eval()
         test_data: Tensor = from_numpy(test_x) if not isinstance(test_x, Tensor) else test_x
         with torch.no_grad():
-            predictions = self.cnn_classifier(test_data)
+            # currently not very efficient, switching devices a lot. Might need some future work
+            predictions = self.cnn_classifier(test_data.to(self.device))
             prediction_labels: np.ndarray = torch.argmax(predictions, dim=1).cpu().numpy()
 
         return prediction_labels
