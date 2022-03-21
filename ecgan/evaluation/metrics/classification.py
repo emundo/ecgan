@@ -5,6 +5,7 @@ from typing import List, Union
 
 import numpy as np
 import sklearn.metrics as skm
+import sklearn.preprocessing
 import torch
 from sklearn.metrics import roc_auc_score
 
@@ -152,6 +153,8 @@ class AUROCMetric(ClassificationMetric):
             return 0.0
         if np.unique(y).__len__() > 2:
             logger.debug('Multiple classes: num classes is {}.'.format(np.unique(y)))
+            y = sklearn.preprocessing.label_binarize(y, classes=np.unique(y))
+            y_hat = sklearn.preprocessing.label_binarize(y_hat, classes=np.unique(y_hat))
 
         auroc = roc_auc_score(y, y_hat, average=self.average, multi_class='ovr')
 
