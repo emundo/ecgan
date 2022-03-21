@@ -35,10 +35,10 @@ activate the env (`.venv\Scripts\activate`) and install the packages (`pip insta
 ### How to use
 
 The package comes with a convenient CLI and configuration over YAML-Files.
-By calling `ecgan-init -d DATASET -m MODULE -o FILE_NAME PROJECT NAME` a configuration file
+By calling `ecgan-init -d DATASET -m MODULE -o FILE_NAME.yml ENTITY PROJECT EXPERIMENT_NAME` a configuration file
 is generated. This can be manually updated and contains most relevant hyperparameters.
-After applying changes to the config file if desired you can start the preprocessing of
-the chosen DATASET using `ecgan-preprocess` before training the model by invoking `ecgan-train`.
+After possibly applying changes to the config file (lets say `FILE_NAME`) you can start the preprocessing of
+the chosen dataset using `ecgan-preprocess FILE_NAME.yml` before training the model by invoking `ecgan-train FILE_NAME.yml`.
 To perform anomaly detection, the `-a model_reference` flag is used (see [docs](https://emundo.github.io/ecgan-docs) for more
 information).
 
